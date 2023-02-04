@@ -1,11 +1,14 @@
 import { BrowserRouter } from 'react-router-dom';
 import Routers from './routers';
+import { SettingsProvider } from './contexts/SettingTheme';
 interface Props {}
 
 const App = (props: Props) => {
   return (
     <BrowserRouter>
-      <Routers />
+      <SettingsProvider>
+        <Routers />
+      </SettingsProvider>
     </BrowserRouter>
   );
 };

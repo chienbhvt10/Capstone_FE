@@ -11,7 +11,7 @@ module.exports = {
   mode: 'development',
   entry: './src/index.tsx',
   output: {
-    filename: 'bundle.[name].[contenthash].js',
+    filename: 'js/bundle.[name].js',
     path: path.resolve(__dirname, 'build'),
   },
   // Add loader
@@ -19,7 +19,31 @@ module.exports = {
     rules: [
       {
         test: /\.(js|ts)x?$/,
-        use: 'babel-loader',
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',
+              [
+                '@babel/preset-react',
+                {
+                  runtime: 'automatic',
+                },
+              ],
+              '@babel/preset-typescript',
+            ],
+            plugins: [
+              [
+                'module-resolver',
+                {
+                  alias: {
+                    '~': './src',
+                  },
+                },
+              ],
+            ],
+          },
+        },
         exclude: /node_modules/,
       },
       {
