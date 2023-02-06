@@ -1,17 +1,20 @@
-import { BrowserRouter } from 'react-router-dom';
+import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
 import Routers from './routers';
 import { SettingsProvider } from './contexts/SettingTheme';
 import { CssBaseline } from '@mui/material';
-interface Props {}
+import { HelmetProvider } from 'react-helmet-async';
+import history from './utils/history';
 
-const App = (props: Props) => {
+const App = () => {
   return (
-    <BrowserRouter>
-      <SettingsProvider>
-        <CssBaseline />
-        <Routers />
-      </SettingsProvider>
-    </BrowserRouter>
+    <HelmetProvider>
+      <HistoryRouter history={history}>
+        <SettingsProvider>
+          <CssBaseline />
+          <Routers />
+        </SettingsProvider>
+      </HistoryRouter>
+    </HelmetProvider>
   );
 };
 
