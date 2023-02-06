@@ -1,8 +1,16 @@
 import { RouteObject, useRoutes } from 'react-router-dom';
 import AdminLayout from '../layouts/AdminLayout';
+import HomePage from '../modules/Home';
 
 const routes: RouteObject[] = [
-  { path: '/', element: <AdminLayout>"AdminLayout"</AdminLayout> },
+  {
+    path: '/',
+    element: (
+      <AdminLayout>
+        <HomePage />
+      </AdminLayout>
+    ),
+  },
 ];
 
 const Routers = () => {

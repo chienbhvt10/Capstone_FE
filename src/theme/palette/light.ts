@@ -1,5 +1,6 @@
 import type { ThemeOptions } from '@mui/material';
 import { alpha } from '@mui/material/styles';
+import { CapstoneAttributes } from 'theme';
 
 const neutral = {
   100: '#F3F4F6',
@@ -13,7 +14,7 @@ const neutral = {
   900: '#111827',
 };
 
-const vShip = {
+const capstoneAttributes: CapstoneAttributes = {
   richTextEditor: {
     contentEditorBorder: '1px solid #000000',
     activeButton: '#D1D5DB',
@@ -182,7 +183,7 @@ const light: ThemeOptions = {
     success,
     text,
     warning,
-    vShip,
+    capstoneAttributes,
   },
   shadows: [
     'none',

@@ -18,7 +18,7 @@ interface Neutral {
   900: string;
 }
 
-interface VShip {
+export interface CapstoneAttributes {
   richTextEditor: {
     contentEditorBorder: string;
     activeButton: string;
@@ -62,12 +62,12 @@ interface VShip {
 declare module '@mui/material/styles' {
   interface Palette {
     neutral: Neutral;
-    vShip: VShip;
+    capstoneAttributes: CapstoneAttributes;
   }
 
   interface PaletteOptions {
     neutral: Neutral;
-    vShip: VShip;
+    capstoneAttributes: CapstoneAttributes;
   }
 }
 
