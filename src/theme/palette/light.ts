@@ -61,9 +61,9 @@ const background = {
 };
 
 const primary = {
-  main: '#0B9F7C',
-  light: '#63E2AC',
-  dark: '#05726D',
+  main: '#3DA2FF',
+  light: '#72BBFF',
+  dark: '#0888FD',
   contrastText: '#FFFFFF',
 };
 

@@ -6,7 +6,7 @@ import type { Breakpoint } from '@mui/system';
 
 interface Props {
   title?: string;
-  children: [ReactNode, ReactNode];
+  children: [ReactNode, ReactNode] | ReactNode;
   maxWidth?: false | Breakpoint;
 }
 

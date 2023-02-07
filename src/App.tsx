@@ -4,14 +4,17 @@ import { SettingsProvider } from './contexts/SettingTheme';
 import { CssBaseline } from '@mui/material';
 import { HelmetProvider } from 'react-helmet-async';
 import history from './utils/history';
+import { NotificationProvider } from './contexts/Notification';
 
 const App = () => {
   return (
     <HelmetProvider>
       <HistoryRouter history={history}>
         <SettingsProvider>
-          <CssBaseline />
-          <Routers />
+          <NotificationProvider>
+            <CssBaseline />
+            <Routers />
+          </NotificationProvider>
         </SettingsProvider>
       </HistoryRouter>
     </HelmetProvider>

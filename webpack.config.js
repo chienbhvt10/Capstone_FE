@@ -100,5 +100,6 @@ module.exports = {
   // create server when start project development environment
   devServer: {
     port: 3000,
+    historyApiFallback: true,
   },
 };

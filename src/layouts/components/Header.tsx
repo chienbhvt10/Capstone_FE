@@ -5,6 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import { styled } from '@mui/material/styles';
 import Image from '../../components/Image';
+import { useLocation } from 'react-router-dom';
+import { LOGIN_PATH } from '../../constants/path';
 
 export const drawerWidth = 240;
 
@@ -13,29 +15,34 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 interface Props extends AppBarProps {
-  handleDrawerOpen: () => void;
+  handleDrawerOpen?: () => void;
 }
 
 const Header = (props: Props) => {
   const { handleDrawerOpen, open } = props;
-
+  const { pathname } = useLocation();
   return (
     <AppBar position="fixed" open={open}>
       <Toolbar
-        sx={{ px: 2.25, backgroundColor: '#FFFFFF' }}
+        sx={{
+          px: pathname === LOGIN_PATH ? 5 : 2.25,
+          backgroundColor: '#FFFFFF',
+        }}
         disableGutters={true}
       >
-        <IconButton
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-          sx={{
-            marginRight: 5,
-            ...(open && { display: 'none' }),
-          }}
-        >
-          <MenuIcon fontSize="medium" />
-        </IconButton>
+        {pathname !== LOGIN_PATH && (
+          <IconButton
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              marginRight: 5,
+              ...(open && { display: 'none' }),
+            }}
+          >
+            <MenuIcon fontSize="medium" />
+          </IconButton>
+        )}
         <Image
           sx={{ width: 80, height: 'auto' }}
           src="images/Logo-FU-01-200.png"

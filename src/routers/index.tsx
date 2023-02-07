@@ -5,6 +5,9 @@ import ArrangePage from '../modules/Arrange';
 import SettingPage from '../modules/Setting';
 import RegisterPage from '../modules/Register';
 import TimeTablePage from '../modules/TimeTable';
+import authRoutes from './AuthRoutes';
+import AuthLayout from '../layouts/AuthLayout';
+import Login from '../modules/Auth/Login';
 
 const routes: RouteObject[] = [
   {
@@ -55,6 +58,15 @@ const routes: RouteObject[] = [
       </AdminLayout>
     ),
   },
+  {
+    path: '/login',
+    element: (
+      <AuthLayout>
+        <Login />
+      </AuthLayout>
+    ),
+  },
+  authRoutes,
 ];
 
 const Routers = () => {
