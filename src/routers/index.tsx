@@ -14,7 +14,7 @@ const routes: RouteObject[] = [
     path: '/',
     element: (
       <AdminLayout>
-        <ManagePage />
+        <TimeTablePage />
       </AdminLayout>
     ),
   },

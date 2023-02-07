@@ -5,6 +5,8 @@ import { CssBaseline } from '@mui/material';
 import { HelmetProvider } from 'react-helmet-async';
 import history from './utils/history';
 import { NotificationProvider } from './contexts/Notification';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const App = () => {
   return (
@@ -12,8 +14,10 @@ const App = () => {
       <HistoryRouter history={history}>
         <SettingsProvider>
           <NotificationProvider>
-            <CssBaseline />
-            <Routers />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <CssBaseline />
+              <Routers />
+            </LocalizationProvider>
           </NotificationProvider>
         </SettingsProvider>
       </HistoryRouter>

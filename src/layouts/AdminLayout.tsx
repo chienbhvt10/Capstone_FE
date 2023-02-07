@@ -1,8 +1,8 @@
-import { Box, Stack } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
+import ContentBounder from './components/ContentBounder';
 import Header from './components/Header';
 import SideBar from './components/SideBar';
-import ContentBounder from './components/ContentBounder';
 
 interface Props {
   children: React.ReactNode;

@@ -158,7 +158,9 @@ const light: ThemeOptions = {
         root: {
           backgroundColor: neutral[200],
           '.MuiTableCell-root': {
-            color: neutral[700],
+            color: primary.contrastText,
+            backgroundColor: primary.main,
+            fontWeight: 'bold',
           },
         },
       },

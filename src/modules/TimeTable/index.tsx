@@ -1,14 +1,17 @@
-import { Box } from '@mui/material';
+import Paper from '@mui/material/Paper';
 import PageBreadcrumbs from '../../components/PageBreadcrumbs';
 import PageWrapper from '../../components/PageWrapper';
+import TimeTable from './components/TimeTable';
+import FilterTable from './components/FilterTable';
 
-type Props = {};
-
-const TimeTablePage = (props: Props) => {
+const TimeTablePage = () => {
   return (
     <PageWrapper title="TimeTable Page">
       <PageBreadcrumbs title={'TimeTable'} breadcrumbs={[]} />
-      <Box></Box>
+      <Paper elevation={12} sx={{ background: '#FFFFFF', p: 2 }}>
+        <FilterTable />
+        <TimeTable />
+      </Paper>
     </PageWrapper>
   );
 };
