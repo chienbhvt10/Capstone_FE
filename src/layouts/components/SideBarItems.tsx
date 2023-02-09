@@ -54,7 +54,7 @@ const listItem: ListItem[] = [
 
     icon: (
       <Image
-        src="images/sidebar/register.png"
+        src="images/sidebar/edit.png"
         alt=""
         sx={{ width: 25, height: 25 }}
       />
