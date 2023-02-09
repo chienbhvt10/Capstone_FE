@@ -11,12 +11,13 @@ import Typography from '@mui/material/Typography';
 import { lecturerTableColumns } from '../utils/column';
 import { timeTableRows } from '../utils/row';
 import { EXPECTED_COMPLETED, STATUS_ACTIVE } from '../const';
+import { Paper, TablePagination } from '@mui/material';
 
 interface Props {}
 
 const LecturerTable = (props: Props) => {
   return (
-    <TableContainer>
+    <TableContainer sx={{ maxHeight: 500 }}>
       <Table stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
@@ -101,6 +102,15 @@ const LecturerTable = (props: Props) => {
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={10}
+        rowsPerPage={10}
+        page={1}
+        onPageChange={() => {}}
+        onRowsPerPageChange={() => {}}
+      />
     </TableContainer>
   );
 };

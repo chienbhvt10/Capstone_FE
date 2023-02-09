@@ -11,11 +11,16 @@ interface Props {}
 const ArrangePage = (props: Props) => {
   return (
     <PageWrapper title="Arrange Page">
-      <PageBreadcrumbs title={'Arrange'} breadcrumbs={[]} />
+      {/* <PageBreadcrumbs title={'Arrange'} breadcrumbs={[]} /> */}
       <Stack
         direction="column"
         spacing={2}
-        sx={{ backgroundColor: 'background.paper', p: 2 }}
+        sx={{
+          backgroundColor: 'background.paper',
+          p: 2,
+          pb: 6,
+          overflowX: 'auto',
+        }}
       >
         <FilterForm />
         <Stack direction="row" spacing={2}>

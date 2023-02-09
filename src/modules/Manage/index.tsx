@@ -8,11 +8,11 @@ import LecturerTable from './components/LecturerTable';
 const ManagePage = () => {
   return (
     <PageWrapper title="Manage Page">
-      <PageBreadcrumbs title={'Manage'} breadcrumbs={[]} />
+      {/* <PageBreadcrumbs title={'Manage'} breadcrumbs={[]} /> */}
       <Stack
         direction="column"
         spacing={2}
-        sx={{ backgroundColor: 'background.paper', p: 2 }}
+        sx={{ backgroundColor: 'background.paper', p: 2, overflowX: 'auto' }}
       >
         <Toolbox />
         <LecturerTable />

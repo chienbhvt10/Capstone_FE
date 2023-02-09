@@ -7,8 +7,11 @@ import FilterTable from './components/FilterTable';
 const TimeTablePage = () => {
   return (
     <PageWrapper title="TimeTable Page">
-      <PageBreadcrumbs title={'TimeTable'} breadcrumbs={[]} />
-      <Paper elevation={12} sx={{ background: '#FFFFFF', p: 2 }}>
+      {/* <PageBreadcrumbs title={'TimeTable'} breadcrumbs={[]} /> */}
+      <Paper
+        elevation={12}
+        sx={{ background: '#FFFFFF', p: 2, overflowX: 'auto' }}
+      >
         <FilterTable />
         <TimeTable />
       </Paper>
