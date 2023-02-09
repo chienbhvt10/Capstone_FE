@@ -1,10 +1,9 @@
 import { Box, Container } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete/Autocomplete';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid/Grid';
 import TextField from '@mui/material/TextField/TextField';
 import { Stack } from '@mui/system';
-import React, { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 
 type Props = {};
 
