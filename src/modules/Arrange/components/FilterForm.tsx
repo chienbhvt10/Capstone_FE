@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField/TextField';
 import { Stack } from '@mui/system';
 import { SyntheticEvent, useState } from 'react';
 
-type Props = {};
+interface Props {}
 
 interface Option {
   id: number;

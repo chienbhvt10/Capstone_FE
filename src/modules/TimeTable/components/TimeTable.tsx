@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { timeTableColumns } from '../utils/column';
 import { timeTableRows } from '../utils/row';
 
-type Props = {};
+interface Props {}
 
 const TimeTable = (props: Props) => {
   return (

@@ -1,0 +1,16 @@
+export interface Column {
+  id: string;
+  label: string;
+  minWidth?: number;
+  minHeight?: number;
+  align?: 'right' | 'center' | 'left';
+  format?: (value: number) => string;
+}
+
+export interface Row {
+  email: string;
+  fullName: string;
+  shortName: string;
+  expected: string;
+  status: string;
+}
