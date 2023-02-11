@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
-import PageBreadcrumbs from '../../components/PageBreadcrumbs';
-import PageWrapper from '../../components/PageWrapper';
+import PageBreadcrumbs from '~/components/PageBreadcrumbs';
+import PageWrapper from '~/components/PageWrapper';
 
 type Props = {};
 

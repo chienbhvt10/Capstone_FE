@@ -1,6 +1,6 @@
 import Paper from '@mui/material/Paper';
-import PageBreadcrumbs from '../../components/PageBreadcrumbs';
-import PageWrapper from '../../components/PageWrapper';
+import PageBreadcrumbs from '~/components/PageBreadcrumbs';
+import PageWrapper from '~/components/PageWrapper';
 import TimeTable from './components/TimeTable';
 import FilterTable from './components/FilterTable';
 

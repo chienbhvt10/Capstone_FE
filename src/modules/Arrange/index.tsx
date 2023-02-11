@@ -1,6 +1,5 @@
 import { Stack } from '@mui/material';
-import PageBreadcrumbs from '../../components/PageBreadcrumbs';
-import PageWrapper from '../../components/PageWrapper';
+import PageWrapper from '~/components/PageWrapper';
 import FilterForm from './components/FilterForm';
 import TimeTable from './components/TimeTable';
 import TimetableModify from './components/TimetableModify';
