@@ -80,7 +80,10 @@ const FilterForm = (props: Props) => {
   const onSearch = () => {};
 
   return (
-    <Box sx={{ border: '1px solid #ccc', p: 2, borderRadius: 1 }}>
+    <Box
+      id="scroll-filter-form"
+      sx={{ border: '1px solid #ccc', p: 2, borderRadius: 1 }}
+    >
       <Container maxWidth="lg">
         <Stack direction="column" spacing={2}>
           <Stack direction="row" spacing={2} sx={{ justifyContent: 'center' }}>

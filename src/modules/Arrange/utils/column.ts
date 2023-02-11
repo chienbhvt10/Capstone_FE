@@ -4,8 +4,10 @@ export const timeTableColumns: readonly Column[] = [
   {
     id: 'Lecturer',
     label: 'Lecturer',
-    minWidth: 60,
+    minWidth: 100,
     align: 'center',
+    sticky: true,
+    stickyPosition: 'left',
   },
   {
     id: 'A24',
@@ -143,7 +145,9 @@ export const timeTableColumns: readonly Column[] = [
   {
     id: '#REF!',
     label: '#REF!',
-    minWidth: 60,
+    minWidth: 40,
     align: 'center',
+    sticky: true,
+    stickyPosition: 'right',
   },
 ];

@@ -18,7 +18,7 @@ const ArrangePage = (props: Props) => {
           backgroundColor: 'background.paper',
           p: 2,
           pb: 6,
-          overflowX: 'auto',
+          overflowX: 'hidden',
         }}
       >
         <FilterForm />

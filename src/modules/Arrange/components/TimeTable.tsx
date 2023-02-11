@@ -7,13 +7,34 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { timeTableColumns } from '../utils/column';
-import { timeTableRows } from '../utils/row';
+import { assignedRows, notAssignRows } from '../utils/row';
+import { useTheme } from '@mui/material/styles';
+import { Fragment, useEffect, useState } from 'react';
 
 interface Props {}
 
 const TimeTable = (props: Props) => {
+  const theme = useTheme();
+  const [maxLengthNotAssignSlot, setMaxLengthNotAssignSlot] =
+    useState<number>(0);
+
+  useEffect(() => {
+    const lengthNotAssignSlot = notAssignRows.map((row) =>
+      row.slots.map((slot) => slot.slotInfo?.length as number)
+    )[0];
+
+    const filterUndefinedInList = lengthNotAssignSlot.filter(
+      (item) => item !== undefined
+    );
+
+    const maxLength = Math.max(...filterUndefinedInList);
+    setMaxLengthNotAssignSlot(maxLength);
+  }, [notAssignRows]);
+
+  const onClickGetDetails = () => {};
+
   return (
-    <TableContainer sx={{ maxHeight: 550 }}>
+    <TableContainer sx={{ maxHeight: 550 + maxLengthNotAssignSlot * 40 }}>
       <Table
         stickyHeader
         aria-label="sticky table"
@@ -29,7 +50,17 @@ const TimeTable = (props: Props) => {
         <TableHead>
           <TableRow>
             {timeTableColumns.map((item) => (
-              <TableCell key={item.id} align={item.align}>
+              <TableCell
+                key={item.id}
+                align={item.align}
+                sx={{
+                  left: item.stickyPosition === 'left' ? 0 : 'unset',
+                  right: item.stickyPosition === 'right' ? 0 : 'unset',
+                  zIndex: item.sticky
+                    ? theme.zIndex.appBar + 10
+                    : theme.zIndex.appBar,
+                }}
+              >
                 <Box
                   sx={{
                     display: 'flex',
@@ -48,9 +79,22 @@ const TimeTable = (props: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {timeTableRows.map((item, index) => (
-            <TableRow hover role="checkbox" tabIndex={-1} key={index + 1}>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
+          {assignedRows.map((item, index) => (
+            <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
+              <TableCell
+                align="center"
+                sx={{
+                  border: '1px solid #ccc',
+                  left: 0,
+                  position: 'sticky',
+                  zIndex: theme.zIndex.appBar,
+                  backgroundColor: theme.palette.background.paper,
+                  '&:hover': {
+                    backgroundColor: '#DDF5FF',
+                    cursor: 'pointer',
+                  },
+                }}
+              >
                 <Box
                   sx={{
                     minHeight: 60,
@@ -65,560 +109,186 @@ const TimeTable = (props: Props) => {
                   </Typography>
                 </Box>
               </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
+              {item.slots.map((slot, index) => (
+                <Fragment key={index}>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      border: '1px solid #ccc',
+                      '&:hover': {
+                        backgroundColor: '#DDF5FF',
+                        cursor: 'pointer',
+                      },
+                    }}
+                  >
+                    {slot.slotInfo &&
+                      slot.slotInfo?.length > 0 &&
+                      slot?.slotInfo?.map((item, index) => (
+                        <Box
+                          component="a"
+                          href="#scroll-filter-form"
+                          key={index + slot.code}
+                          sx={{
+                            minHeight: 60,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                            textDecoration: 'none',
+                            color: '#000',
+                          }}
+                        >
+                          <Fragment>
+                            <Typography variant="body2" align="left">
+                              {item.class}
+                            </Typography>
+                            <Typography variant="body2" align="left">
+                              {item.subject}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              align="left"
+                              sx={{ color: 'primary.dark' }}
+                            >
+                              {item.room}
+                            </Typography>
+                          </Fragment>
+                        </Box>
+                      ))}
+                  </TableCell>
+                </Fragment>
+              ))}
+
+              <TableCell
+                align="center"
+                sx={{
+                  border: '1px solid #ccc',
+                  right: 0,
+                  position: 'sticky',
+                  zIndex: theme.zIndex.appBar,
+                  backgroundColor: theme.palette.background.paper,
+                }}
+              >
+                <Box
+                  sx={{
+                    minHeight: 40,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                    {item.total}
+                  </Typography>
+                </Box>
+              </TableCell>
+            </TableRow>
+          ))}
+          {notAssignRows.map((item, index) => (
+            <TableRow
+              role="checkbox"
+              tabIndex={-1}
+              key={index + 1}
+              sx={{
+                bottom: 0,
+                position: 'sticky',
+                zIndex: theme.zIndex.appBar,
+                backgroundColor: theme.palette.background.paper,
+              }}
+            >
+              <TableCell
+                align="center"
+                sx={{
+                  border: '1px solid #ccc',
+                  left: 0,
+                  position: 'sticky',
+                  zIndex: theme.zIndex.appBar,
+                  backgroundColor: theme.palette.background.paper,
+                  '&:hover': {
+                    backgroundColor: '#DDF5FF',
+                    cursor: 'pointer',
+                  },
+                }}
+              >
                 <Box
                   sx={{
                     minHeight: 60,
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
-                    alignItems: 'flex-start',
+                    alignItems: 'center',
                   }}
                 >
-                  <Typography variant="body2" align="left">
-                    {item.A24?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.A24?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.A24?.room}
+                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                    {item.lecturer}
                   </Typography>
                 </Box>
               </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.A42?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.A42?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
+              {item.slots.map((slot, index) => (
+                <Fragment key={index}>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      border: '1px solid #ccc',
+                    }}
                   >
-                    {item.A42?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
+                    {slot.slotInfo &&
+                      slot.slotInfo?.length > 0 &&
+                      slot?.slotInfo?.map((item, index) => (
+                        <Box
+                          component="a"
+                          href="#scroll-filter-form"
+                          key={index + slot.code}
+                          sx={{
+                            p: 0.5,
+                            minHeight: 60,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                            textDecoration: 'none',
+                            color: '#000',
+                            '&:hover': {
+                              backgroundColor: '#DDF5FF',
+                              cursor: 'pointer',
+                            },
+                          }}
+                        >
+                          <Fragment>
+                            <Typography variant="body2" align="left">
+                              {item.class}
+                            </Typography>
+                            <Typography variant="body2" align="left">
+                              {item.subject}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              align="left"
+                              sx={{ color: 'primary.dark' }}
+                            >
+                              {item.room}
+                            </Typography>
+                          </Fragment>
+                        </Box>
+                      ))}
+                  </TableCell>
+                </Fragment>
+              ))}
+
+              <TableCell
+                align="center"
+                sx={{
+                  border: '1px solid #ccc',
+                  right: 0,
+                  position: 'sticky',
+                  zIndex: theme.zIndex.appBar,
+                  backgroundColor: theme.palette.background.paper,
+                }}
+              >
                 <Box
                   sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.P24?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.P24?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.P24?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.P42?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.P42?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.P42?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.A25?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.A25?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.A25?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.A52?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.A52?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.A52?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.P25?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.P25?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.P25?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.P52?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.P52?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.P52?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.A35?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.A35?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.A35?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.A53?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.A53?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.A53?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.P35?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.P35?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.P35?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.P53?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.P53?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.P53?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.A36?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.A36?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.A36?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.A63?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.A63?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.A63?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.P36?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.P36?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.P36?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.P63?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.P63?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.P63?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.A46?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.A46?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.A46?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.A64?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.A64?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.A64?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.P46?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.P46?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.P46?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.P64?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.P64?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.P64?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.A77?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.A77?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.A77?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <Typography variant="body2" align="left">
-                    {item.P77?.class}
-                  </Typography>
-                  <Typography variant="body2" align="left">
-                    {item.P77?.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="left"
-                    sx={{ color: 'primary.dark' }}
-                  >
-                    {item.P77?.room}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Box
-                  sx={{
-                    minHeight: 60,
+                    minHeight: 40,
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',

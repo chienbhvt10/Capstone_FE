@@ -14,7 +14,12 @@ const TimetableModify = (props: Props) => {
     <Stack
       direction="column"
       spacing={2}
-      sx={{ border: '1px solid #ccc', p: 2, borderRadius: 1, width: 250 }}
+      sx={{
+        border: '1px solid #ccc',
+        p: 2,
+        borderRadius: 1,
+        width: 250,
+      }}
     >
       <TimeTableModifyForm />
       <TimetableSwapForm />
