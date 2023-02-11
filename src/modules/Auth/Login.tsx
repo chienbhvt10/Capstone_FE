@@ -2,10 +2,11 @@ import { Button, Stack, TextField, Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import { Container } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
-import Image from '../../components/Image';
-import PageWrapper from '../../components/PageWrapper';
-import { HOME_PATH } from '../../constants/path';
-import useNotification from '../../hooks/useNotification';
+import images from '~/assets/images';
+import Image from '~/components/Image';
+import PageWrapper from '~/components/PageWrapper';
+import { HOME_PATH } from '~/constants/path';
+import useNotification from '~/hooks/useNotification';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ const Login = () => {
                 variant="outlined"
                 startIcon={
                   <Image
-                    src="images/google.png"
+                    src={images.iconGoogle}
                     alt=""
                     sx={{ width: 25, height: 25 }}
                   />

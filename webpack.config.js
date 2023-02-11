@@ -13,6 +13,7 @@ module.exports = {
   output: {
     filename: 'js/bundle.[name].js',
     path: path.resolve(__dirname, 'build'),
+    assetModuleFilename: 'images/[hash][ext][query]',
   },
   // Add loader
   module: {
@@ -55,6 +56,10 @@ module.exports = {
           'css-loader',
           'sass-loader',
         ],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset/resource',
       },
     ],
   },

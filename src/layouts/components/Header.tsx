@@ -1,16 +1,15 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { Typography } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
-import Toolbar from '@mui/material/Toolbar';
-import { styled } from '@mui/material/styles';
-import Image from '../../components/Image';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { LOGIN_PATH } from '../../constants/path';
-import Box from '@mui/material/Box/Box';
 import Stack from '@mui/material/Stack';
+import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
-import useNotification from '../../hooks/useNotification';
+import { styled } from '@mui/material/styles';
+import { useLocation, useNavigate } from 'react-router-dom';
+import images from '~/assets/images';
+import Image from '~/components/Image';
+import { LOGIN_PATH } from '~/constants/path';
+import useNotification from '~/hooks/useNotification';
 
 export const drawerWidth = 240;
 
@@ -58,17 +57,14 @@ const Header = (props: Props) => {
               <MenuIcon fontSize="medium" />
             </IconButton>
           )}
-          <Image
-            sx={{ width: 80, height: 'auto' }}
-            src="images/Logo-FU-01-200.png"
-          />
+          <Image sx={{ width: 80, height: 'auto' }} src={images.logo} />
         </Stack>
         {pathname !== LOGIN_PATH && (
           <Tooltip title="Logout">
             <IconButton onClick={onLogout}>
               <Image
                 sx={{ width: 20, height: 'auto' }}
-                src="images/button/logout.png"
+                src={images.iconLogout}
               />
             </IconButton>
           </Tooltip>

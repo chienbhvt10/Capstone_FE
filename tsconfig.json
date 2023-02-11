@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
+    // config with alias in .babelrc to get absolute path
+    "paths": {
+      "~/*": ["src/*"]
+    },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -16,10 +20,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "downlevelIteration": true,
-    "paths": {
-      "~/*": ["src/*"]
-    }
+    "downlevelIteration": true
   },
   "include": ["./src"]
 }

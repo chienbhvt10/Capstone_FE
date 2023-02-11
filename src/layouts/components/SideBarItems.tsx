@@ -6,14 +6,15 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from 'react-router-dom';
-import Image from '../../components/Image';
+import Image from '~/components/Image';
 import {
   ARRANGE_PATH,
   MANAGE_PATH,
   REGISTER_PATH,
   SETTING_PATH,
   TIMETABLE_PATH,
-} from '../../constants/path';
+} from '~/constants/path';
+import images from '~/assets/images';
 
 interface Props {
   open: boolean;
@@ -30,56 +31,34 @@ const listItem: ListItem[] = [
     title: 'Time Table',
     path: TIMETABLE_PATH,
     icon: (
-      <Image
-        src="images/sidebar/timetable.png"
-        alt=""
-        sx={{ width: 25, height: 25 }}
-      />
+      <Image src={images.iconTimetable} alt="" sx={{ width: 25, height: 25 }} />
     ),
   },
   {
     title: 'Manage',
     path: MANAGE_PATH,
     icon: (
-      <Image
-        src="images/sidebar/manage.png"
-        alt=""
-        sx={{ width: 25, height: 25 }}
-      />
+      <Image src={images.iconManage} alt="" sx={{ width: 25, height: 25 }} />
     ),
   },
   {
     title: 'Register',
     path: REGISTER_PATH,
 
-    icon: (
-      <Image
-        src="images/sidebar/edit.png"
-        alt=""
-        sx={{ width: 25, height: 25 }}
-      />
-    ),
+    icon: <Image src={images.iconEdit} alt="" sx={{ width: 25, height: 25 }} />,
   },
   {
     title: 'Arrange',
     path: ARRANGE_PATH,
     icon: (
-      <Image
-        src="images/sidebar/arrange.png"
-        alt=""
-        sx={{ width: 25, height: 25 }}
-      />
+      <Image src={images.iconArrange} alt="" sx={{ width: 25, height: 25 }} />
     ),
   },
   {
     title: 'Settings',
     path: SETTING_PATH,
     icon: (
-      <Image
-        src="images/sidebar/settings.png"
-        alt=""
-        sx={{ width: 25, height: 25 }}
-      />
+      <Image src={images.iconSettings} alt="" sx={{ width: 25, height: 25 }} />
     ),
   },
 ];
