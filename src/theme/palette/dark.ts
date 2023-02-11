@@ -1,6 +1,6 @@
 import type { ThemeOptions } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import { CapstoneAttributes } from 'theme';
+import { CapstoneAttributes } from '..';
 
 const neutral = {
   100: '#F3F4F6',

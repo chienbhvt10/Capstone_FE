@@ -116,7 +116,7 @@ const SideBarItems = (props: Props) => {
               sx={{ opacity: open ? 1 : 0, color: '#FFFFFF' }}
             />
           </ListItemButton>
-          <Divider variant="fullWidth" sx={{ borderColor: '#E0E0E0' }} />
+          <Divider sx={{ borderColor: '#E0E0E0' }} />
         </ListItem>
       ))}
     </List>

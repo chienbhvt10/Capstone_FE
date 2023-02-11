@@ -10,7 +10,14 @@ const TimeTablePage = () => {
       {/* <PageBreadcrumbs title={'TimeTable'} breadcrumbs={[]} /> */}
       <Paper
         elevation={12}
-        sx={{ background: '#FFFFFF', p: 2, overflowX: 'auto' }}
+        sx={{
+          background: '#FFFFFF',
+          p: 2,
+          overflowX: 'auto',
+          alignItems: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
       >
         <FilterTable />
         <TimeTable />

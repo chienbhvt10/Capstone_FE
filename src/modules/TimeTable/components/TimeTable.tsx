@@ -13,7 +13,7 @@ interface Props {}
 
 const TimeTable = (props: Props) => {
   return (
-    <TableContainer>
+    <TableContainer sx={{ maxWidth: 1100 }}>
       <Table stickyHeader aria-label="sticky table" sx={{ borderSpacing: 2 }}>
         <TableHead>
           <TableRow>
