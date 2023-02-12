@@ -22,28 +22,6 @@ module.exports = {
         test: /\.(js|ts)x?$/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-              [
-                '@babel/preset-react',
-                {
-                  runtime: 'automatic',
-                },
-              ],
-              '@babel/preset-typescript',
-            ],
-            plugins: [
-              [
-                'module-resolver',
-                {
-                  alias: {
-                    '~': './src',
-                  },
-                },
-              ],
-            ],
-          },
         },
         exclude: /node_modules/,
       },
