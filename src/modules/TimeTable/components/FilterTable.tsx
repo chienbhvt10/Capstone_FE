@@ -32,6 +32,15 @@ const FilterTable = (props: Props) => {
           )}
         />
       </Box>
+      <Box sx={{ width: 250 }}>
+        <Autocomplete
+          disablePortal
+          options={['Spring', 'Summer', 'Fall']}
+          renderInput={(params) => (
+            <TextField {...params} label="Select Lecturer" />
+          )}
+        />
+      </Box>
     </Stack>
   );
 };

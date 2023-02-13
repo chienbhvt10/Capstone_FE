@@ -2,6 +2,8 @@ import { TextField, Autocomplete } from '@mui/material';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { SyntheticEvent, useState } from 'react';
+import images from '~/assets/images';
+import Image from '~/components/Image';
 
 interface Props {}
 
@@ -66,7 +68,17 @@ const Toolbox = (props: Props) => {
     <Stack spacing={2} direction="column" sx={{ display: 'block' }}>
       <Stack direction="row">
         <Button>Add new department’s lecturer</Button>
-        <Button>Export in import format</Button>
+        <Button
+          startIcon={
+            <Image
+              src={images.iconExport}
+              alt=""
+              sx={{ width: 20, height: 20 }}
+            />
+          }
+        >
+          Export in import format
+        </Button>
       </Stack>
       <Stack direction="row">
         <Autocomplete

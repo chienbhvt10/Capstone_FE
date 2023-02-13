@@ -5,6 +5,7 @@ import { Row } from '../utils/type';
 import Box from '@mui/material/Box/Box';
 import { Autocomplete } from '@mui/lab';
 import { SyntheticEvent, useState } from 'react';
+import TimeTableSelectSlot from '~/components/TimeTableSelectSlot';
 
 interface Props {
   onCloseDetailLecturerPopup: () => void;
@@ -238,19 +239,26 @@ const DetailLecturerPopup = (props: Props) => {
           </Grid>
           <Grid item xs={12}>
             <Grid container spacing={2} sx={{ justifyContent: 'center' }}>
-              <Grid item xs={12}>
-                <Typography variant="body2">Expected slot</Typography>
+              <Grid item xs={2}>
+                <Typography variant="body2">Expected Slot</Typography>
               </Grid>
-              <Grid item xs={10}></Grid>
+              <Grid item xs={10}>
+                <TimeTableSelectSlot />
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12}>
             <Grid container spacing={2} sx={{ justifyContent: 'center' }}>
-              <Grid item xs={12}>
+              <Grid item xs={2}>
                 <Typography variant="body2">Note</Typography>
               </Grid>
               <Grid item xs={10}>
-                <Typography variant="body2">{itemShow?.email}</Typography>
+                <TextField
+                  multiline
+                  rows={4}
+                  variant="outlined"
+                  sx={{ maxWidth: 600 }}
+                />
               </Grid>
             </Grid>
           </Grid>

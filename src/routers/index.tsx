@@ -1,13 +1,16 @@
 import { RouteObject, useRoutes } from 'react-router-dom';
+import ApproveLecturerRegister from '~/modules/Lecturer/ApproveLecturerRegister';
+import LecturerProfilePage from '~/modules/Lecturer/LecturerProfile';
+import LecturerRegisterEdit from '~/modules/Lecturer/LecturerRegisterEdit';
 import AdminLayout from '../layouts/AdminLayout';
-import ManagePage from '../modules/Manage';
+import AuthLayout from '../layouts/AuthLayout';
 import ArrangePage from '../modules/Arrange';
+import Login from '../modules/Auth/Login';
+import RegisterPage from '../modules/Lecturer/LecturerRegister';
+import ManagePage from '../modules/Manage';
 import SettingPage from '../modules/Setting';
-import RegisterPage from '../modules/Register';
 import TimeTablePage from '../modules/TimeTable';
 import authRoutes from './AuthRoutes';
-import AuthLayout from '../layouts/AuthLayout';
-import Login from '../modules/Auth/Login';
 
 const routes: RouteObject[] = [
   {
@@ -47,6 +50,30 @@ const routes: RouteObject[] = [
     element: (
       <AdminLayout>
         <RegisterPage />
+      </AdminLayout>
+    ),
+  },
+  {
+    path: '/register/edit',
+    element: (
+      <AdminLayout>
+        <LecturerRegisterEdit />
+      </AdminLayout>
+    ),
+  },
+  {
+    path: '/register/approve',
+    element: (
+      <AdminLayout>
+        <ApproveLecturerRegister />
+      </AdminLayout>
+    ),
+  },
+  {
+    path: '/profile',
+    element: (
+      <AdminLayout>
+        <LecturerProfilePage />
       </AdminLayout>
     ),
   },

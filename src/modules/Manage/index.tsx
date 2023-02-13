@@ -1,9 +1,7 @@
-import { Box } from '@mui/material';
-import PageBreadcrumbs from '~/components/PageBreadcrumbs';
-import PageWrapper from '~/components/PageWrapper';
 import Stack from '@mui/material/Stack';
-import Toolbox from './components/Toolbox';
+import PageWrapper from '~/components/PageWrapper';
 import LecturerTable from './components/LecturerTable';
+import Toolbox from './components/Toolbox';
 
 const ManagePage = () => {
   return (
@@ -12,7 +10,12 @@ const ManagePage = () => {
       <Stack
         direction="column"
         spacing={2}
-        sx={{ backgroundColor: 'background.paper', p: 2, overflowX: 'auto' }}
+        sx={{
+          backgroundColor: 'background.paper',
+          p: 2,
+          overflowX: 'auto',
+          height: 'calc(100vh - 120px)',
+        }}
       >
         <Toolbox />
         <LecturerTable />
