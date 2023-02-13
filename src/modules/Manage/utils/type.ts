@@ -8,6 +8,7 @@ export interface Column {
 }
 
 export interface Row {
+  id: number;
   email: string;
   fullName: string;
   shortName: string;

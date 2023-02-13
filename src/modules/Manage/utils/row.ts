@@ -8,6 +8,7 @@ import { Row } from './type';
 
 export const timeTableRows: Row[] = [
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_COMPLETED,
     fullName: 'Chien',
@@ -15,6 +16,7 @@ export const timeTableRows: Row[] = [
     status: STATUS_ACTIVE,
   },
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_COMPLETED,
     fullName: 'Chien',
@@ -22,6 +24,7 @@ export const timeTableRows: Row[] = [
     status: STATUS_ACTIVE,
   },
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_COMPLETED,
     fullName: 'Chien',
@@ -29,6 +32,7 @@ export const timeTableRows: Row[] = [
     status: STATUS_ACTIVE,
   },
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_COMPLETED,
     fullName: 'Chien',
@@ -36,6 +40,7 @@ export const timeTableRows: Row[] = [
     status: STATUS_DEACTIVATE,
   },
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_UNCOMPLETED,
     fullName: 'Chien',
@@ -43,6 +48,7 @@ export const timeTableRows: Row[] = [
     status: STATUS_ACTIVE,
   },
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_UNCOMPLETED,
     fullName: 'Chien',
@@ -50,6 +56,7 @@ export const timeTableRows: Row[] = [
     status: STATUS_DEACTIVATE,
   },
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_COMPLETED,
     fullName: 'Chien',
@@ -57,6 +64,7 @@ export const timeTableRows: Row[] = [
     status: STATUS_DEACTIVATE,
   },
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_UNCOMPLETED,
     fullName: 'Chien',
@@ -64,6 +72,7 @@ export const timeTableRows: Row[] = [
     status: STATUS_ACTIVE,
   },
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_COMPLETED,
     fullName: 'Chien',
@@ -71,6 +80,7 @@ export const timeTableRows: Row[] = [
     status: STATUS_DEACTIVATE,
   },
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_COMPLETED,
     fullName: 'Chien',
@@ -78,6 +88,7 @@ export const timeTableRows: Row[] = [
     status: STATUS_DEACTIVATE,
   },
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_COMPLETED,
     fullName: 'Chien',
@@ -85,6 +96,7 @@ export const timeTableRows: Row[] = [
     status: STATUS_DEACTIVATE,
   },
   {
+    id: 1,
     email: 'abc@example.com',
     expected: EXPECTED_COMPLETED,
     fullName: 'Chien',

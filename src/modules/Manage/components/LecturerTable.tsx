@@ -10,12 +10,46 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { lecturerTableColumns } from '../utils/column';
 import { timeTableRows } from '../utils/row';
-import { EXPECTED_COMPLETED, STATUS_ACTIVE } from '../const';
+import {
+  EXPECTED_COMPLETED,
+  EXPECTED_UNCOMPLETED,
+  STATUS_ACTIVE,
+} from '../const';
 import { Paper, TablePagination } from '@mui/material';
+import { useState } from 'react';
+import DetailLecturerPopup from './DetailLecturerPopup';
+import { Row } from '../utils/type';
+import ExpectedPriorityPopup from './ExpectedPriorityPopup';
 
 interface Props {}
 
 const LecturerTable = (props: Props) => {
+  const [openDetailPopup, setOpenDetailPopup] = useState<boolean>(false);
+  const [openExpectedPriorityPopup, setOpenExpectedPriorityPopup] =
+    useState<boolean>(false);
+
+  const [itemShow, setItemShow] = useState<Row | null>(null);
+
+  const onShowDetailPopup = (item: Row) => () => {
+    setOpenDetailPopup(true);
+    setItemShow(item);
+  };
+
+  const onCloseDetailLecturerPopup = () => {
+    setOpenDetailPopup(false);
+  };
+
+  const onShowExpectedPriorityPopup = (item: Row) => () => {
+    if (item.expected === EXPECTED_UNCOMPLETED) {
+      setOpenExpectedPriorityPopup(true);
+      setItemShow(item);
+    }
+  };
+
+  const onCloseExpectedPriorityPopup = () => {
+    setOpenExpectedPriorityPopup(false);
+  };
+
   return (
     <TableContainer sx={{ maxHeight: 500 }}>
       <Table stickyHeader aria-label="sticky table">
@@ -47,7 +81,13 @@ const LecturerTable = (props: Props) => {
                 </Typography>
               </TableCell>
               <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
-                <Typography variant="body2" align="left">
+                <Typography
+                  variant="body2"
+                  align="left"
+                  color="primary.main"
+                  sx={{ cursor: 'pointer' }}
+                  onClick={onShowDetailPopup(item)}
+                >
                   {item.email}
                 </Typography>
               </TableCell>
@@ -65,11 +105,12 @@ const LecturerTable = (props: Props) => {
                 <Typography
                   variant="body2"
                   align="center"
+                  onClick={onShowExpectedPriorityPopup(item)}
                   sx={{
-                    border:
-                      item.expected === EXPECTED_COMPLETED
-                        ? '1px solid green'
-                        : '1px solid red',
+                    cursor: 'pointer',
+                    border: '1px solid',
+                    borderColor:
+                      item.expected === EXPECTED_COMPLETED ? 'green' : 'red',
                     color:
                       item.expected === EXPECTED_COMPLETED ? 'green' : 'red',
                   }}
@@ -110,6 +151,15 @@ const LecturerTable = (props: Props) => {
         page={1}
         onPageChange={() => {}}
         onRowsPerPageChange={() => {}}
+      />
+      <DetailLecturerPopup
+        open={openDetailPopup}
+        onCloseDetailLecturerPopup={onCloseDetailLecturerPopup}
+        itemShow={itemShow}
+      />
+      <ExpectedPriorityPopup
+        open={openExpectedPriorityPopup}
+        onCloseExpectedPriorityPopup={onCloseExpectedPriorityPopup}
       />
     </TableContainer>
   );
