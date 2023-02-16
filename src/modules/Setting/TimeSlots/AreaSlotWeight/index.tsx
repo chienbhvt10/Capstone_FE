@@ -9,13 +9,14 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import { lecturerSlotPreferenceLevel } from '../utils/data';
-import { getTableSlotColumns } from '../utils/slotColumns';
+import { useMemo } from 'react';
+import { getTableAreaSlotWeightColumns } from '../utils/columns';
+import { slotConflictData } from '../utils/data';
 
-const SlotPreferenceLevel = () => {
+const AreaSlotWeight = () => {
   const theme = useTheme();
 
-  const columns = getTableSlotColumns();
+  const columns = useMemo(() => getTableAreaSlotWeightColumns(), []);
 
   return (
     <TableContainer sx={{ maxHeight: 550 }}>
@@ -64,7 +65,7 @@ const SlotPreferenceLevel = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {lecturerSlotPreferenceLevel.map((item, index) => (
+          {slotConflictData.map((item, index) => (
             <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
               <TableCell
                 align="center"
@@ -89,10 +90,10 @@ const SlotPreferenceLevel = () => {
                     alignItems: 'center',
                   }}
                 >
-                  <Typography variant="body1">{item.lecturer}</Typography>
+                  <Typography variant="body1">{item.slot}</Typography>
                 </Box>
               </TableCell>
-              {item.slots.map((subject, index) => (
+              {item.slots.map((slot, index) => (
                 <TableCell
                   key={index + 2}
                   align="center"
@@ -113,10 +114,11 @@ const SlotPreferenceLevel = () => {
                       alignItems: 'center',
                     }}
                   >
-                    <Select value="">
+                    <Select value={slot.conflictLevel}>
                       <MenuItem disabled value="">
-                        <em>Select preference level</em>
+                        <em>Select conflict level</em>
                       </MenuItem>
+                      <MenuItem value={0}>0</MenuItem>
                       <MenuItem value={1}>1</MenuItem>
                       <MenuItem value={2}>2</MenuItem>
                       <MenuItem value={3}>3</MenuItem>
@@ -134,4 +136,4 @@ const SlotPreferenceLevel = () => {
   );
 };
 
-export default SlotPreferenceLevel;
+export default AreaSlotWeight;

@@ -1,13 +1,13 @@
-import { Stack } from '@mui/material';
-import PageWrapper from '~/components/PageWrapper';
-import SubjectPreferenceLevel from './components/SubjectPreferenceLevel';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { useState } from 'react';
 import { TabContext, TabPanel } from '@mui/lab';
-import SlotPreferenceLevel from './components/SlotPreferenceLevel';
+import { Stack } from '@mui/material';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Typography from '@mui/material/Typography';
+import { useState } from 'react';
+import PageWrapper from '~/components/PageWrapper';
+import SlotPreferenceLevel from './SlotPreferenceLevel';
+import SubjectPreferenceLevel from './SubjectPreferenceLevel';
 
 const PreferenceLevelSetting = () => {
   const [tab, setTab] = useState('1');
@@ -33,11 +33,7 @@ const PreferenceLevelSetting = () => {
         <Typography variant="h6">Preference Level</Typography>
         <TabContext value={tab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs
-              value={tab}
-              onChange={handleChange}
-              aria-label="basic tabs example"
-            >
+            <Tabs value={tab} onChange={handleChange}>
               <Tab label="Subject Preference Level" value="1" />
               <Tab label="Slot Preference Level" value="2" />
             </Tabs>

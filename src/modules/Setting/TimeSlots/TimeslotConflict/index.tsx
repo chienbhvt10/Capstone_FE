@@ -9,13 +9,14 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import { lecturerSubjectPreferenceLevel } from '../utils/data';
-import { getTableSubjectColumns } from '../utils/subjectColumns';
+import { useMemo } from 'react';
+import { getTableSlotConflictColumns } from '../utils/columns';
+import { slotConflictData } from '../utils/data';
 
-const SubjectPreferenceLevel = () => {
+const TimeSlotConflict = () => {
   const theme = useTheme();
 
-  const columns = getTableSubjectColumns();
+  const columns = useMemo(() => getTableSlotConflictColumns(), []);
 
   return (
     <TableContainer sx={{ maxHeight: 550 }}>
@@ -64,7 +65,7 @@ const SubjectPreferenceLevel = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {lecturerSubjectPreferenceLevel.map((item, index) => (
+          {slotConflictData.map((item, index) => (
             <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
               <TableCell
                 align="center"
@@ -89,10 +90,10 @@ const SubjectPreferenceLevel = () => {
                     alignItems: 'center',
                   }}
                 >
-                  <Typography variant="body1">{item.lecturer}</Typography>
+                  <Typography variant="body1">{item.slot}</Typography>
                 </Box>
               </TableCell>
-              {item.subjects.map((subject, index) => (
+              {item.slots.map((slot, index) => (
                 <TableCell
                   key={index + 2}
                   align="center"
@@ -113,16 +114,7 @@ const SubjectPreferenceLevel = () => {
                       alignItems: 'center',
                     }}
                   >
-                    <Select value="">
-                      <MenuItem disabled value="">
-                        <em>Select preference level</em>
-                      </MenuItem>
-                      <MenuItem value={1}>1</MenuItem>
-                      <MenuItem value={2}>2</MenuItem>
-                      <MenuItem value={3}>3</MenuItem>
-                      <MenuItem value={4}>4</MenuItem>
-                      <MenuItem value={5}>5</MenuItem>
-                    </Select>
+                    {slot.conflictLevel !== -5 && 'x'}
                   </Box>
                 </TableCell>
               ))}
@@ -134,4 +126,4 @@ const SubjectPreferenceLevel = () => {
   );
 };
 
-export default SubjectPreferenceLevel;
+export default TimeSlotConflict;

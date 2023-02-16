@@ -3,6 +3,7 @@ import ModelSetting from '~/modules/Setting/Models';
 import PreferenceLevelSetting from '~/modules/Setting/PreferenceLevel';
 import RoomsSettings from '~/modules/Setting/Rooms';
 import SubjectsSetting from '~/modules/Setting/Subjects';
+import TimeSlotsSetting from '~/modules/Setting/TimeSlots';
 
 const settingRoutes: RouteObject = {
   path: 'settings',
@@ -27,7 +28,7 @@ const settingRoutes: RouteObject = {
     },
     {
       path: 'time-slot',
-      element: <PreferenceLevelSetting />,
+      element: <TimeSlotsSetting />,
     },
   ],
 };
