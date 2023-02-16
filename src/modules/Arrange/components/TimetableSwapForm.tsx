@@ -25,7 +25,7 @@ const TimetableSwapForm = (props: Props) => {
         <Typography variant="body2" sx={{ width: 80 }}>
           Lecturer Swap
         </Typography>
-        <Select>
+        <Select value="">
           <MenuItem disabled value="">
             <em>Select Lecturer</em>
           </MenuItem>
@@ -45,7 +45,7 @@ const TimetableSwapForm = (props: Props) => {
         <Typography variant="body2" sx={{ width: 80 }}>
           Room Swap
         </Typography>
-        <Select>
+        <Select value="">
           <MenuItem disabled value="">
             <em>Select Room</em>
           </MenuItem>

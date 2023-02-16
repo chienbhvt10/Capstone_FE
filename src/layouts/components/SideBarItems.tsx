@@ -14,6 +14,7 @@ import {
   MANAGE_PATH,
   REGISTER_PATH,
   SETTING_PATH,
+  SETTING_PATH_DEFAULT,
   TIMETABLE_PATH,
 } from '~/constants/path';
 import images from '~/assets/images';
@@ -63,7 +64,7 @@ const listItem: ListItem[] = [
   },
   {
     title: 'Settings',
-    path: SETTING_PATH,
+    path: SETTING_PATH_DEFAULT,
     icon: (
       <Image src={images.iconSettings} alt="" sx={{ width: 25, height: 25 }} />
     ),
@@ -147,25 +148,23 @@ const SideBarItems = (props: Props) => {
           </ListItemButton>
 
           <Divider sx={{ borderColor: '#E0E0E0' }} />
-          {item.path === SETTING_PATH && (
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                {item.subItems?.map((subItem) => (
-                  <ListItemButton
-                    key={subItem.path}
-                    sx={{ py: 0.2, pl: 4 }}
-                    onClick={onChangePath(subItem.path)}
-                  >
-                    <ListItemIcon sx={{ minWidth: 22 }}></ListItemIcon>
-                    <ListItemText
-                      primary={subItem.title}
-                      sx={{ opacity: open ? 1 : 0, color: '#FFFFFF' }}
-                    />
-                  </ListItemButton>
-                ))}
-              </List>
-            </Collapse>
-          )}
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {item.subItems?.map((subItem) => (
+                <ListItemButton
+                  key={subItem.path}
+                  sx={{ py: 0.2, pl: 4 }}
+                  onClick={onChangePath(subItem.path)}
+                >
+                  <ListItemIcon sx={{ minWidth: 22 }}></ListItemIcon>
+                  <ListItemText
+                    primary={subItem.title}
+                    sx={{ opacity: open ? 1 : 0, color: '#FFFFFF' }}
+                  />
+                </ListItemButton>
+              ))}
+            </List>
+          </Collapse>
         </ListItem>
       ))}
     </List>

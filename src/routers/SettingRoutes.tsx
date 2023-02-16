@@ -10,12 +10,12 @@ const settingRoutes: RouteObject = {
   children: [
     {
       index: true,
-      path: 'subjects',
-      element: <SubjectsSetting />,
-    },
-    {
       path: 'models',
       element: <ModelSetting />,
+    },
+    {
+      path: 'subjects',
+      element: <SubjectsSetting />,
     },
     {
       path: 'rooms',

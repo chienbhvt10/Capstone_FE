@@ -1,4 +1,4 @@
-import { Grid, MenuItem, Select } from '@mui/material';
+import { Container, Grid, MenuItem, Select } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -19,7 +19,7 @@ const ToolBox = (props: Props) => {
           <Typography variant="body2" sx={{ width: 80 }}>
             Group by
           </Typography>
-          <Select>
+          <Select value="">
             <MenuItem disabled value="">
               <em>Select Lecturer</em>
             </MenuItem>
