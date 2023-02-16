@@ -3,7 +3,7 @@ import AuthLayout from '../layouts/AuthLayout';
 import { RouteObject } from 'react-router-dom';
 
 const authRoutes: RouteObject = {
-  path: 'auth',
+  path: '/auth',
   element: <AuthLayout />,
   children: [
     {

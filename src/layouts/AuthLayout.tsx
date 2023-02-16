@@ -1,17 +1,13 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import Header from './components/Header';
+import { Outlet } from 'react-router-dom';
 
-interface Props {
-  children?: React.ReactNode;
-}
-
-const AuthLayout = (props: Props) => {
-  const { children } = props;
+const AuthLayout = () => {
   return (
     <Box>
       <Header />
-      {children}
+      <Outlet />
     </Box>
   );
 };

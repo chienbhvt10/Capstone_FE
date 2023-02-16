@@ -27,11 +27,11 @@ const Login = () => {
             </Typography>
             <Stack direction="column" sx={{ pt: 3 }}>
               <Typography variant="body2">Username</Typography>
-              <TextField placeholder="Enter username" size="small" />
+              <TextField placeholder="Enter username" size="medium" />
             </Stack>
             <Stack direction="column">
               <Typography variant="body2">Password</Typography>
-              <TextField placeholder="Enter password" size="small" />
+              <TextField placeholder="Enter password" size="medium" />
             </Stack>
 
             <Stack direction="column" sx={{ pt: 3 }}>

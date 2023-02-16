@@ -1,11 +1,13 @@
 import { IconButton, Tooltip } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
+import Collapse from '@mui/material/Collapse';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from 'react-router-dom';
+import StarBorder from '@mui/icons-material/StarBorder';
 import Image from '~/components/Image';
 import {
   ARRANGE_PATH,
@@ -24,6 +26,11 @@ interface ListItem {
   title: string;
   path: string;
   icon: React.ReactNode;
+  subItems?: {
+    title: string;
+    path: string;
+    icon?: React.ReactNode;
+  }[];
 }
 
 const listItem: ListItem[] = [
@@ -60,6 +67,28 @@ const listItem: ListItem[] = [
     icon: (
       <Image src={images.iconSettings} alt="" sx={{ width: 25, height: 25 }} />
     ),
+    subItems: [
+      {
+        title: 'Models',
+        path: 'settings/models',
+      },
+      {
+        title: 'Subjects',
+        path: 'settings/subjects',
+      },
+      {
+        title: 'Rooms',
+        path: 'settings/rooms',
+      },
+      {
+        title: 'TimeSlot',
+        path: 'settings/time-slot',
+      },
+      {
+        title: 'Preference Level',
+        path: 'settings/preference-level',
+      },
+    ],
   },
 ];
 
@@ -87,7 +116,7 @@ const SideBarItems = (props: Props) => {
               <ListItemIcon
                 sx={{
                   minWidth: 0,
-                  mr: open ? 3 : 'auto',
+                  mr: open ? 1 : 'auto',
                   justifyContent: 'center',
                   color: '#FFFFFF',
                 }}
@@ -116,7 +145,27 @@ const SideBarItems = (props: Props) => {
               sx={{ opacity: open ? 1 : 0, color: '#FFFFFF' }}
             />
           </ListItemButton>
+
           <Divider sx={{ borderColor: '#E0E0E0' }} />
+          {item.path === SETTING_PATH && (
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {item.subItems?.map((subItem) => (
+                  <ListItemButton
+                    key={subItem.path}
+                    sx={{ py: 0.2, pl: 4 }}
+                    onClick={onChangePath(subItem.path)}
+                  >
+                    <ListItemIcon sx={{ minWidth: 22 }}></ListItemIcon>
+                    <ListItemText
+                      primary={subItem.title}
+                      sx={{ opacity: open ? 1 : 0, color: '#FFFFFF' }}
+                    />
+                  </ListItemButton>
+                ))}
+              </List>
+            </Collapse>
+          )}
         </ListItem>
       ))}
     </List>
