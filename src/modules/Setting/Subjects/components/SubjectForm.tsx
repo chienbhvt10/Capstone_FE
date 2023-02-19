@@ -34,65 +34,60 @@ const options: Option[] = [
   },
 ];
 
-const RoomForm = () => {
+const SubjectForm = () => {
   const onShowCreateDistanceDialog = () => {};
 
   const onShowCreateBuildingDialog = () => {};
 
   return (
-    <Box sx={{ marginLeft: 0, maxWidth: 1300 }}>
+    <Box
+      sx={{
+        maxWidth: 1200,
+        px: 4,
+      }}
+    >
       <Grid container spacing={2}>
-        <Grid item container xs={3}>
+        <Grid item container xs={3.5}>
           <Stack
             direction="row"
             sx={{ justifyContent: 'center', alignItems: 'center', width: 1 }}
           >
-            <Typography variant="body2" sx={{ width: 100 }}>
-              Building 1
+            <Typography variant="body2" sx={{ width: 120 }}>
+              SubjectCode
             </Typography>
-            <AutocompleteCustom
-              options={options}
-              label="Select Building"
-              renderOptionAllowRemove
-            />
+            <TextField variant="outlined" label="Subject Code" />
           </Stack>
         </Grid>
-        <Grid item container xs={3}>
+        <Grid item container xs={3.5}>
           <Stack
             direction="row"
             sx={{ justifyContent: 'center', alignItems: 'center', width: 1 }}
           >
-            <Typography variant="body2" sx={{ width: 100 }}>
-              Building 2
+            <Typography variant="body2" sx={{ width: 130 }}>
+              SubjectName
             </Typography>
-            <AutocompleteCustom
-              options={options}
-              label="Select Building"
-              renderOptionAllowRemove
-            />
+            <TextField variant="outlined" label="Subject Name" />
           </Stack>
         </Grid>
-        <Grid item container xs={3}>
+        <Grid item container xs={3.5}>
           <Stack
             direction="row"
             sx={{ justifyContent: 'center', alignItems: 'center' }}
           >
             <Typography variant="body2" sx={{ width: 100 }}>
-              Distance
+              Department
             </Typography>
-            <TextField variant="outlined" label="Distance" />
+            <TextField variant="outlined" label="Department" />
           </Stack>
         </Grid>
-        <Grid item container xs={3}>
+        <Grid item container xs={1.5}>
           <Stack direction="row">
-            <Button onClick={onShowCreateDistanceDialog} sx={{ width: 120 }}>
-              Create Distance
-            </Button>
             <Button
               startIcon={<AddIcon />}
-              onClick={onShowCreateBuildingDialog}
+              onClick={onShowCreateDistanceDialog}
+              sx={{ width: 130 }}
             >
-              Building
+              Create Class
             </Button>
           </Stack>
         </Grid>
@@ -101,4 +96,4 @@ const RoomForm = () => {
   );
 };
 
-export default RoomForm;
+export default SubjectForm;

@@ -1,5 +1,5 @@
 import { TabContext, TabPanel } from '@mui/lab';
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -22,7 +22,7 @@ const TimeSlotsSettingPage = () => {
       {/* <PageBreadcrumbs title={'Arrange'} breadcrumbs={[]} /> */}
       <Stack
         direction="column"
-        spacing={2}
+        spacing={4}
         sx={{
           backgroundColor: 'background.paper',
           p: 2,
@@ -31,6 +31,7 @@ const TimeSlotsSettingPage = () => {
           height: 'calc(100vh - 120px)',
         }}
       >
+        <Typography variant="h6">Time Slot Setting</Typography>
         <TabContext value={tab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={tab} onChange={handleChange}>

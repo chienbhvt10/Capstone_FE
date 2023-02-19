@@ -1,13 +1,13 @@
-import Table from '@mui/material/Table';
+import Table, { TableProps } from '@mui/material/Table';
 import { tableCellClasses } from '@mui/material/TableCell';
 import React from 'react';
 
-interface Props {
+interface Props extends TableProps {
   children: React.ReactNode;
 }
 
 const TableCustom = (props: Props) => {
-  const { children } = props;
+  const { children, ...rest } = props;
   return (
     <Table
       stickyHeader
@@ -20,6 +20,7 @@ const TableCustom = (props: Props) => {
         },
         borderSpacing: 1,
       }}
+      {...rest}
     >
       {children}
     </Table>

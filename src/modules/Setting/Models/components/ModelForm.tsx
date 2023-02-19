@@ -19,14 +19,6 @@ const ModelForm = (props: Props) => {
   return (
     <Container maxWidth="lg" sx={{ mt: 2 }}>
       <Grid container spacing={5}>
-        <Grid item xs={4}>
-          <Typography component="span" variant="body1">
-            Model
-          </Typography>
-          <Typography component="span" variant="body1" color="error.main">
-            *
-          </Typography>
-        </Grid>
         <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
           <Grid item xs={4}>
             <Typography variant="body1">Select optimization model</Typography>
