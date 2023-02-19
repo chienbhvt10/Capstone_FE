@@ -9,9 +9,7 @@ const base: ThemeOptions = {
         size: 'small',
         fullWidth: true,
         variant: 'outlined',
-        inputProps: {
-          sx: { padding: '6px 12px' },
-        },
+        inputProps: {},
       },
     },
     MuiSelect: {

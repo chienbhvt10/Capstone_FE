@@ -13,13 +13,12 @@ const ModelSetting = () => {
           backgroundColor: 'background.paper',
           p: 2,
           pb: 6,
-          overflowX: 'hidden',
         }}
       >
         <Stack
           direction="column"
           spacing={2}
-          sx={{ height: 'calc(100vh - 180px)' }}
+          sx={{ height: 'calc(100vh - 120px)' }}
         >
           <ModelForm />
         </Stack>

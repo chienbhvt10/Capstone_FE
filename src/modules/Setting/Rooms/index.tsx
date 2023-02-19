@@ -1,5 +1,7 @@
-import { Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import PageWrapper from '~/components/PageWrapper';
+import RoomForm from './components/RoomForm';
+import RoomTable from './components/RoomTable';
 
 const RoomsSettings = () => {
   return (
@@ -7,14 +9,19 @@ const RoomsSettings = () => {
       {/* <PageBreadcrumbs title={'Arrange'} breadcrumbs={[]} /> */}
       <Stack
         direction="column"
-        spacing={2}
+        spacing={5}
         sx={{
           backgroundColor: 'background.paper',
           p: 2,
           pb: 6,
           overflowX: 'hidden',
+          height: 'calc(100vh - 120px)',
         }}
-      ></Stack>
+      >
+        <Typography variant="h6">Distance Settings</Typography>
+        <RoomForm />
+        <RoomTable />
+      </Stack>
     </PageWrapper>
   );
 };
