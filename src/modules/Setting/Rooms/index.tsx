@@ -9,7 +9,7 @@ const RoomsSettings = () => {
       {/* <PageBreadcrumbs title={'Arrange'} breadcrumbs={[]} /> */}
       <Stack
         direction="column"
-        spacing={4}
+        spacing={2}
         sx={{
           backgroundColor: 'background.paper',
           p: 3,

@@ -9,6 +9,16 @@ export interface Column {
   format?: ((value: number) => string) | null;
 }
 
+export interface SlotWeightData {
+  id: number;
+  slot: string;
+  slots: {
+    id: number;
+    name: string;
+    slotWeight: number;
+  }[];
+}
+
 export interface SlotConflictData {
   id: number;
   slot: string;
@@ -27,4 +37,14 @@ export interface SlotCompatibilityData {
     name: string;
     conflictLevel: number;
   }[];
+}
+
+export interface SlotConflictSelectItem {
+  value: number;
+  label: string;
+}
+
+export interface AreaSlotWeightSelectItem {
+  value: number;
+  label: string;
 }

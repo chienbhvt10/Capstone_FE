@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useForm } from 'react-hook-form';
-import Form from '~/components/Form';
+import Form from '~/components/form/Form';
 import Button from '@mui/material/Button';
 
 interface Props {}

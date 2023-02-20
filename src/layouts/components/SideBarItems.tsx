@@ -8,7 +8,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from 'react-router-dom';
 import StarBorder from '@mui/icons-material/StarBorder';
-import Image from '~/components/Image';
+import Image from '~/components/styledComponents/Image';
 import {
   ARRANGE_PATH,
   MANAGE_PATH,

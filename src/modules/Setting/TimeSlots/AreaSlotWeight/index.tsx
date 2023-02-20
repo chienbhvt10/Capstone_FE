@@ -6,10 +6,16 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useMemo } from 'react';
-import TableCellCustom from '~/components/Table/TableCellCustom';
-import TableCustom from '~/components/Table/TableCustom';
+import TableCellCustom from '~/components/table/TableCellCustom';
+import TableCustom from '~/components/table/TableCustom';
 import { getTableAreaSlotWeightColumns } from '../utils/columns';
-import { slotConflictData } from '../utils/data';
+import {
+  areaSlotWeightData,
+  areaSlotWeightItem,
+  slotConflictData,
+} from '../utils/data';
+import TableCellSelect from '~/components/specificComponent/TableCellSelect';
+import { AreaSlotWeightSelectItem } from '../utils/type';
 
 const AreaSlotWeight = () => {
   const columns = useMemo(() => getTableAreaSlotWeightColumns(), []);
@@ -35,7 +41,7 @@ const AreaSlotWeight = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {slotConflictData.map((item, index) => (
+          {areaSlotWeightData.map((item, index) => (
             <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
               <TableCellCustom
                 key={index + 1}
@@ -56,17 +62,12 @@ const AreaSlotWeight = () => {
                   border={true}
                   hover={true}
                 >
-                  <Select value={slot.conflictLevel}>
-                    <MenuItem disabled value="">
-                      <em>Select conflict level</em>
-                    </MenuItem>
-                    <MenuItem value={0}>0</MenuItem>
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
-                    <MenuItem value={3}>3</MenuItem>
-                    <MenuItem value={4}>4</MenuItem>
-                    <MenuItem value={5}>5</MenuItem>
-                  </Select>
+                  <TableCellSelect<AreaSlotWeightSelectItem>
+                    value={slot.slotWeight}
+                    item={slot}
+                    selectItems={areaSlotWeightItem}
+                    selectTitle="Select conflict level"
+                  />
                 </TableCellCustom>
               ))}
             </TableRow>

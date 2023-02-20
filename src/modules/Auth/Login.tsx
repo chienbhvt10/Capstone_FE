@@ -3,7 +3,7 @@ import Paper from '@mui/material/Paper';
 import { Container } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import images from '~/assets/images';
-import Image from '~/components/Image';
+import Image from '~/components/styledComponents/Image';
 import PageWrapper from '~/components/PageWrapper';
 import { HOME_PATH } from '~/constants/path';
 import useNotification from '~/hooks/useNotification';

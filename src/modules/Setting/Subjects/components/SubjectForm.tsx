@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import AutocompleteCustom from '~/components/Form/AutocompleteCustom';
+import AutocompleteCustom from '~/components/form/AutocompleteCustom';
 import AddIcon from '@mui/icons-material/Add';
 
 interface Option {

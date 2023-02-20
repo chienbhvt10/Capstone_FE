@@ -7,7 +7,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { useLocation, useNavigate } from 'react-router-dom';
 import images from '~/assets/images';
-import Image from '~/components/Image';
+import Image from '~/components/styledComponents/Image';
 import { LOGIN_PATH } from '~/constants/path';
 import useNotification from '~/hooks/useNotification';
 

@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/system';
 import images from '~/assets/images';
-import Image from '~/components/Image';
+import Image from '~/components/styledComponents/Image';
 
 type Props = {};
 

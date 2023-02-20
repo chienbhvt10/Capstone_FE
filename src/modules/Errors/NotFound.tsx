@@ -1,7 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Image from '~/components/Image';
+import Image from '~/components/styledComponents/Image';
 import PageWrapper from '~/components/PageWrapper';
 
 const NotFound = () => {

@@ -4,11 +4,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useMemo } from 'react';
-import TableCellCustom from '~/components/Table/TableCellCustom';
-import TableCustom from '~/components/Table/TableCustom';
+import TableCellCustom from '~/components/table/TableCellCustom';
+import TableCustom from '~/components/table/TableCustom';
 import { getRoomsDistanceColumns } from '../util/columns';
 import { roomDistanceData } from '../util/data';
-import TableToolCustom from '~/components/Table/TableToolCustom';
+import TableToolCustom from '~/components/table/TableToolCustom';
 
 const RoomTable = () => {
   const columns = useMemo(() => getRoomsDistanceColumns(), []);

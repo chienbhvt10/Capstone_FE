@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { SyntheticEvent, useState } from 'react';
 import images from '~/assets/images';
-import Image from '~/components/Image';
+import Image from '~/components/styledComponents/Image';
 
 interface Props {}
 

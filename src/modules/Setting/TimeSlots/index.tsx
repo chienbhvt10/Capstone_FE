@@ -22,7 +22,7 @@ const TimeSlotsSettingPage = () => {
       {/* <PageBreadcrumbs title={'Arrange'} breadcrumbs={[]} /> */}
       <Stack
         direction="column"
-        spacing={4}
+        spacing={2}
         sx={{
           backgroundColor: 'background.paper',
           p: 2,
@@ -41,13 +41,13 @@ const TimeSlotsSettingPage = () => {
               <Tab label="Area Slot Weight" value="4" />
             </Tabs>
           </Box>
-          <TabPanel value="1">
+          <TabPanel value="1" sx={{ p: 0 }}>
             <TimeSlotSetting />
           </TabPanel>
-          <TabPanel value="2">
+          <TabPanel value="2" sx={{ p: 0 }}>
             <TimeSlotConflict />
           </TabPanel>
-          <TabPanel value="3">
+          <TabPanel value="3" sx={{ p: 0 }}>
             <TimeSlotCompatibility />
             <Stack
               direction="row"
@@ -72,7 +72,7 @@ const TimeSlotsSettingPage = () => {
               </ul>
             </Stack>
           </TabPanel>
-          <TabPanel value="4">
+          <TabPanel value="4" sx={{ p: 0 }}>
             <AreaSlotWeight />
             <Stack
               direction="row"

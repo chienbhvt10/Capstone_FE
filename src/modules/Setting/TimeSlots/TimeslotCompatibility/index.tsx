@@ -6,10 +6,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useMemo } from 'react';
-import TableCellCustom from '~/components/Table/TableCellCustom';
-import TableCustom from '~/components/Table/TableCustom';
+import TableCellCustom from '~/components/table/TableCellCustom';
+import TableCustom from '~/components/table/TableCustom';
 import { getTableSlotCompatibilityColumns } from '../utils/columns';
-import { slotCompatibilityData } from '../utils/data';
+import { slotCompatibilityData, slotConflictItem } from '../utils/data';
+import TableCellSelect from '~/components/specificComponent/TableCellSelect';
+import { SlotConflictSelectItem } from '../utils/type';
 
 const TimeSlotCompatibility = () => {
   const columns = useMemo(() => getTableSlotCompatibilityColumns(), []);
@@ -56,22 +58,12 @@ const TimeSlotCompatibility = () => {
                   border={true}
                   hover={true}
                 >
-                  <Select value={slot.conflictLevel}>
-                    <MenuItem disabled value="">
-                      <em>Select conflict level</em>
-                    </MenuItem>
-                    <MenuItem value={-5}>-5</MenuItem>
-                    <MenuItem value={-4}>-4</MenuItem>
-                    <MenuItem value={-3}>-3</MenuItem>
-                    <MenuItem value={-2}>-2</MenuItem>
-                    <MenuItem value={-1}>-1</MenuItem>
-                    <MenuItem value={0}>0</MenuItem>
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
-                    <MenuItem value={3}>3</MenuItem>
-                    <MenuItem value={4}>4</MenuItem>
-                    <MenuItem value={5}>5</MenuItem>
-                  </Select>
+                  <TableCellSelect<SlotConflictSelectItem>
+                    value={slot.conflictLevel}
+                    item={slot}
+                    selectItems={slotConflictItem}
+                    selectTitle="Select conflict level"
+                  />
                 </TableCellCustom>
               ))}
             </TableRow>
