@@ -1,7 +1,7 @@
 import { Outlet, RouteObject } from 'react-router-dom';
 import AdminLayout from '~/layouts/AdminLayout';
+import RegisterPage from '~/modules/Lecturer';
 import ApproveLecturerRegister from '~/modules/Lecturer/ApproveLecturerRegister';
-import RegisterPage from '~/modules/Lecturer/LecturerRegister';
 import LecturerRegisterEdit from '~/modules/Lecturer/LecturerRegisterEdit';
 
 const registerRoutes: RouteObject = {

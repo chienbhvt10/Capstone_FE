@@ -1,8 +1,15 @@
 import { Stack } from '@mui/material';
+import { useState } from 'react';
 import PageWrapper from '~/components/PageWrapper';
-import RegisterScheduleForm from '../components/RegisterScheduleForm';
+import RegisterScheduleForm from './components/RegisterScheduleForm';
 
 const RegisterPage = () => {
+  const [tab, setTab] = useState('1');
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setTab(newValue);
+  };
+
   return (
     <PageWrapper title="Register Page">
       {/* <PageBreadcrumbs title={'Register'} breadcrumbs={[]} /> */}
