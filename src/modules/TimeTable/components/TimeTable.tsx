@@ -40,7 +40,7 @@ const TimeTable = (props: Props) => {
               <TableCell align="center" sx={{ border: '1px solid #ccc' }}>
                 <Box
                   sx={{
-                    minHeight: 100,
+                    minHeight: 80,
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -63,7 +63,7 @@ const TimeTable = (props: Props) => {
                 >
                   <Box
                     sx={{
-                      minHeight: 100,
+                      minHeight: 80,
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'center',

@@ -349,3 +349,110 @@ export const getTableAreaSlotWeightColumns = (slots?: any) => {
 
   return [...columns, ...columnsDefined];
 };
+
+export const slotColumns: readonly Column[] = [
+  { id: '', label: '', minWidth: 80, minHeight: 30, align: 'center' },
+  { id: 'MON', label: 'MON', minWidth: 80, minHeight: 30, align: 'center' },
+  {
+    id: 'TUE',
+    label: 'TUE',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'WED',
+    label: 'WED',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'THU',
+    label: 'THU',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'FRI',
+    label: 'FRI',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'SAT',
+    label: 'SAT',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'SUN',
+    label: 'SUN',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+];
+
+export const timeSlotColumns: readonly Column[] = [
+  {
+    id: 'TimeSlot',
+    label: 'TimeSlot',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  { id: 'MON', label: 'MON', minWidth: 80, minHeight: 30, align: 'center' },
+  {
+    id: 'TUE',
+    label: 'TUE',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'WED',
+    label: 'WED',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'THU',
+    label: 'THU',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'FRI',
+    label: 'FRI',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'SAT',
+    label: 'SAT',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'SUN',
+    label: 'SUN',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'tool',
+    label: '',
+    minWidth: 50,
+    minHeight: 30,
+    align: 'center',
+  },
+];

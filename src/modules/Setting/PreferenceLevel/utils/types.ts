@@ -28,3 +28,13 @@ export interface LecturerSlotsPreferenceLevel {
     preferenceLevel: number;
   }[];
 }
+
+export interface SubjectPreferenceLevelItems {
+  value: number;
+  label: string;
+}
+
+export interface SlotPreferenceLevelItems {
+  value: number;
+  label: string;
+}

@@ -4,25 +4,37 @@ import { Box, IconButton, Tooltip } from '@mui/material';
 
 interface Props {
   item: any;
-  onEdit: (item: any) => () => void;
-  onDelete: (item: any) => () => void;
+  onEdit?: (item: any) => () => void;
+  onDelete?: (item: any) => () => void;
+  displayEditButton?: boolean;
+  displayDeleteButton?: boolean;
 }
 
 const TableToolCustom = (props: Props) => {
-  const { item, onEdit, onDelete } = props;
+  const {
+    item,
+    onEdit,
+    onDelete,
+    displayEditButton = true,
+    displayDeleteButton = true,
+  } = props;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-      <Tooltip title="Edit item" placement="top">
-        <IconButton onClick={onEdit(item)}>
-          <EditIcon fontSize="medium" sx={{ color: 'primary.main' }} />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Delete item" placement="top">
-        <IconButton onClick={onDelete(item)}>
-          <DeleteIcon fontSize="medium" sx={{ color: 'error.main' }} />
-        </IconButton>
-      </Tooltip>
+      {displayEditButton && (
+        <Tooltip title="Edit item" placement="top">
+          <IconButton onClick={onEdit?.(item)}>
+            <EditIcon fontSize="medium" sx={{ color: 'primary.main' }} />
+          </IconButton>
+        </Tooltip>
+      )}
+      {displayDeleteButton && (
+        <Tooltip title="Delete item" placement="top">
+          <IconButton onClick={onDelete?.(item)}>
+            <DeleteIcon fontSize="medium" sx={{ color: 'error.main' }} />
+          </IconButton>
+        </Tooltip>
+      )}
     </Box>
   );
 };

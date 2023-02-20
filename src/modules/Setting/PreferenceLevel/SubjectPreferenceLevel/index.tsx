@@ -9,9 +9,16 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import { lecturerSubjectPreferenceLevel } from '../utils/data';
+import {
+  lecturerSubjectPreferenceLevel,
+  subjectPreferenceLevelItems,
+} from '../utils/data';
 import { getTableSubjectColumns } from '../utils/subjectColumns';
 import { useMemo } from 'react';
+import TableCustom from '~/components/table/TableCustom';
+import TableCellCustom from '~/components/table/TableCellCustom';
+import TableCellSelect from '~/components/specificComponent/TableCellSelect';
+import { SubjectPreferenceLevelItems } from '../utils/types';
 
 const SubjectPreferenceLevel = () => {
   const theme = useTheme();
@@ -20,118 +27,50 @@ const SubjectPreferenceLevel = () => {
 
   return (
     <TableContainer sx={{ maxHeight: 550 }}>
-      <Table
-        stickyHeader
-        aria-label="sticky table"
-        sx={{
-          [`& .${tableCellClasses.root}`]: {
-            px: 1,
-          },
-          [`& th.${tableCellClasses.root}`]: {
-            p: 2,
-          },
-          borderSpacing: 1,
-        }}
-      >
+      <TableCustom>
         <TableHead>
           <TableRow>
             {columns.map((item) => (
-              <TableCell
+              <TableCellCustom
                 key={item.id}
                 align={item.align}
-                sx={{
-                  left: item.stickyPosition === 'left' ? 0 : 'unset',
-                  right: item.stickyPosition === 'right' ? 0 : 'unset',
-                  zIndex: item.sticky
-                    ? theme.zIndex.appBar + 10
-                    : theme.zIndex.appBar,
-                }}
+                sticky={item.sticky}
+                stickyPosition={item.stickyPosition}
+                minWidth={item.minWidth}
+                minHeight={item.minHeight}
               >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    minWidth: item.minWidth,
-                    minHeight: item.minHeight,
-                  }}
-                >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                    {item.label}
-                  </Typography>
-                </Box>
-              </TableCell>
+                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                  {item.label}
+                </Typography>
+              </TableCellCustom>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
           {lecturerSubjectPreferenceLevel.map((item, index) => (
             <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
-              <TableCell
+              <TableCellCustom
                 align="center"
-                sx={{
-                  border: '1px solid #ccc',
-                  left: 0,
-                  position: 'sticky',
-                  zIndex: theme.zIndex.appBar,
-                  backgroundColor: theme.palette.background.paper,
-                  '&:hover': {
-                    backgroundColor: '#DDF5FF',
-                    cursor: 'pointer',
-                  },
-                }}
+                sticky={true}
+                stickyPosition="left"
+                minHeight={60}
               >
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Typography variant="body1">{item.lecturer}</Typography>
-                </Box>
-              </TableCell>
+                <Typography variant="body1">{item.lecturer}</Typography>
+              </TableCellCustom>
               {item.subjects.map((subject, index) => (
-                <TableCell
-                  key={index + 2}
-                  align="center"
-                  sx={{
-                    border: '1px solid #ccc',
-                    '&:hover': {
-                      backgroundColor: '#DDF5FF',
-                      cursor: 'pointer',
-                    },
-                  }}
-                >
-                  <Box
-                    sx={{
-                      minHeight: 60,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Select value="">
-                      <MenuItem disabled value="">
-                        <em>Select preference level</em>
-                      </MenuItem>
-                      <MenuItem value={0}>0</MenuItem>
-                      <MenuItem value={1}>1</MenuItem>
-                      <MenuItem value={2}>2</MenuItem>
-                      <MenuItem value={3}>3</MenuItem>
-                      <MenuItem value={4}>4</MenuItem>
-                      <MenuItem value={5}>5</MenuItem>
-                    </Select>
-                  </Box>
-                </TableCell>
+                <TableCellCustom key={index + 2} align="center" minHeight={60}>
+                  <TableCellSelect<SubjectPreferenceLevelItems>
+                    value={subject.preferenceLevel}
+                    selectTitle="Select preference level"
+                    selectItems={subjectPreferenceLevelItems}
+                    item={subject}
+                  />
+                </TableCellCustom>
               ))}
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </TableCustom>
     </TableContainer>
   );
 };

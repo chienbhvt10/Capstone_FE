@@ -8,11 +8,12 @@ interface Props extends TableCellProps {
   align?: 'center' | 'left' | 'right';
   stickyPosition?: ('left' | 'right') | null;
   sticky?: boolean | null;
-  minWidth?: number;
-  minHeight?: number;
+  minWidth?: number | null;
+  minHeight?: number | null;
   BoxProps?: BoxProps;
   border?: boolean | null;
   hover?: boolean | null;
+  backgroundEmphasize?: boolean | null;
 }
 
 const TableCellCustom = (props: Props) => {
@@ -26,6 +27,7 @@ const TableCellCustom = (props: Props) => {
     BoxProps,
     border,
     hover,
+    backgroundEmphasize,
     ...rest
   } = props;
   const theme = useTheme();
@@ -34,9 +36,11 @@ const TableCellCustom = (props: Props) => {
     <TableCell
       align={align}
       sx={{
+        background: backgroundEmphasize ? '#5aafff' : '#FFF',
         border: border ? '1px solid #ccc' : '0px solid #ccc',
         left: stickyPosition === 'left' ? 0 : 'unset',
         right: stickyPosition === 'right' ? 0 : 'unset',
+        position: sticky ? 'sticky' : 'unset',
         zIndex: sticky ? theme.zIndex.appBar + 10 : theme.zIndex.appBar,
         '&:hover': hover
           ? {
@@ -44,6 +48,7 @@ const TableCellCustom = (props: Props) => {
               cursor: 'pointer',
             }
           : {},
+        ...rest.sx,
       }}
       {...rest}
     >

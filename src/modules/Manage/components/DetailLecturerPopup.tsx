@@ -5,7 +5,6 @@ import { Row } from '../utils/type';
 import Box from '@mui/material/Box/Box';
 import { Autocomplete } from '@mui/lab';
 import { SyntheticEvent, useState } from 'react';
-import TimeTableSelectSlot from '~/components/TimeTableSelectSlot';
 
 interface Props {
   onCloseDetailLecturerPopup: () => void;
@@ -242,9 +241,7 @@ const DetailLecturerPopup = (props: Props) => {
               <Grid item xs={2}>
                 <Typography variant="body2">Expected Slot</Typography>
               </Grid>
-              <Grid item xs={10}>
-                <TimeTableSelectSlot />
-              </Grid>
+              <Grid item xs={10}></Grid>
             </Grid>
           </Grid>
           <Grid item xs={12}>

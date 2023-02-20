@@ -1,5 +1,7 @@
+import TimeTableSelectSlot from './components/TimeTableSelectSlot';
+
 const TimeSlotSetting = () => {
-  return <div>TimeSlotSetting</div>;
+  return <TimeTableSelectSlot />;
 };
 
 export default TimeSlotSetting;

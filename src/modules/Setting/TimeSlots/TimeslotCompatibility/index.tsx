@@ -1,16 +1,14 @@
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useMemo } from 'react';
+import TableCellSelect from '~/components/specificComponent/TableCellSelect';
 import TableCellCustom from '~/components/table/TableCellCustom';
 import TableCustom from '~/components/table/TableCustom';
 import { getTableSlotCompatibilityColumns } from '../utils/columns';
 import { slotCompatibilityData, slotConflictItem } from '../utils/data';
-import TableCellSelect from '~/components/specificComponent/TableCellSelect';
 import { SlotConflictSelectItem } from '../utils/type';
 
 const TimeSlotCompatibility = () => {
