@@ -13,7 +13,7 @@ const ApproveLecturerRegister = () => {
           backgroundColor: 'background.paper',
           p: 2,
           overflowX: 'auto',
-          height: 'calc(100vh - 120px)',
+          height: 'calc(100vh - 60px)',
         }}
       >
         <RegisterScheduleForm title="Approve Lecturer's Register Subject-Slot" />

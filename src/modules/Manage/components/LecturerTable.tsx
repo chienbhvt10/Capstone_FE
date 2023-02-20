@@ -156,6 +156,7 @@ const LecturerTable = (props: Props) => {
         />
       </TableContainer>
       <TablePagination
+        sx={{ overflow: 'unset' }}
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
         count={10}

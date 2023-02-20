@@ -5,17 +5,17 @@ import RoomTable from './components/RoomTable';
 
 const RoomsSettings = () => {
   return (
-    <PageWrapper title="Rooms Setting">
+    <PageWrapper title="Distance Setting">
       {/* <PageBreadcrumbs title={'Arrange'} breadcrumbs={[]} /> */}
       <Stack
         direction="column"
         spacing={4}
         sx={{
           backgroundColor: 'background.paper',
-          p: 2,
+          p: 3,
           pb: 6,
           overflowX: 'hidden',
-          height: 'calc(100vh - 120px)',
+          height: 'calc(100vh - 60px)',
         }}
       >
         <Typography variant="h6">Distance Settings</Typography>

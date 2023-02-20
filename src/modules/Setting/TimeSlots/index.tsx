@@ -28,7 +28,7 @@ const TimeSlotsSettingPage = () => {
           p: 2,
           pb: 6,
           overflowX: 'hidden',
-          height: 'calc(100vh - 120px)',
+          height: 'calc(100vh - 60px)',
         }}
       >
         <Typography variant="h6">Time Slot Setting</Typography>

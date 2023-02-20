@@ -16,7 +16,7 @@ const TimeTablePage = () => {
           alignItems: 'center',
           display: 'flex',
           flexDirection: 'column',
-          height: 'calc(100vh - 120px)',
+          height: 'calc(100vh - 60px)',
         }}
       >
         <FilterTable />

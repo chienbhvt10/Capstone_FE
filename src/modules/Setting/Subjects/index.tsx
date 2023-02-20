@@ -18,7 +18,7 @@ const SubjectsSetting = () => {
           pb: 6,
           overflowX: 'hidden',
           alignItems: 'center',
-          height: 'calc(100vh - 120px)',
+          height: 'calc(100vh - 60px)',
         }}
       >
         <Typography variant="h6" sx={{ alignSelf: 'flex-start', ml: 4 }}>

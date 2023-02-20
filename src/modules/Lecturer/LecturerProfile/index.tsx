@@ -23,7 +23,7 @@ const LecturerProfilePage = (props: Props) => {
         sx={{
           backgroundColor: 'background.paper',
           p: 2,
-          height: 'calc(100vh - 120px)',
+          height: 'calc(100vh - 60px)',
         }}
       >
         <Container maxWidth="md">

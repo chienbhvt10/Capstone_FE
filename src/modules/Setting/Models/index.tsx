@@ -14,7 +14,7 @@ const ModelSetting = () => {
           p: 2,
           pb: 6,
           alignItems: 'center',
-          height: 'calc(100vh - 120px)',
+          height: 'calc(100vh - 60px)',
         }}
       >
         <Stack direction="row" sx={{ alignSelf: 'flex-start', ml: 4 }}>
