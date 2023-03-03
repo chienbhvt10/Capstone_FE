@@ -1,20 +1,14 @@
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useMemo } from 'react';
-import TableCellCustom from '~/components/table/TableCellCustom';
-import TableCustom from '~/components/table/TableCustom';
+import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
+import TableCellCustom from '~/components/TableComponents/TableCellCustom';
+import TableCustom from '~/components/TableComponents/TableCustom';
 import { getTableAreaSlotWeightColumns } from '../utils/columns';
-import {
-  areaSlotWeightData,
-  areaSlotWeightItem,
-  slotConflictData,
-} from '../utils/data';
-import TableCellSelect from '~/components/specificComponent/TableCellSelect';
+import { areaSlotWeightData, areaSlotWeightItem } from '../utils/data';
 import { AreaSlotWeightSelectItem } from '../utils/type';
 
 const AreaSlotWeight = () => {

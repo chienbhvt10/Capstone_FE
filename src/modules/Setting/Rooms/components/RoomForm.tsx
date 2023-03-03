@@ -7,8 +7,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import AutocompleteCustom from '~/components/form/AutocompleteCustom';
 import AddIcon from '@mui/icons-material/Add';
+import AutocompleteCustom from '~/components/FormComponents/AutocompleteCustom';
 
 interface Option {
   id: number;

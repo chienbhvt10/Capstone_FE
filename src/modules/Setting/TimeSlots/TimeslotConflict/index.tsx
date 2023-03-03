@@ -4,8 +4,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useMemo } from 'react';
-import TableCellCustom from '~/components/table/TableCellCustom';
-import TableCustom from '~/components/table/TableCustom';
+import TableCellCustom from '~/components/TableComponents/TableCellCustom';
+import TableCustom from '~/components/TableComponents/TableCustom';
 import { getTableSlotConflictColumns } from '../utils/columns';
 import { slotConflictData } from '../utils/data';
 

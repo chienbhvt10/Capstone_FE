@@ -10,9 +10,9 @@ import { Fragment, useState } from 'react';
 import { Button, ButtonGroup, Container, Stack } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import TableCellCustom from '~/components/table/TableCellCustom';
+import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import { slotColumns, timeSlotColumns } from '../../utils/columns';
-import TableToolCustom from '~/components/table/TableToolCustom';
+import TableToolCustom from '~/components/TableComponents/TableToolCustom';
 
 interface Props {}
 

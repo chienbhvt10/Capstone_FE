@@ -17,10 +17,10 @@ import {
 import { getTableSlotColumns } from '../utils/slotColumns';
 import { useState } from 'react';
 import { useMemo } from 'react';
-import TableCustom from '~/components/table/TableCustom';
-import TableCellCustom from '~/components/table/TableCellCustom';
-import TableCellSelect from '~/components/specificComponent/TableCellSelect';
 import { SlotPreferenceLevelItems } from '../utils/types';
+import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
+import TableCustom from '~/components/TableComponents/TableCustom';
+import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 
 const SlotPreferenceLevel = () => {
   const theme = useTheme();

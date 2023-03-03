@@ -1,24 +1,19 @@
-import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+import { useMemo } from 'react';
+import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
 import {
   lecturerSubjectPreferenceLevel,
   subjectPreferenceLevelItems,
 } from '../utils/data';
 import { getTableSubjectColumns } from '../utils/subjectColumns';
-import { useMemo } from 'react';
-import TableCustom from '~/components/table/TableCustom';
-import TableCellCustom from '~/components/table/TableCellCustom';
-import TableCellSelect from '~/components/specificComponent/TableCellSelect';
 import { SubjectPreferenceLevelItems } from '../utils/types';
+import TableCellCustom from '~/components/TableComponents/TableCellCustom';
+import TableCustom from '~/components/TableComponents/TableCustom';
 
 const SubjectPreferenceLevel = () => {
   const theme = useTheme();

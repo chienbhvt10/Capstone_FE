@@ -4,12 +4,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useMemo } from 'react';
-import TableCellSelect from '~/components/specificComponent/TableCellSelect';
-import TableCellCustom from '~/components/table/TableCellCustom';
-import TableCustom from '~/components/table/TableCustom';
 import { getTableSlotCompatibilityColumns } from '../utils/columns';
 import { slotCompatibilityData, slotConflictItem } from '../utils/data';
 import { SlotConflictSelectItem } from '../utils/type';
+import TableCustom from '~/components/TableComponents/TableCustom';
+import TableCellCustom from '~/components/TableComponents/TableCellCustom';
+import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
 
 const TimeSlotCompatibility = () => {
   const columns = useMemo(() => getTableSlotCompatibilityColumns(), []);
