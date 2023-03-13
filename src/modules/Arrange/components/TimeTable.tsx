@@ -1,22 +1,45 @@
 import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { timeTableColumns } from '../utils/column';
-import { assignedRows, notAssignRows } from '../utils/row';
 import { useTheme } from '@mui/material/styles';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import TableCustom from '~/components/TableComponents/TableCustom';
+import useArrange from '~/hooks/useArrange';
+import { getTimeSlot } from '~/modules/Setting/services/timeslot';
+import { notAssignRows } from '../utils/row';
+import { Column } from '../utils/type';
+import { getTableTimeSlotColumns } from '../utils/column';
 
 interface Props {}
 
 const TimeTable = (props: Props) => {
   const theme = useTheme();
+  const {
+    lecturersTaskAssignInfo,
+    tasksNotAssignedInfo,
+    timeSlots,
+    setTimeSlots,
+  } = useArrange();
+
+  const columns = useMemo(
+    () => getTableTimeSlotColumns(timeSlots),
+    [timeSlots]
+  );
+
   const [maxLengthNotAssignSlot, setMaxLengthNotAssignSlot] =
     useState<number>(0);
+
+  useEffect(() => {
+    getTimeSlot().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setTimeSlots(res.data);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const lengthNotAssignSlot = notAssignRows.map((row) =>
@@ -35,21 +58,10 @@ const TimeTable = (props: Props) => {
 
   return (
     <TableContainer sx={{ maxHeight: 550 + maxLengthNotAssignSlot * 40 }}>
-      <Table
-        stickyHeader
-        aria-label="sticky table"
-        sx={{
-          [`& .${tableCellClasses.root}`]: {
-            px: 1,
-          },
-          [`& th.${tableCellClasses.root}`]: {
-            p: 2,
-          },
-        }}
-      >
+      <TableCustom>
         <TableHead>
           <TableRow>
-            {timeTableColumns.map((item) => (
+            {columns.map((item) => (
               <TableCell
                 key={item.id}
                 align={item.align}
@@ -79,55 +91,53 @@ const TimeTable = (props: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {assignedRows.map((item, index) => (
-            <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
-              <TableCell
-                align="center"
-                sx={{
-                  border: '1px solid #ccc',
-                  left: 0,
-                  position: 'sticky',
-                  zIndex: theme.zIndex.appBar,
-                  backgroundColor: theme.palette.background.paper,
-                  '&:hover': {
-                    backgroundColor: '#DDF5FF',
-                    cursor: 'pointer',
-                  },
-                }}
-              >
-                <Box
+          {lecturersTaskAssignInfo?.length > 0 &&
+            lecturersTaskAssignInfo.map((item, index) => (
+              <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
+                <TableCell
+                  align="center"
                   sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    border: '1px solid #ccc',
+                    left: 0,
+                    position: 'sticky',
+                    zIndex: theme.zIndex.appBar,
+                    backgroundColor: theme.palette.background.paper,
+                    '&:hover': {
+                      backgroundColor: '#DDF5FF',
+                      cursor: 'pointer',
+                    },
                   }}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                    {item.lecturer}
-                  </Typography>
-                </Box>
-              </TableCell>
-              {item.slots.map((slot, index) => (
-                <Fragment key={index}>
-                  <TableCell
-                    align="center"
+                  <Box
                     sx={{
-                      border: '1px solid #ccc',
-                      '&:hover': {
-                        backgroundColor: '#DDF5FF',
-                        cursor: 'pointer',
-                      },
+                      minHeight: 60,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                   >
-                    {slot.slotInfo &&
-                      slot.slotInfo?.length > 0 &&
-                      slot?.slotInfo?.map((item, index) => (
+                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                      {item.lecturerName}
+                    </Typography>
+                  </Box>
+                </TableCell>
+                {item?.timeSlotInfos &&
+                  item?.timeSlotInfos.length > 0 &&
+                  item.timeSlotInfos.map((task, index) => (
+                    <Fragment key={index}>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: '1px solid #ccc',
+                          '&:hover': {
+                            backgroundColor: '#DDF5FF',
+                            cursor: 'pointer',
+                          },
+                        }}
+                      >
                         <Box
-                          component="a"
-                          href="#scroll-filter-form"
-                          key={index + slot.code}
+                          key={task.timeSlotName}
                           sx={{
                             minHeight: 60,
                             display: 'flex',
@@ -139,171 +149,179 @@ const TimeTable = (props: Props) => {
                           }}
                         >
                           <Fragment>
-                            <Typography variant="body2" align="left">
-                              {item.class}
-                            </Typography>
-                            <Typography variant="body2" align="left">
-                              {item.subject}
+                            <Typography
+                              variant="body2"
+                              sx={{ margin: '0 auto' }}
+                            >
+                              {task.className}
                             </Typography>
                             <Typography
                               variant="body2"
-                              align="left"
-                              sx={{ color: 'primary.dark' }}
+                              sx={{ margin: '0 auto' }}
                             >
-                              {item.room}
+                              {task.subjectName}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ color: 'primary.dark', margin: '0 auto' }}
+                            >
+                              {task.roomName}
                             </Typography>
                           </Fragment>
                         </Box>
-                      ))}
+                      </TableCell>
+                    </Fragment>
+                  ))}
+
+                <TableCell
+                  align="center"
+                  sx={{
+                    border: '1px solid #ccc',
+                    right: 0,
+                    position: 'sticky',
+                    zIndex: theme.zIndex.appBar,
+                    backgroundColor: theme.palette.background.paper,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      minHeight: 40,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                      {111}
+                    </Typography>
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ))}
+
+          <TableRow
+            role="checkbox"
+            tabIndex={-1}
+            sx={{
+              bottom: 0,
+              position: 'sticky',
+              zIndex: theme.zIndex.appBar,
+              backgroundColor: theme.palette.background.paper,
+            }}
+          >
+            <TableCell
+              align="center"
+              sx={{
+                border: '1px solid #ccc',
+                left: 0,
+                position: 'sticky',
+                zIndex: theme.zIndex.appBar,
+                backgroundColor: theme.palette.background.paper,
+                '&:hover': {
+                  backgroundColor: '#DDF5FF',
+                  cursor: 'pointer',
+                },
+              }}
+            >
+              <Box
+                sx={{
+                  minHeight: 60,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                  NOT_ASSIGNED
+                </Typography>
+              </Box>
+            </TableCell>
+            {tasksNotAssignedInfo?.length &&
+              tasksNotAssignedInfo?.length > 0 &&
+              tasksNotAssignedInfo.map((task, index) => (
+                <Fragment key={index}>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      border: '1px solid #ccc',
+                      verticalAlign: 'top',
+                    }}
+                  >
+                    {task.map((item) => (
+                      <Box
+                        key={item.timeSlotId + item.taskId}
+                        sx={{
+                          minHeight: 60,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'flex-start',
+                          textDecoration: 'none',
+                          color: '#000',
+                          '&:hover': {
+                            backgroundColor: '#DDF5FF',
+                            cursor: 'pointer',
+                          },
+                        }}
+                      >
+                        <Fragment>
+                          <Typography
+                            variant="body2"
+                            align="center"
+                            sx={{ margin: '0 auto' }}
+                          >
+                            {item.className}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            align="center"
+                            sx={{ margin: '0 auto' }}
+                          >
+                            {item.subjectName}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            align="center"
+                            sx={{ color: 'primary.dark', margin: '0 auto' }}
+                          >
+                            {item.roomName}
+                          </Typography>
+                        </Fragment>
+                      </Box>
+                    ))}
                   </TableCell>
                 </Fragment>
               ))}
 
-              <TableCell
-                align="center"
-                sx={{
-                  border: '1px solid #ccc',
-                  right: 0,
-                  position: 'sticky',
-                  zIndex: theme.zIndex.appBar,
-                  backgroundColor: theme.palette.background.paper,
-                }}
-              >
-                <Box
-                  sx={{
-                    minHeight: 40,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                    {item.total}
-                  </Typography>
-                </Box>
-              </TableCell>
-            </TableRow>
-          ))}
-          {notAssignRows.map((item, index) => (
-            <TableRow
-              role="checkbox"
-              tabIndex={-1}
-              key={index + 1}
+            <TableCell
+              align="center"
               sx={{
-                bottom: 0,
+                border: '1px solid #ccc',
+                right: 0,
                 position: 'sticky',
                 zIndex: theme.zIndex.appBar,
                 backgroundColor: theme.palette.background.paper,
               }}
             >
-              <TableCell
-                align="center"
+              <Box
                 sx={{
-                  border: '1px solid #ccc',
-                  left: 0,
-                  position: 'sticky',
-                  zIndex: theme.zIndex.appBar,
-                  backgroundColor: theme.palette.background.paper,
-                  '&:hover': {
-                    backgroundColor: '#DDF5FF',
-                    cursor: 'pointer',
-                  },
+                  minHeight: 40,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
-                <Box
-                  sx={{
-                    minHeight: 60,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                    {item.lecturer}
-                  </Typography>
-                </Box>
-              </TableCell>
-              {item.slots.map((slot, index) => (
-                <Fragment key={index}>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: '1px solid #ccc',
-                    }}
-                  >
-                    {slot.slotInfo &&
-                      slot.slotInfo?.length > 0 &&
-                      slot?.slotInfo?.map((item, index) => (
-                        <Box
-                          component="a"
-                          href="#scroll-filter-form"
-                          key={index + slot.code}
-                          sx={{
-                            p: 0.5,
-                            minHeight: 60,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'flex-start',
-                            textDecoration: 'none',
-                            color: '#000',
-                            '&:hover': {
-                              backgroundColor: '#DDF5FF',
-                              cursor: 'pointer',
-                            },
-                          }}
-                        >
-                          <Fragment>
-                            <Typography variant="body2" align="left">
-                              {item.class}
-                            </Typography>
-                            <Typography variant="body2" align="left">
-                              {item.subject}
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              align="left"
-                              sx={{ color: 'primary.dark' }}
-                            >
-                              {item.room}
-                            </Typography>
-                          </Fragment>
-                        </Box>
-                      ))}
-                  </TableCell>
-                </Fragment>
-              ))}
-
-              <TableCell
-                align="center"
-                sx={{
-                  border: '1px solid #ccc',
-                  right: 0,
-                  position: 'sticky',
-                  zIndex: theme.zIndex.appBar,
-                  backgroundColor: theme.palette.background.paper,
-                }}
-              >
-                <Box
-                  sx={{
-                    minHeight: 40,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                    {item.total}
-                  </Typography>
-                </Box>
-              </TableCell>
-            </TableRow>
-          ))}
+                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                  {tasksNotAssignedInfo && tasksNotAssignedInfo?.length}
+                </Typography>
+              </Box>
+            </TableCell>
+          </TableRow>
         </TableBody>
-      </Table>
+      </TableCustom>
     </TableContainer>
   );
 };

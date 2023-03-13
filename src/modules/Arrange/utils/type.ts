@@ -1,12 +1,12 @@
 export interface Column {
-  id: string;
-  label: string;
-  minWidth?: number;
-  minHeight?: number;
+  id?: string | null;
+  label: string | null;
+  minWidth?: number | null;
+  minHeight?: number | null;
   align?: 'right' | 'center' | 'left';
-  sticky?: boolean;
-  stickyPosition?: 'right' | 'left';
-  format?: (value: number) => string;
+  sticky?: boolean | null;
+  stickyPosition?: ('right' | 'left') | null;
+  format?: ((value: number) => string) | null;
 }
 
 export interface SlotInfo {
@@ -26,4 +26,36 @@ export interface Row {
   lecturer: string | null;
   total: number | null;
   slots: Slot[];
+}
+
+export interface LecturerAssign {
+  lecturerId: number | null;
+  lecturerName: string | null;
+  semesterId: number | null;
+  timeSlotInfos: TimeSlotLecturer[];
+}
+
+export interface TimeSlotLecturer {
+  classId: number;
+  className: string;
+  isAssign: number;
+  roomId: number;
+  roomName: string;
+  status: null;
+  subjectId: number;
+  subjectName: string;
+  taskId: number;
+  timeSlotId: number;
+  timeSlotName: string;
+  timeSlotOrder: number;
+}
+
+export interface TimeSlotResponse {
+  description: string;
+  id: number;
+  name: string;
+  orderNumber: number;
+  semesterId: null;
+  slot1: string;
+  slot2: string;
 }

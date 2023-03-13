@@ -116,6 +116,7 @@ export const getTableSlotConflictColumns = (slots?: any) => {
 
   return [...columns, ...columnsDefined];
 };
+
 export const getTableSlotCompatibilityColumns = (slots?: any) => {
   const columns: Column[] = [];
 

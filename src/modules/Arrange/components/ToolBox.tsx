@@ -1,14 +1,60 @@
-import { Container, Grid, MenuItem, Select } from '@mui/material';
+import { Grid, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/system';
+import { useState } from 'react';
 import images from '~/assets/images';
 import Image from '~/components/styledComponents/Image';
+import useArrange from '~/hooks/useArrange';
+import useNotification from '~/hooks/useNotification';
+import { getExecutedArrangeInfo, getTaskNotAssign } from '../services';
 
-type Props = {};
+const ToolBox = () => {
+  const { setLecturersTaskAssignInfo, setTasksNotAssigned } = useArrange();
+  const setNotification = useNotification();
+  const [executeId, setExecuteId] = useState<string>('');
 
-const ToolBox = (props: Props) => {
+  const exportInImportFormat = () => {
+    const url = 'https://localhost:7279/Timetable-20230306171426222.xlsx';
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'Timetable-20230306171426222.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        link?.parentNode?.removeChild(link);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const onGetScheduleByExecuteId = async (executeId: number) => {
+    try {
+      const res = await getExecutedArrangeInfo(executeId);
+      if (res.data && res.data.length > 0) {
+        setLecturersTaskAssignInfo(res.data);
+      }
+      const res2 = await getTaskNotAssign();
+      if (res2.data && res2.data.length > 0) {
+        setTasksNotAssigned(res2.data);
+      }
+      setNotification({
+        message: 'Get execute data success',
+        severity: 'success',
+      });
+    } catch (err) {
+      setNotification({ message: 'Get execute data fail', severity: 'error' });
+    }
+  };
+
+  const onChangeExecuteId = (event: SelectChangeEvent) => {
+    setExecuteId(event.target.value as string);
+    onGetScheduleByExecuteId(Number(event.target.value as string));
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid container item xs={6} lg={3.5}>
@@ -16,12 +62,12 @@ const ToolBox = (props: Props) => {
           direction="row"
           sx={{ width: 1, alignItems: 'center', maxWidth: 300 }}
         >
-          <Typography variant="body2" sx={{ width: 80 }}>
-            Group by
+          <Typography variant="body2" sx={{ width: 200 }}>
+            Select Execute Time
           </Typography>
-          <Select value="">
-            <MenuItem disabled value="">
-              <em>Select Lecturer</em>
+          <Select value={executeId} onChange={onChangeExecuteId}>
+            <MenuItem disabled value={-1}>
+              <em>Select Execute Time</em>
             </MenuItem>
             <MenuItem value={10}>Ten</MenuItem>
             <MenuItem value={20}>Twenty</MenuItem>
@@ -70,6 +116,7 @@ const ToolBox = (props: Props) => {
       <Grid container item xs={6} lg={3} sx={{ display: 'block' }}>
         <Stack direction="column" sx={{ alignItems: 'center' }}>
           <Button
+            onClick={exportInImportFormat}
             startIcon={
               <Image
                 src={images.iconExport}
