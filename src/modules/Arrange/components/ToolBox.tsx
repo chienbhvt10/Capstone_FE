@@ -32,21 +32,17 @@ const ToolBox = () => {
   };
 
   const onGetScheduleByExecuteId = async (executeId: number) => {
-    try {
-      const res = await getExecutedArrangeInfo(executeId);
-      if (res.data && res.data.length > 0) {
-        setLecturersTaskAssignInfo(res.data);
-      }
-      const res2 = await getTaskNotAssign();
-      if (res2.data && res2.data.length > 0) {
-        setTasksNotAssigned(res2.data);
-      }
-      setNotification({
-        message: 'Get execute data success',
-        severity: 'success',
-      });
-    } catch (err) {
-      setNotification({ message: 'Get execute data fail', severity: 'error' });
+    const res = await getExecutedArrangeInfo(executeId);
+    if (res.data && res.data.length > 0) {
+      setLecturersTaskAssignInfo(res.data);
+    }
+    const res2 = await getTaskNotAssign();
+    if (
+      res2.data &&
+      res2.data.timeSlotInfos &&
+      res2.data.timeSlotInfos.length > 0
+    ) {
+      setTasksNotAssigned(res2.data);
     }
   };
 

@@ -32,6 +32,7 @@ export interface LecturerAssign {
   lecturerId: number | null;
   lecturerName: string | null;
   semesterId: number | null;
+  total: number | null;
   timeSlotInfos: TimeSlotLecturer[];
 }
 
@@ -50,7 +51,7 @@ export interface TimeSlotLecturer {
   timeSlotOrder: number;
 }
 
-export interface TimeSlotResponse {
+export interface TimeSlot {
   description: string;
   id: number;
   name: string;
@@ -58,4 +59,9 @@ export interface TimeSlotResponse {
   semesterId: null;
   slot1: string;
   slot2: string;
+}
+
+export interface TimeSlotResponse {
+  total: number | null;
+  timeSlotInfos: Array<Array<TimeSlotLecturer>>;
 }

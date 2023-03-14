@@ -193,7 +193,7 @@ const TimeTable = (props: Props) => {
                     }}
                   >
                     <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                      {111}
+                      {item.total}
                     </Typography>
                   </Box>
                 </TableCell>
@@ -205,8 +205,6 @@ const TimeTable = (props: Props) => {
             tabIndex={-1}
             sx={{
               bottom: 0,
-              position: 'sticky',
-              zIndex: theme.zIndex.appBar,
               backgroundColor: theme.palette.background.paper,
             }}
           >
@@ -218,10 +216,7 @@ const TimeTable = (props: Props) => {
                 position: 'sticky',
                 zIndex: theme.zIndex.appBar,
                 backgroundColor: theme.palette.background.paper,
-                '&:hover': {
-                  backgroundColor: '#DDF5FF',
-                  cursor: 'pointer',
-                },
+                verticalAlign: 'top',
               }}
             >
               <Box
@@ -238,9 +233,9 @@ const TimeTable = (props: Props) => {
                 </Typography>
               </Box>
             </TableCell>
-            {tasksNotAssignedInfo?.length &&
-              tasksNotAssignedInfo?.length > 0 &&
-              tasksNotAssignedInfo.map((task, index) => (
+            {tasksNotAssignedInfo?.timeSlotInfos.length &&
+              tasksNotAssignedInfo?.timeSlotInfos.length > 0 &&
+              tasksNotAssignedInfo.timeSlotInfos.map((task, index) => (
                 <Fragment key={index}>
                   <TableCell
                     align="center"
@@ -253,7 +248,8 @@ const TimeTable = (props: Props) => {
                       <Box
                         key={item.timeSlotId + item.taskId}
                         sx={{
-                          minHeight: 60,
+                          py: 0.5,
+                          minHeight: 70,
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'center',
@@ -303,6 +299,7 @@ const TimeTable = (props: Props) => {
                 position: 'sticky',
                 zIndex: theme.zIndex.appBar,
                 backgroundColor: theme.palette.background.paper,
+                verticalAlign: 'top',
               }}
             >
               <Box
@@ -315,7 +312,7 @@ const TimeTable = (props: Props) => {
                 }}
               >
                 <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                  {tasksNotAssignedInfo && tasksNotAssignedInfo?.length}
+                  {tasksNotAssignedInfo && tasksNotAssignedInfo?.total}
                 </Typography>
               </Box>
             </TableCell>

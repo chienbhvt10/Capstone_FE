@@ -6,11 +6,11 @@ import {
   API_GET_TASK_NOT_ASSIGNED,
   API_IMPORT_TIME_TABLE,
 } from '../constants/api-path';
-import { LecturerAssign } from '../utils/type';
+import { LecturerAssign, TimeSlotResponse } from '../utils/type';
 
 export const getTaskNotAssign = async () => {
   const url = API_GET_TASK_NOT_ASSIGNED;
-  return HttpClient.get<number, CommonResponse>(url);
+  return HttpClient.get<number, CommonResponse<TimeSlotResponse>>(url);
 };
 
 export const executeArrange = async () => {};

@@ -1,8 +1,6 @@
-import { Column, TimeSlotResponse } from './type';
+import { Column, TimeSlot } from './type';
 
-export const getTableTimeSlotColumns = (
-  slots?: TimeSlotResponse[]
-): Column[] => {
+export const getTableTimeSlotColumns = (slots?: TimeSlot[]): Column[] => {
   const columns: Column[] = [];
 
   columns.push({

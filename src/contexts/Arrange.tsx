@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react';
 import {
   LecturerAssign,
-  TimeSlotLecturer,
+  TimeSlot,
   TimeSlotResponse,
 } from '~/modules/Arrange/utils/type';
 
@@ -10,9 +10,11 @@ export interface ArrangeContextValue {
   setLecturersTaskAssignInfo: React.Dispatch<
     React.SetStateAction<LecturerAssign[]>
   >;
-  tasksNotAssignedInfo: Array<Array<TimeSlotLecturer>> | null;
-  setTasksNotAssigned: React.Dispatch<React.SetStateAction<any>>;
-  timeSlots: TimeSlotResponse[];
+  tasksNotAssignedInfo: TimeSlotResponse | null;
+  setTasksNotAssigned: React.Dispatch<
+    React.SetStateAction<TimeSlotResponse | null>
+  >;
+  timeSlots: TimeSlot[];
   setTimeSlots: React.Dispatch<any>;
 }
 
@@ -27,10 +29,10 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [lecturersTaskAssignInfo, setLecturersTaskAssignInfo] = useState<
     LecturerAssign[]
   >([]);
-  const [tasksNotAssignedInfo, setTasksNotAssigned] = useState<Array<
-    Array<TimeSlotLecturer>
-  > | null>(null);
-  const [timeSlots, setTimeSlots] = useState<TimeSlotResponse[]>([]);
+  const [tasksNotAssignedInfo, setTasksNotAssigned] =
+    useState<TimeSlotResponse | null>(null);
+
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
 
   return (
     <ArrangeContext.Provider
