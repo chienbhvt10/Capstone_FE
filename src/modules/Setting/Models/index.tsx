@@ -5,16 +5,15 @@ import ModelForm from './components/ModelForm';
 const ModelSetting = () => {
   return (
     <PageWrapper title="Models Setting">
-      {/* <PageBreadcrumbs title={'Arrange'} breadcrumbs={[]} /> */}
       <Stack
         direction="column"
-        spacing={4}
+        spacing={2}
         sx={{
           backgroundColor: 'background.paper',
           p: 2,
           pb: 6,
           alignItems: 'center',
-          height: 'calc(100vh - 60px)',
+          height: 'calc(100vh - 120px)',
         }}
       >
         <Stack direction="row" sx={{ alignSelf: 'flex-start', ml: 4 }}>

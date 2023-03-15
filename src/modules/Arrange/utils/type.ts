@@ -6,6 +6,7 @@ export interface Column {
   align?: 'right' | 'center' | 'left';
   sticky?: boolean | null;
   stickyPosition?: ('right' | 'left') | null;
+  zIndex?: number;
   format?: ((value: number) => string) | null;
 }
 
@@ -49,16 +50,6 @@ export interface TimeSlotTask {
   timeSlotId: number;
   timeSlotName: string;
   timeSlotOrder: number;
-}
-
-export interface TimeSlot {
-  description: string;
-  id: number;
-  name: string;
-  orderNumber: number;
-  semesterId: null;
-  slot1: string;
-  slot2: string;
 }
 
 export interface TimeSlotResponse {

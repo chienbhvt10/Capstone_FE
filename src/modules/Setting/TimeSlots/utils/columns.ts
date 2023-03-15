@@ -1,5 +1,50 @@
 import { Column } from './type';
 
+export const getTimeSlotTableColumns = () => {
+  const columns: Column[] = [];
+
+  columns.push(
+    {
+      id: 'Name',
+      label: 'Name',
+      minWidth: 100,
+      align: 'center',
+    },
+    {
+      id: 'Description',
+      label: 'Description',
+      minWidth: 100,
+      align: 'center',
+    },
+    {
+      id: 'Slot1',
+      label: 'Slot1',
+      minWidth: 100,
+      align: 'center',
+    },
+    {
+      id: 'Slot2',
+      label: 'Slot2',
+      minWidth: 100,
+      align: 'center',
+    },
+    {
+      id: 'OrderNumber',
+      label: 'OrderNumber',
+      minWidth: 100,
+      align: 'center',
+    },
+    {
+      id: 'Tool',
+      label: '',
+      minWidth: 50,
+      align: 'center',
+    }
+  );
+
+  return [...columns];
+};
+
 export const getTableSlotConflictColumns = (slots?: any) => {
   const columns: Column[] = [];
 
@@ -10,6 +55,7 @@ export const getTableSlotConflictColumns = (slots?: any) => {
     align: 'center',
     sticky: true,
     stickyPosition: 'left',
+    zIndex: 1111,
   });
 
   const subjectsClone = [
@@ -127,6 +173,7 @@ export const getTableSlotCompatibilityColumns = (slots?: any) => {
     align: 'center',
     sticky: true,
     stickyPosition: 'left',
+    zIndex: 1111,
   });
 
   const subjectsClone = [
@@ -226,7 +273,7 @@ export const getTableSlotCompatibilityColumns = (slots?: any) => {
     minWidth: 60,
     align: 'center',
     minHeight: null,
-    sticky: null,
+    sticky: true,
     stickyPosition: null,
     format: null,
   }));
@@ -244,6 +291,7 @@ export const getTableAreaSlotWeightColumns = (slots?: any) => {
     align: 'center',
     sticky: true,
     stickyPosition: 'left',
+    zIndex: 1111,
   });
 
   const subjectsClone = [

@@ -109,7 +109,6 @@ const TimeTableSelectSlot = (props: Props) => {
     setCurrentSlots(newCurrentSlots);
   };
 
-  console.log(currentSlots);
   const onIncrementSlot = () => {
     setNumberSlots((numberSlots) => numberSlots + 1);
     setCurrentSlots((currentSlot) => [

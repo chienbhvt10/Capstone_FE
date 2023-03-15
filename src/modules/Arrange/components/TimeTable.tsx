@@ -12,7 +12,6 @@ import useArrange from '~/hooks/useArrange';
 import { getATask } from '../../../services/arrange';
 import { getTableTimeSlotColumns } from '../utils/column';
 import { notAssignRows } from '../utils/row';
-import { getTimeSlot } from '~/services/timeslot';
 
 interface Props {}
 
@@ -22,8 +21,6 @@ const TimeTable = (props: Props) => {
     lecturersTaskAssignInfo,
     tasksNotAssignedInfo,
     timeSlots,
-    setTimeSlots,
-    taskSelect,
     setTaskSelect,
   } = useArrange();
 
@@ -34,14 +31,6 @@ const TimeTable = (props: Props) => {
 
   const [maxLengthNotAssignSlot, setMaxLengthNotAssignSlot] =
     useState<number>(0);
-
-  useEffect(() => {
-    getTimeSlot().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setTimeSlots(res.data);
-      }
-    });
-  }, []);
 
   useEffect(() => {
     const lengthNotAssignSlot = notAssignRows.map((row) =>
@@ -77,7 +66,9 @@ const TimeTable = (props: Props) => {
                 sx={{
                   left: item.stickyPosition === 'left' ? 0 : 'unset',
                   right: item.stickyPosition === 'right' ? 0 : 'unset',
-                  zIndex: item.sticky
+                  zIndex: item.zIndex
+                    ? item.zIndex
+                    : item.sticky
                     ? theme.zIndex.appBar + 10
                     : theme.zIndex.appBar,
                 }}

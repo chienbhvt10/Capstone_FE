@@ -10,27 +10,46 @@ import TableCustom from '~/components/TableComponents/TableCustom';
 import { getTableAreaSlotWeightColumns } from '../utils/columns';
 import { areaSlotWeightData, areaSlotWeightItem } from '../utils/data';
 import { AreaSlotWeightSelectItem } from '../utils/type';
+import { Box, TableCell } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const AreaSlotWeight = () => {
   const columns = useMemo(() => getTableAreaSlotWeightColumns(), []);
+  const theme = useTheme();
 
   return (
-    <TableContainer sx={{ maxHeight: 550 }}>
+    <TableContainer sx={{ maxHeight: 500 }}>
       <TableCustom>
         <TableHead>
           <TableRow>
             {columns.map((item) => (
-              <TableCellCustom
+              <TableCell
                 key={item.id}
                 align={item.align}
-                stickyPosition={item.stickyPosition}
-                sticky={item.sticky}
-                minWidth={60}
+                sx={{
+                  left: item.stickyPosition === 'left' ? 0 : 'unset',
+                  right: item.stickyPosition === 'right' ? 0 : 'unset',
+                  zIndex: item.zIndex
+                    ? item.zIndex
+                    : item.sticky
+                    ? theme.zIndex.appBar + 10
+                    : theme.zIndex.appBar,
+                }}
               >
-                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                  {item.label}
-                </Typography>
-              </TableCellCustom>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minWidth: item.minWidth,
+                    minHeight: item.minHeight,
+                  }}
+                >
+                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                    {item.label}
+                  </Typography>
+                </Box>
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>

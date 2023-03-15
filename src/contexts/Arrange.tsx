@@ -4,17 +4,18 @@ import {
   Class,
   LecturerAssign,
   TaskDetail,
-  TimeSlot,
   TimeSlotResponse,
 } from '~/modules/Arrange/utils/type';
 import { Lecturer } from '~/modules/Lecturer/util/type';
 import { Room } from '~/modules/Setting/Rooms/util/type';
 import { Subject } from '~/modules/Setting/Subjects/util/type';
+import { TimeSlot } from '~/modules/Setting/TimeSlots/utils/type';
 import { getExecutedArrangeInfo, getTaskNotAssign } from '~/services/arrange';
 import { getClasses } from '~/services/class';
 import { getLecturers } from '~/services/lecturer';
 import { getRooms } from '~/services/room';
 import { getSubjects } from '~/services/subject';
+import { getTimeSlots } from '~/services/timeslot';
 
 export interface ArrangeContextValue {
   lecturersTaskAssignInfo: LecturerAssign[];
@@ -105,6 +106,11 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
     getClasses().then((res) => {
       if (res.data) {
         setClasses(res.data);
+      }
+    });
+    getTimeSlots().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setTimeSlots(res.data || []);
       }
     });
   }, []);

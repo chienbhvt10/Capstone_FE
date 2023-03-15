@@ -1,4 +1,5 @@
-import { Column, TimeSlot } from './type';
+import { TimeSlot } from '~/modules/Setting/TimeSlots/utils/type';
+import { Column } from './type';
 
 export const getTableTimeSlotColumns = (slots?: TimeSlot[]): Column[] => {
   const columns: Column[] = [];
@@ -10,6 +11,7 @@ export const getTableTimeSlotColumns = (slots?: TimeSlot[]): Column[] => {
     align: 'center',
     sticky: true,
     stickyPosition: 'left',
+    zIndex: 1111,
   });
 
   const columnsDefined: Column[] =

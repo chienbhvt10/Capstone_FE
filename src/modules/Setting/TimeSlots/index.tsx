@@ -9,6 +9,7 @@ import AreaSlotWeight from './AreaSlotWeight';
 import TimeSlotSetting from './TimeSlotSetting';
 import TimeSlotCompatibility from './TimeslotCompatibility';
 import TimeSlotConflict from './TimeslotConflict';
+import TimeSlotTable from './TimeSlotSetting/components/TimeSlotTable';
 
 const TimeSlotsSettingPage = () => {
   const [tab, setTab] = useState('1');
@@ -28,10 +29,9 @@ const TimeSlotsSettingPage = () => {
           p: 2,
           pb: 6,
           overflowX: 'hidden',
-          height: 'calc(100vh - 60px)',
+          height: 'calc(100vh - 120px)',
         }}
       >
-        <Typography variant="h6">Time Slot Setting</Typography>
         <TabContext value={tab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={tab} onChange={handleChange}>
@@ -42,7 +42,7 @@ const TimeSlotsSettingPage = () => {
             </Tabs>
           </Box>
           <TabPanel value="1" sx={{ p: 0 }}>
-            <TimeSlotSetting />
+            <TimeSlotTable />
           </TabPanel>
           <TabPanel value="2" sx={{ p: 0 }}>
             <TimeSlotConflict />

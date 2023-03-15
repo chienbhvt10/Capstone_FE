@@ -6,6 +6,7 @@ export interface Column {
   align?: 'right' | 'center' | 'left';
   sticky?: boolean | null;
   stickyPosition?: ('right' | 'left') | null;
+  zIndex?: number;
   format?: ((value: number) => string) | null;
 }
 
@@ -47,4 +48,14 @@ export interface SlotConflictSelectItem {
 export interface AreaSlotWeightSelectItem {
   value: number;
   label: string;
+}
+
+export interface TimeSlot {
+  id: number;
+  name: string;
+  description: string;
+  semesterId: number;
+  orderNumber: number;
+  slot1: string;
+  slot2: string;
 }

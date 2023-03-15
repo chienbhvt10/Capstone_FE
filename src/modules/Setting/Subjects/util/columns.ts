@@ -23,6 +23,12 @@ export const getSubjectTableColumns = () => {
       align: 'center',
     },
     {
+      id: 'OrderNumber',
+      label: 'OrderNumber',
+      minWidth: 100,
+      align: 'center',
+    },
+    {
       id: 'Tool',
       label: '',
       minWidth: 50,

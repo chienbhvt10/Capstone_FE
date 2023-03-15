@@ -10,27 +10,46 @@ import { SlotConflictSelectItem } from '../utils/type';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
+import { useTheme } from '@mui/material/styles';
+import { Box, TableCell } from '@mui/material';
 
 const TimeSlotCompatibility = () => {
+  const theme = useTheme();
   const columns = useMemo(() => getTableSlotCompatibilityColumns(), []);
 
   return (
-    <TableContainer sx={{ maxHeight: 550 }}>
+    <TableContainer sx={{ maxHeight: 500 }}>
       <TableCustom>
         <TableHead>
           <TableRow>
             {columns.map((item) => (
-              <TableCellCustom
+              <TableCell
                 key={item.id}
                 align={item.align}
-                stickyPosition={item.stickyPosition}
-                sticky={item.sticky}
-                minWidth={60}
+                sx={{
+                  left: item.stickyPosition === 'left' ? 0 : 'unset',
+                  right: item.stickyPosition === 'right' ? 0 : 'unset',
+                  zIndex: item.zIndex
+                    ? item.zIndex
+                    : item.sticky
+                    ? theme.zIndex.appBar + 10
+                    : theme.zIndex.appBar,
+                }}
               >
-                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                  {item.label}
-                </Typography>
-              </TableCellCustom>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minWidth: item.minWidth,
+                    minHeight: item.minHeight,
+                  }}
+                >
+                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                    {item.label}
+                  </Typography>
+                </Box>
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
