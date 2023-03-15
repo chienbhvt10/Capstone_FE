@@ -1,7 +1,8 @@
 import { CommonResponse } from '~/utils/TypeCommon';
-import { Room } from '../Rooms/util/type';
+
 import HttpClient from '~/utils/HttpClient';
 import { API_GET_ROOMS } from '../constants/api-path';
+import { Room } from '~/modules/Setting/Rooms/util/type';
 
 export const createBuilding = async () => {};
 export const deleteBuilding = async () => {};

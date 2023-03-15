@@ -9,10 +9,10 @@ import { useTheme } from '@mui/material/styles';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import useArrange from '~/hooks/useArrange';
-import { getTimeSlot } from '~/modules/Setting/services/timeslot';
-import { getATask } from '../services';
+import { getATask } from '../../../services/arrange';
 import { getTableTimeSlotColumns } from '../utils/column';
 import { notAssignRows } from '../utils/row';
+import { getTimeSlot } from '~/services/timeslot';
 
 interface Props {}
 

@@ -89,3 +89,9 @@ export interface TimeTableModifyParam {
   lecturerId: number | null;
   roomId: number | null;
 }
+
+export interface Class {
+  id: number;
+  name: string;
+  semesterId: number;
+}

@@ -1,10 +1,7 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import useRefresh from '~/hooks/useRefresh';
 import {
-  getExecutedArrangeInfo,
-  getTaskNotAssign,
-} from '~/modules/Arrange/services';
-import {
+  Class,
   LecturerAssign,
   TaskDetail,
   TimeSlot,
@@ -12,6 +9,12 @@ import {
 } from '~/modules/Arrange/utils/type';
 import { Lecturer } from '~/modules/Lecturer/util/type';
 import { Room } from '~/modules/Setting/Rooms/util/type';
+import { Subject } from '~/modules/Setting/Subjects/util/type';
+import { getExecutedArrangeInfo, getTaskNotAssign } from '~/services/arrange';
+import { getClasses } from '~/services/class';
+import { getLecturers } from '~/services/lecturer';
+import { getRooms } from '~/services/room';
+import { getSubjects } from '~/services/subject';
 
 export interface ArrangeContextValue {
   lecturersTaskAssignInfo: LecturerAssign[];
@@ -33,6 +36,10 @@ export interface ArrangeContextValue {
   executeId: number;
   setExecuteId: React.Dispatch<React.SetStateAction<number>>;
   refetch: React.DispatchWithoutAction;
+  subjects: Subject[];
+  setSubjects: React.Dispatch<React.SetStateAction<Subject[]>>;
+  classes: Class[];
+  setClasses: React.Dispatch<React.SetStateAction<Class[]>>;
 }
 
 export const ArrangeContext = createContext<ArrangeContextValue | null>(null);
@@ -55,6 +62,8 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [lecturers, setLecturers] = useState<Lecturer[]>([]);
   const [rooms, setRooms] = useState<Room[]>([]);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [classes, setClasses] = useState<Class[]>([]);
 
   useEffect(() => {
     getExecutedArrangeInfo(executeId).then((res) => {
@@ -74,10 +83,38 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
     });
   }, [executeId, refresh]);
 
+  useEffect(() => {
+    getLecturers().then((res) => {
+      if (res.data) {
+        setLecturers(res.data);
+      }
+    });
+
+    getRooms().then((res) => {
+      if (res.data) {
+        setRooms(res.data);
+      }
+    });
+
+    getSubjects().then((res) => {
+      if (res.data) {
+        setSubjects(res.data);
+      }
+    });
+
+    getClasses().then((res) => {
+      if (res.data) {
+        setClasses(res.data);
+      }
+    });
+  }, []);
+
   return (
     <ArrangeContext.Provider
       value={{
+        classes,
         rooms,
+        subjects,
         executeId,
         lecturers,
         timeSlots,
@@ -85,6 +122,8 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         tasksNotAssignedInfo,
         lecturersTaskAssignInfo,
         refetch,
+        setClasses,
+        setSubjects,
         setRooms,
         setExecuteId,
         setTimeSlots,

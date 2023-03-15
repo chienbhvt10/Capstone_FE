@@ -4,8 +4,11 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField/TextField';
 import { Stack } from '@mui/system';
 import { SyntheticEvent, useState } from 'react';
-
-interface Props {}
+import useArrange from '~/hooks/useArrange';
+import { Lecturer } from '~/modules/Lecturer/util/type';
+import { Room } from '~/modules/Setting/Rooms/util/type';
+import { Subject } from '~/modules/Setting/Subjects/util/type';
+import { Class } from '../utils/type';
 
 interface Option {
   id: number;
@@ -38,12 +41,13 @@ const selectedOptions: Option[] = [
   },
 ];
 
-const FilterForm = (props: Props) => {
+const FilterForm = () => {
+  const { rooms, lecturers, subjects, classes, refetch } = useArrange();
   const [semestersSelector, setSemestersSelector] = useState(selectedOptions);
-  const [lecturersSelector, setLecturersSelector] = useState(selectedOptions);
-  const [classesSelector, setClassesSelector] = useState(selectedOptions);
-  const [roomsSelector, setRoomsSelector] = useState(selectedOptions);
-  const [subjectsSelector, setSubjectsSelector] = useState(selectedOptions);
+  const [lecturersSelector, setLecturersSelector] = useState<Lecturer[]>([]);
+  const [classesSelector, setClassesSelector] = useState<Class[]>([]);
+  const [roomsSelector, setRoomsSelector] = useState<Room[]>([]);
+  const [subjectsSelector, setSubjectsSelector] = useState<Subject[]>([]);
 
   const onChangeSemestersSelector = (
     event: SyntheticEvent,
@@ -54,30 +58,34 @@ const FilterForm = (props: Props) => {
 
   const onChangeLecturersSelector = (
     event: SyntheticEvent,
-    newValue: Option[]
+    newValue: Lecturer[]
   ) => {
     setLecturersSelector(newValue);
   };
 
   const onChangeClassesSelector = (
     event: SyntheticEvent,
-    newValue: Option[]
+    newValue: Class[]
   ) => {
     setClassesSelector(newValue);
   };
 
-  const onChangeRoomsSelector = (event: SyntheticEvent, newValue: Option[]) => {
+  const onChangeRoomsSelector = (event: SyntheticEvent, newValue: Room[]) => {
     setRoomsSelector(newValue);
   };
 
   const onChangeSubjectsSelector = (
     event: SyntheticEvent,
-    newValue: Option[]
+    newValue: Subject[]
   ) => {
     setSubjectsSelector(newValue);
   };
 
   const onSearch = () => {};
+
+  const onClearSearch = () => {
+    refetch();
+  };
 
   return (
     <Box
@@ -113,11 +121,11 @@ const FilterForm = (props: Props) => {
             multiple
             disableCloseOnSelect
             filterSelectedOptions
-            getOptionLabel={(option) => option.label}
+            getOptionLabel={(option) => option.shortName}
             isOptionEqualToValue={(option, value) => {
               return option.id === value.id;
             }}
-            options={options}
+            options={lecturers}
             value={lecturersSelector}
             onChange={onChangeLecturersSelector}
             renderInput={(params) => (
@@ -134,11 +142,11 @@ const FilterForm = (props: Props) => {
             multiple
             disableCloseOnSelect
             filterSelectedOptions
-            getOptionLabel={(option) => option.label}
+            getOptionLabel={(option) => option.name}
             isOptionEqualToValue={(option, value) => {
               return option.id === value.id;
             }}
-            options={options}
+            options={classes}
             value={classesSelector}
             onChange={onChangeClassesSelector}
             renderInput={(params) => (
@@ -150,18 +158,18 @@ const FilterForm = (props: Props) => {
             )}
           />
         </Stack>
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
           <Autocomplete
             sx={{ maxWidth: 300, width: 1 }}
             size="small"
             multiple
             disableCloseOnSelect
             filterSelectedOptions
-            getOptionLabel={(option) => option.label}
+            getOptionLabel={(option) => option.name}
             isOptionEqualToValue={(option, value) => {
               return option.id === value.id;
             }}
-            options={options}
+            options={rooms}
             value={roomsSelector}
             onChange={onChangeRoomsSelector}
             renderInput={(params) => (
@@ -174,11 +182,11 @@ const FilterForm = (props: Props) => {
             multiple
             disableCloseOnSelect
             filterSelectedOptions
-            getOptionLabel={(option) => option.label}
+            getOptionLabel={(option) => option.code}
             isOptionEqualToValue={(option, value) => {
               return option.id === value.id;
             }}
-            options={options}
+            options={subjects}
             value={subjectsSelector}
             onChange={onChangeSubjectsSelector}
             renderInput={(params) => (
@@ -192,7 +200,9 @@ const FilterForm = (props: Props) => {
           <Button onClick={onSearch} size="medium">
             Search
           </Button>
-          <Button size="medium">Clear</Button>
+          <Button onClick={onClearSearch} size="medium">
+            Clear
+          </Button>
         </Stack>
       </Stack>
     </Box>

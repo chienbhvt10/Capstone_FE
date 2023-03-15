@@ -13,7 +13,7 @@ import {
   TaskDetail,
   TimeSlotResponse,
   TimeTableModifyParam,
-} from '../utils/type';
+} from '../modules/Arrange/utils/type';
 
 export const getTaskNotAssign = async () => {
   const url = API_GET_TASK_NOT_ASSIGNED;

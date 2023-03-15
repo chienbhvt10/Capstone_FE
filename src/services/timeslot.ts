@@ -1,4 +1,4 @@
-import { API_GET_TIME_SLOT } from '~/modules/Arrange/constants/api-path';
+import { API_GET_TIME_SLOT } from '../constants/api-path';
 import HttpClient from '~/utils/HttpClient';
 import { CommonResponse } from '~/utils/TypeCommon';
 

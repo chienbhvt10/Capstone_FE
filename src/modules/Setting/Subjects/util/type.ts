@@ -15,3 +15,12 @@ export interface RoomDistanceData {
   subjectName: string;
   department: string;
 }
+
+export interface Subject {
+  id: number;
+  code: string;
+  name: string;
+  semesterId: number;
+  orderNumber: number;
+  department: string;
+}
