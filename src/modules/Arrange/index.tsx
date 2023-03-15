@@ -21,7 +21,6 @@ const ArrangePage = (props: Props) => {
           overflowX: 'hidden',
         }}
       >
-        <FilterForm />
         <Stack direction="row" spacing={2}>
           <TimetableModify />
           <Stack

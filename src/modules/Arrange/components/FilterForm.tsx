@@ -82,128 +82,119 @@ const FilterForm = (props: Props) => {
   return (
     <Box
       id="scroll-filter-form"
-      sx={{ border: '1px solid #ccc', p: 2, borderRadius: 1 }}
+      sx={{ border: '1px solid #ccc', p: 2, borderRadius: 1, width: 1, mr: 2 }}
     >
-      <Container maxWidth="lg">
-        <Stack direction="column" spacing={2}>
-          <Stack direction="row" spacing={2} sx={{ justifyContent: 'center' }}>
-            <Autocomplete
-              sx={{ maxWidth: 300, width: 1 }}
-              size="small"
-              multiple
-              disableCloseOnSelect
-              filterSelectedOptions
-              getOptionLabel={(option) => option.label}
-              isOptionEqualToValue={(option, value) => {
-                return option.id === value.id;
-              }}
-              options={options}
-              value={semestersSelector}
-              onChange={onChangeSemestersSelector}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Select Semester"
-                />
-              )}
-            />
-            <Autocomplete
-              sx={{ maxWidth: 300, width: 1 }}
-              size="small"
-              multiple
-              disableCloseOnSelect
-              filterSelectedOptions
-              getOptionLabel={(option) => option.label}
-              isOptionEqualToValue={(option, value) => {
-                return option.id === value.id;
-              }}
-              options={options}
-              value={lecturersSelector}
-              onChange={onChangeLecturersSelector}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Select Lecturers"
-                />
-              )}
-            />
-            <Autocomplete
-              sx={{ maxWidth: 300, width: 1 }}
-              size="small"
-              multiple
-              disableCloseOnSelect
-              filterSelectedOptions
-              getOptionLabel={(option) => option.label}
-              isOptionEqualToValue={(option, value) => {
-                return option.id === value.id;
-              }}
-              options={options}
-              value={classesSelector}
-              onChange={onChangeClassesSelector}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Select Classes"
-                />
-              )}
-            />
-          </Stack>
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{ justifyContent: 'center', alignItems: 'center' }}
-          >
-            <Autocomplete
-              sx={{ maxWidth: 300, width: 1 }}
-              size="small"
-              multiple
-              disableCloseOnSelect
-              filterSelectedOptions
-              getOptionLabel={(option) => option.label}
-              isOptionEqualToValue={(option, value) => {
-                return option.id === value.id;
-              }}
-              options={options}
-              value={roomsSelector}
-              onChange={onChangeRoomsSelector}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Select Rooms"
-                />
-              )}
-            />
-            <Autocomplete
-              sx={{ maxWidth: 300, width: 1 }}
-              size="small"
-              multiple
-              disableCloseOnSelect
-              filterSelectedOptions
-              getOptionLabel={(option) => option.label}
-              isOptionEqualToValue={(option, value) => {
-                return option.id === value.id;
-              }}
-              options={options}
-              value={subjectsSelector}
-              onChange={onChangeSubjectsSelector}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Select Subjects"
-                />
-              )}
-            />
-            <Button onClick={onSearch} size="medium">
-              Search
-            </Button>
-          </Stack>
+      <Stack direction="column" spacing={2}>
+        <Stack direction="row" spacing={2}>
+          <Autocomplete
+            sx={{ maxWidth: 300, width: 1 }}
+            size="small"
+            multiple
+            disableCloseOnSelect
+            filterSelectedOptions
+            getOptionLabel={(option) => option.label}
+            isOptionEqualToValue={(option, value) => {
+              return option.id === value.id;
+            }}
+            options={options}
+            value={semestersSelector}
+            onChange={onChangeSemestersSelector}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Select Semester"
+              />
+            )}
+          />
+          <Autocomplete
+            sx={{ maxWidth: 300, width: 1 }}
+            size="small"
+            multiple
+            disableCloseOnSelect
+            filterSelectedOptions
+            getOptionLabel={(option) => option.label}
+            isOptionEqualToValue={(option, value) => {
+              return option.id === value.id;
+            }}
+            options={options}
+            value={lecturersSelector}
+            onChange={onChangeLecturersSelector}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Select Lecturers"
+              />
+            )}
+          />
+          <Autocomplete
+            sx={{ maxWidth: 300, width: 1 }}
+            size="small"
+            multiple
+            disableCloseOnSelect
+            filterSelectedOptions
+            getOptionLabel={(option) => option.label}
+            isOptionEqualToValue={(option, value) => {
+              return option.id === value.id;
+            }}
+            options={options}
+            value={classesSelector}
+            onChange={onChangeClassesSelector}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Select Classes"
+              />
+            )}
+          />
         </Stack>
-      </Container>
+        <Stack direction="row" spacing={2}>
+          <Autocomplete
+            sx={{ maxWidth: 300, width: 1 }}
+            size="small"
+            multiple
+            disableCloseOnSelect
+            filterSelectedOptions
+            getOptionLabel={(option) => option.label}
+            isOptionEqualToValue={(option, value) => {
+              return option.id === value.id;
+            }}
+            options={options}
+            value={roomsSelector}
+            onChange={onChangeRoomsSelector}
+            renderInput={(params) => (
+              <TextField {...params} variant="outlined" label="Select Rooms" />
+            )}
+          />
+          <Autocomplete
+            sx={{ maxWidth: 300, width: 1 }}
+            size="small"
+            multiple
+            disableCloseOnSelect
+            filterSelectedOptions
+            getOptionLabel={(option) => option.label}
+            isOptionEqualToValue={(option, value) => {
+              return option.id === value.id;
+            }}
+            options={options}
+            value={subjectsSelector}
+            onChange={onChangeSubjectsSelector}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Select Subjects"
+              />
+            )}
+          />
+          <Button onClick={onSearch} size="medium">
+            Search
+          </Button>
+          <Button size="medium">Clear</Button>
+        </Stack>
+      </Stack>
     </Box>
   );
 };

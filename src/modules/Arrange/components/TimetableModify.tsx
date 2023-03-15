@@ -22,8 +22,7 @@ const TimetableModify = (props: Props) => {
       }}
     >
       <TimeTableModifyForm />
-      {/* <TimetableSwapForm /> */}
-      <Stack direction="column" spacing={1}>
+      {/* <Stack direction="column" spacing={1}>
         <Typography variant="body1" align="center">
           Request Confirm
         </Typography>
@@ -31,7 +30,7 @@ const TimetableModify = (props: Props) => {
         <Button fullWidth onClick={onRequestLecturerConfirm}>
           Request Lecturer Confirm
         </Button>
-      </Stack>
+      </Stack> */}
     </Stack>
   );
 };

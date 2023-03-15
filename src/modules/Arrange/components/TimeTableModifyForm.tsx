@@ -10,6 +10,8 @@ import useNotification from '~/hooks/useNotification';
 import { getLecturers } from '~/modules/Lecturer/services';
 import { getRooms } from '~/modules/Setting/services/room';
 import { modifyTimetable } from '../services';
+import Image from '~/components/styledComponents/Image';
+import images from '~/assets/images';
 
 const TimeTableModifyForm = () => {
   const {
@@ -76,8 +78,81 @@ const TimeTableModifyForm = () => {
     }
   };
 
+  const exportInImportFormat = () => {
+    const url = 'https://localhost:7279/Timetable-20230306171426222.xlsx';
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'Timetable-20230306171426222.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        link?.parentNode?.removeChild(link);
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
     <Stack direction="column" spacing={1}>
+      <Typography variant="body1" align="center">
+        Arrange
+      </Typography>
+      <Divider variant="fullWidth" />
+      <Button
+        startIcon={
+          <Image
+            src={images.iconArrange}
+            sx={{ width: 25, height: 25 }}
+            alt=""
+          />
+        }
+        fullWidth
+      >
+        Arrange
+      </Button>
+      <Typography variant="body1" align="center">
+        Excel Action
+      </Typography>
+      <Divider variant="fullWidth" />
+      <Button
+        startIcon={
+          <Image
+            src={images.iconImport}
+            sx={{ width: 18, height: 18 }}
+            alt=""
+          />
+        }
+        fullWidth
+      >
+        Import Timetable
+      </Button>
+      <Button
+        onClick={exportInImportFormat}
+        startIcon={
+          <Image
+            src={images.iconExport}
+            sx={{ width: 18, height: 18 }}
+            alt=""
+          />
+        }
+        fullWidth
+      >
+        Export in import format
+      </Button>
+      <Button
+        startIcon={
+          <Image
+            src={images.iconExport}
+            sx={{ width: 18, height: 18 }}
+            alt=""
+          />
+        }
+        fullWidth
+      >
+        Export group by lecturer
+      </Button>
       <Typography variant="body1" align="center">
         Timetable Modify
       </Typography>
