@@ -33,10 +33,10 @@ export interface LecturerAssign {
   lecturerName: string | null;
   semesterId: number | null;
   total: number | null;
-  timeSlotInfos: TimeSlotLecturer[];
+  timeSlotInfos: TimeSlotTask[];
 }
 
-export interface TimeSlotLecturer {
+export interface TimeSlotTask {
   classId: number;
   className: string;
   isAssign: number;
@@ -63,5 +63,29 @@ export interface TimeSlot {
 
 export interface TimeSlotResponse {
   total: number | null;
-  timeSlotInfos: Array<Array<TimeSlotLecturer>>;
+  timeSlotInfos: Array<Array<TimeSlotTask>>;
+}
+
+export interface TaskDetail {
+  taskId: number;
+  lecturerId: number;
+  lecturerName: string;
+  timeSlotId: number;
+  timeSlotName: string;
+  timeSlotOrder: number;
+  classId: number;
+  className: string;
+  subjectId: number;
+  subjectName: string;
+  semesterId: number;
+  roomId: number;
+  roomName: string;
+  status: string;
+  isAssign: number;
+}
+
+export interface TimeTableModifyParam {
+  taskId: number | null;
+  lecturerId: number | null;
+  roomId: number | null;
 }

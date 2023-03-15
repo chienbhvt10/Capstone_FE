@@ -14,7 +14,7 @@ const TimetableSwapForm = (props: Props) => {
   return (
     <Stack direction="column" spacing={1}>
       <Typography variant="body1" align="center">
-        Timetable Modify
+        Swap Timetable
       </Typography>
       <Divider variant="fullWidth" />
 

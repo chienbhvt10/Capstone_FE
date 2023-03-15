@@ -2,15 +2,27 @@ import HttpClient from '~/utils/HttpClient';
 import { CommonResponse } from '~/utils/TypeCommon';
 import {
   API_EXPORT_IN_IMPORT_FORMAT,
+  API_GET_A_TASK,
   API_GET_SCHEDULE,
   API_GET_TASK_NOT_ASSIGNED,
   API_IMPORT_TIME_TABLE,
+  API_MODIFY_TIMETABLE,
 } from '../constants/api-path';
-import { LecturerAssign, TimeSlotResponse } from '../utils/type';
+import {
+  LecturerAssign,
+  TaskDetail,
+  TimeSlotResponse,
+  TimeTableModifyParam,
+} from '../utils/type';
 
 export const getTaskNotAssign = async () => {
   const url = API_GET_TASK_NOT_ASSIGNED;
   return HttpClient.get<number, CommonResponse<TimeSlotResponse>>(url);
+};
+
+export const getATask = async (taskId: number) => {
+  const url = API_GET_A_TASK + taskId;
+  return HttpClient.get<number, CommonResponse<TaskDetail>>(url);
 };
 
 export const executeArrange = async () => {};
@@ -37,5 +49,12 @@ export const importTimeTable = async (params: FormData) => {
 
 export const swapLecturer = async () => {};
 export const swapRoom = async () => {};
-export const modifyTimetable = async () => {};
+
+export const modifyTimetable = async (params: TimeTableModifyParam) => {
+  return HttpClient.put<TimeTableModifyParam, CommonResponse>(
+    API_MODIFY_TIMETABLE,
+    params
+  );
+};
+
 export const searchInThisExecutedArrange = async () => {};

@@ -15,3 +15,8 @@ export interface RoomDistanceData {
   building2: string;
   distance: number;
 }
+
+export interface Room {
+  id: number;
+  name: string;
+}

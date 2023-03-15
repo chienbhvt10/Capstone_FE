@@ -22,7 +22,7 @@ const TimetableModify = (props: Props) => {
       }}
     >
       <TimeTableModifyForm />
-      <TimetableSwapForm />
+      {/* <TimetableSwapForm /> */}
       <Stack direction="column" spacing={1}>
         <Typography variant="body1" align="center">
           Request Confirm

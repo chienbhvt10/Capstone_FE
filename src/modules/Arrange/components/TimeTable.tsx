@@ -10,9 +10,9 @@ import { Fragment, useEffect, useMemo, useState } from 'react';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import useArrange from '~/hooks/useArrange';
 import { getTimeSlot } from '~/modules/Setting/services/timeslot';
-import { notAssignRows } from '../utils/row';
-import { Column } from '../utils/type';
+import { getATask } from '../services';
 import { getTableTimeSlotColumns } from '../utils/column';
+import { notAssignRows } from '../utils/row';
 
 interface Props {}
 
@@ -23,6 +23,8 @@ const TimeTable = (props: Props) => {
     tasksNotAssignedInfo,
     timeSlots,
     setTimeSlots,
+    taskSelect,
+    setTaskSelect,
   } = useArrange();
 
   const columns = useMemo(
@@ -54,7 +56,14 @@ const TimeTable = (props: Props) => {
     setMaxLengthNotAssignSlot(maxLength);
   }, [notAssignRows]);
 
-  const onClickGetDetails = () => {};
+  const onClickGetTaskDetails = (taskId: number) => async () => {
+    if (taskId != 0) {
+      const res = await getATask(taskId);
+      if (res.data) {
+        setTaskSelect(res.data);
+      }
+    }
+  };
 
   return (
     <TableContainer sx={{ maxHeight: 550 + maxLengthNotAssignSlot * 40 }}>
@@ -137,6 +146,7 @@ const TimeTable = (props: Props) => {
                         }}
                       >
                         <Box
+                          onClick={onClickGetTaskDetails(task.taskId)}
                           key={task.timeSlotName}
                           sx={{
                             minHeight: 60,
@@ -246,6 +256,7 @@ const TimeTable = (props: Props) => {
                   >
                     {task.map((item) => (
                       <Box
+                        onClick={onClickGetTaskDetails(item.taskId)}
                         key={item.timeSlotId + item.taskId}
                         sx={{
                           py: 0.5,

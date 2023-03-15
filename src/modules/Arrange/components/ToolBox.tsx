@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import images from '~/assets/images';
 import Image from '~/components/styledComponents/Image';
 import useArrange from '~/hooks/useArrange';
@@ -11,9 +11,13 @@ import useNotification from '~/hooks/useNotification';
 import { getExecutedArrangeInfo, getTaskNotAssign } from '../services';
 
 const ToolBox = () => {
-  const { setLecturersTaskAssignInfo, setTasksNotAssigned } = useArrange();
+  const {
+    setLecturersTaskAssignInfo,
+    setTasksNotAssigned,
+    executeId,
+    setExecuteId,
+  } = useArrange();
   const setNotification = useNotification();
-  const [executeId, setExecuteId] = useState<string>('');
 
   const exportInImportFormat = () => {
     const url = 'https://localhost:7279/Timetable-20230306171426222.xlsx';
@@ -32,23 +36,12 @@ const ToolBox = () => {
   };
 
   const onGetScheduleByExecuteId = async (executeId: number) => {
-    const res = await getExecutedArrangeInfo(executeId);
-    if (res.data && res.data.length > 0) {
-      setLecturersTaskAssignInfo(res.data);
-    }
-    const res2 = await getTaskNotAssign();
-    if (
-      res2.data &&
-      res2.data.timeSlotInfos &&
-      res2.data.timeSlotInfos.length > 0
-    ) {
-      setTasksNotAssigned(res2.data);
-    }
+    setExecuteId(executeId);
   };
 
-  const onChangeExecuteId = (event: SelectChangeEvent) => {
-    setExecuteId(event.target.value as string);
-    onGetScheduleByExecuteId(Number(event.target.value as string));
+  const onChangeExecuteId = (event: SelectChangeEvent<number>) => {
+    setExecuteId(event.target.value as number);
+    onGetScheduleByExecuteId(Number(event.target.value));
   };
 
   return (
@@ -62,7 +55,7 @@ const ToolBox = () => {
             Select Execute Time
           </Typography>
           <Select value={executeId} onChange={onChangeExecuteId}>
-            <MenuItem disabled value={-1}>
+            <MenuItem disabled value={0}>
               <em>Select Execute Time</em>
             </MenuItem>
             <MenuItem value={10}>Ten</MenuItem>
