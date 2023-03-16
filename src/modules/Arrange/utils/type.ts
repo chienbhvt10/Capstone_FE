@@ -51,6 +51,7 @@ export interface TimeSlotTask {
   timeSlotId: number;
   timeSlotName: string;
   timeSlotOrder: number;
+  preAssign: boolean;
 }
 
 export interface TimeSlotResponse {
@@ -81,6 +82,7 @@ export interface TimeTableModifyParam {
   taskId: number | null;
   lecturerId: number | null;
   roomId: number | null;
+  timeSlotId: number | null;
 }
 
 export interface Class {

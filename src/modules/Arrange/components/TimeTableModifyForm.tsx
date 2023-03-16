@@ -8,7 +8,11 @@ import images from '~/assets/images';
 import Image from '~/components/styledComponents/Image';
 import useArrange from '~/hooks/useArrange';
 import useNotification from '~/hooks/useNotification';
-import { modifyTimetable } from '../../../services/arrange';
+import {
+  lockAndUnLockTask,
+  modifyTimetable,
+  unLockAllTask,
+} from '../../../services/arrange';
 
 const TimeTableModifyForm = () => {
   const { taskSelect, setTaskSelect, lecturers, rooms, refetch } = useArrange();
@@ -37,6 +41,7 @@ const TimeTableModifyForm = () => {
         lecturerId: taskSelect?.lecturerId || null,
         taskId: taskSelect?.taskId || null,
         roomId: taskSelect?.roomId || null,
+        timeSlotId: taskSelect?.timeSlotId || null,
       });
 
       if (res.isSuccess) {
@@ -67,6 +72,40 @@ const TimeTableModifyForm = () => {
         link?.parentNode?.removeChild(link);
       })
       .catch((error) => console.log(error));
+  };
+
+  const onPreAssignTask = (taskId: number, lecturerId: number) => () => {
+    lockAndUnLockTask({ taskId, lecturerId })
+      .then((res) => {
+        refetch();
+        setNotification({
+          message: 'PreAssign task success',
+          severity: 'success',
+        });
+      })
+      .catch((err) =>
+        setNotification({
+          message: 'PreAssign task error',
+          severity: 'error',
+        })
+      );
+  };
+
+  const onUnLockAll = () => {
+    unLockAllTask()
+      .then((res) => {
+        refetch();
+        setNotification({
+          message: 'UnPreAssign all task success',
+          severity: 'success',
+        });
+      })
+      .catch((err) =>
+        setNotification({
+          message: 'UnPreAssign all task success',
+          severity: 'error',
+        })
+      );
   };
 
   return (
@@ -215,6 +254,19 @@ const TimeTableModifyForm = () => {
         </Stack>
         <Button fullWidth onClick={onModifyTimeTable}>
           Edit
+        </Button>
+        <Button
+          fullWidth
+          onClick={onPreAssignTask(
+            taskSelect?.taskId || 0,
+            taskSelect?.lecturerId || 0
+          )}
+          disabled={!taskSelect?.lecturerId || !!!taskSelect}
+        >
+          Lock/UnLock Task
+        </Button>
+        <Button fullWidth onClick={onUnLockAll}>
+          UnLock All
         </Button>
       </Stack>
     </Stack>

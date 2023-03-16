@@ -6,7 +6,9 @@ import {
   API_GET_SCHEDULE,
   API_GET_TASK_NOT_ASSIGNED,
   API_IMPORT_TIME_TABLE,
+  API_LOCK_UNLOCK_TASK,
   API_MODIFY_TIMETABLE,
+  API_UNLOCK_ALL_TASK,
 } from '../constants/api-path';
 import {
   LecturerAssign,
@@ -51,10 +53,24 @@ export const swapLecturer = async () => {};
 export const swapRoom = async () => {};
 
 export const modifyTimetable = async (params: TimeTableModifyParam) => {
-  return HttpClient.put<TimeTableModifyParam, CommonResponse>(
+  return HttpClient.put<typeof params, CommonResponse>(
     API_MODIFY_TIMETABLE,
     params
   );
+};
+
+export const lockAndUnLockTask = async (params: {
+  taskId: number;
+  lecturerId: number;
+}) => {
+  return HttpClient.put<typeof params, CommonResponse>(
+    API_LOCK_UNLOCK_TASK,
+    params
+  );
+};
+
+export const unLockAllTask = async () => {
+  return HttpClient.put<null, CommonResponse>(API_UNLOCK_ALL_TASK);
 };
 
 export const searchInThisExecutedArrange = async () => {};

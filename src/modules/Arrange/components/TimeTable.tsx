@@ -12,6 +12,7 @@ import useArrange from '~/hooks/useArrange';
 import { getATask } from '../../../services/arrange';
 import { getTableTimeSlotColumns } from '../utils/column';
 import { notAssignRows } from '../utils/row';
+import LockIcon from '@mui/icons-material/Lock';
 
 const TimeTable = () => {
   const theme = useTheme();
@@ -132,6 +133,7 @@ const TimeTable = () => {
                         align="center"
                         sx={{
                           border: '1px solid #ccc',
+                          backgroundColor: task.preAssign ? '#fff5dd' : '#fff',
                           '&:hover': {
                             backgroundColor: '#DDF5FF',
                             cursor: 'pointer',
@@ -149,8 +151,21 @@ const TimeTable = () => {
                             alignItems: 'flex-start',
                             textDecoration: 'none',
                             color: '#000',
+                            position: 'relative',
                           }}
                         >
+                          {task.preAssign && (
+                            <LockIcon
+                              sx={{
+                                position: 'absolute',
+                                top: -5,
+                                right: -5,
+                                width: 15,
+                                height: 15,
+                                color: '#3DA2FF',
+                              }}
+                            />
+                          )}
                           <Fragment>
                             <Typography
                               variant="body2"
