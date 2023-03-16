@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import useRefresh from '~/hooks/useRefresh';
 import {
   Class,
+  ExecuteInfo,
   LecturerAssign,
   TaskDetail,
   TimeSlotResponse,
@@ -12,6 +13,7 @@ import { Subject } from '~/modules/Setting/Subjects/util/type';
 import { TimeSlot } from '~/modules/Setting/TimeSlots/utils/type';
 import { getExecutedArrangeInfo, getTaskNotAssign } from '~/services/arrange';
 import { getClasses } from '~/services/class';
+import { getExecuteInfos } from '~/services/execute';
 import { getLecturers } from '~/services/lecturer';
 import { getRooms } from '~/services/room';
 import { getSubjects } from '~/services/subject';
@@ -41,6 +43,8 @@ export interface ArrangeContextValue {
   setSubjects: React.Dispatch<React.SetStateAction<Subject[]>>;
   classes: Class[];
   setClasses: React.Dispatch<React.SetStateAction<Class[]>>;
+  executeInfos: ExecuteInfo[];
+  setExecuteInfos: React.Dispatch<React.SetStateAction<ExecuteInfo[]>>;
 }
 
 export const ArrangeContext = createContext<ArrangeContextValue | null>(null);
@@ -65,6 +69,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [classes, setClasses] = useState<Class[]>([]);
+  const [executeInfos, setExecuteInfos] = useState<ExecuteInfo[]>([]);
 
   useEffect(() => {
     getExecutedArrangeInfo(executeId).then((res) => {
@@ -108,9 +113,16 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         setClasses(res.data);
       }
     });
+
     getTimeSlots().then((res) => {
       if (res.data && res.data.length > 0) {
         setTimeSlots(res.data || []);
+      }
+    });
+
+    getExecuteInfos().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setExecuteInfos(res.data || []);
       }
     });
   }, []);
@@ -118,6 +130,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   return (
     <ArrangeContext.Provider
       value={{
+        executeInfos,
         classes,
         rooms,
         subjects,
@@ -128,6 +141,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         tasksNotAssignedInfo,
         lecturersTaskAssignInfo,
         refetch,
+        setExecuteInfos,
         setClasses,
         setSubjects,
         setRooms,

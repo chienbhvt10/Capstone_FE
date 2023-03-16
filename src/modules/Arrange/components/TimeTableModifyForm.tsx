@@ -140,7 +140,7 @@ const TimeTableModifyForm = () => {
           </Typography>
           <TextField
             variant="outlined"
-            value={taskSelect?.subjectName || ''}
+            value={taskSelect?.subjectCode || ''}
             disabled
           />
         </Stack>

@@ -9,3 +9,5 @@ export const API_GET_TIME_SLOT = '/time-slot';
 export const API_MODIFY_TIMETABLE = '/arrange/timetable-modify';
 export const API_GET_ALL_SUBJECT = '/subject';
 export const API_GET_ALL_CLASSES = '/class';
+export const API_GET_ALL_EXECUTE_INFO = '/arrange/execute-info';
+export const API_CREATE_EXECUTE_INFO = '/arrange/execute-info';

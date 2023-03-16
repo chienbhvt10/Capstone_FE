@@ -13,9 +13,7 @@ import { getATask } from '../../../services/arrange';
 import { getTableTimeSlotColumns } from '../utils/column';
 import { notAssignRows } from '../utils/row';
 
-interface Props {}
-
-const TimeTable = (props: Props) => {
+const TimeTable = () => {
   const theme = useTheme();
   const {
     lecturersTaskAssignInfo,
@@ -59,9 +57,9 @@ const TimeTable = (props: Props) => {
       <TableCustom>
         <TableHead>
           <TableRow>
-            {columns.map((item) => (
+            {columns.map((item, index) => (
               <TableCell
-                key={item.id}
+                key={item.id && item.id + index}
                 align={item.align}
                 sx={{
                   left: item.stickyPosition === 'left' ? 0 : 'unset',
@@ -93,7 +91,11 @@ const TimeTable = (props: Props) => {
         <TableBody>
           {lecturersTaskAssignInfo?.length > 0 &&
             lecturersTaskAssignInfo.map((item, index) => (
-              <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
+              <TableRow
+                role="checkbox"
+                tabIndex={-1}
+                key={item.lecturerId && index + item.lecturerId}
+              >
                 <TableCell
                   align="center"
                   sx={{
@@ -125,7 +127,7 @@ const TimeTable = (props: Props) => {
                 {item?.timeSlotInfos &&
                   item?.timeSlotInfos.length > 0 &&
                   item.timeSlotInfos.map((task, index) => (
-                    <Fragment key={index}>
+                    <Fragment key={index + task.taskId}>
                       <TableCell
                         align="center"
                         sx={{
@@ -160,7 +162,7 @@ const TimeTable = (props: Props) => {
                               variant="body2"
                               sx={{ margin: '0 auto' }}
                             >
-                              {task.subjectName}
+                              {task.subjectCode}
                             </Typography>
                             <Typography
                               variant="body2"
@@ -245,50 +247,52 @@ const TimeTable = (props: Props) => {
                       verticalAlign: 'top',
                     }}
                   >
-                    {task.map((item) => (
-                      <Box
-                        onClick={onClickGetTaskDetails(item.taskId)}
-                        key={item.timeSlotId + item.taskId}
-                        sx={{
-                          py: 0.5,
-                          minHeight: 70,
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          alignItems: 'flex-start',
-                          textDecoration: 'none',
-                          color: '#000',
-                          '&:hover': {
-                            backgroundColor: '#DDF5FF',
-                            cursor: 'pointer',
-                          },
-                        }}
-                      >
-                        <Fragment>
-                          <Typography
-                            variant="body2"
-                            align="center"
-                            sx={{ margin: '0 auto' }}
-                          >
-                            {item.className}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            align="center"
-                            sx={{ margin: '0 auto' }}
-                          >
-                            {item.subjectName}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            align="center"
-                            sx={{ color: 'primary.dark', margin: '0 auto' }}
-                          >
-                            {item.roomName}
-                          </Typography>
-                        </Fragment>
-                      </Box>
-                    ))}
+                    {task?.length &&
+                      task?.length > 0 &&
+                      task.map((item, index) => (
+                        <Box
+                          onClick={onClickGetTaskDetails(item.taskId)}
+                          key={item.timeSlotId + item.taskId + index}
+                          sx={{
+                            py: 0.5,
+                            minHeight: 70,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                            textDecoration: 'none',
+                            color: '#000',
+                            '&:hover': {
+                              backgroundColor: '#DDF5FF',
+                              cursor: 'pointer',
+                            },
+                          }}
+                        >
+                          <Fragment>
+                            <Typography
+                              variant="body2"
+                              align="center"
+                              sx={{ margin: '0 auto' }}
+                            >
+                              {item.className}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              align="center"
+                              sx={{ margin: '0 auto' }}
+                            >
+                              {item.subjectCode}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              align="center"
+                              sx={{ color: 'primary.dark', margin: '0 auto' }}
+                            >
+                              {item.roomName}
+                            </Typography>
+                          </Fragment>
+                        </Box>
+                      ))}
                   </TableCell>
                 </Fragment>
               ))}

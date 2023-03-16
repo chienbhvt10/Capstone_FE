@@ -45,6 +45,7 @@ export interface TimeSlotTask {
   roomName: string;
   status: null;
   subjectId: number;
+  subjectCode: string;
   subjectName: string;
   taskId: number;
   timeSlotId: number;
@@ -67,6 +68,7 @@ export interface TaskDetail {
   classId: number;
   className: string;
   subjectId: number;
+  subjectCode: string;
   subjectName: string;
   semesterId: number;
   roomId: number;
@@ -84,5 +86,12 @@ export interface TimeTableModifyParam {
 export interface Class {
   id: number;
   name: string;
+  semesterId: number;
+}
+
+export interface ExecuteInfo {
+  id: number;
+  executeId: number;
+  executeTime: string;
   semesterId: number;
 }

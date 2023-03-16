@@ -6,7 +6,7 @@ import useArrange from '~/hooks/useArrange';
 import FilterForm from './FilterForm';
 
 const ToolBox = () => {
-  const { executeId, setExecuteId } = useArrange();
+  const { executeId, setExecuteId, executeInfos } = useArrange();
 
   const onGetScheduleByExecuteId = async (executeId: number) => {
     setExecuteId(executeId);
@@ -31,9 +31,15 @@ const ToolBox = () => {
             <MenuItem disabled value={0}>
               <em style={{ fontSize: 14 }}>Select Execute Time</em>
             </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {executeInfos?.length &&
+              executeInfos?.length > 0 &&
+              executeInfos?.map((item) => (
+                <MenuItem value={item.id}>
+                  {item.executeTime
+                    ? new Date(item.executeTime).toLocaleString('vi-VI')
+                    : 'Unknown'}
+                </MenuItem>
+              ))}
           </Select>
         </Stack>
         <Stack direction="row" sx={{ width: 1, alignItems: 'center' }}>
