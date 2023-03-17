@@ -9,6 +9,7 @@ import Image from '~/components/styledComponents/Image';
 import useArrange from '~/hooks/useArrange';
 import useNotification from '~/hooks/useNotification';
 import {
+  executeArrange,
   lockAndUnLockTask,
   modifyTimetable,
   unLockAllTask,
@@ -108,6 +109,29 @@ const TimeTableModifyForm = () => {
       );
   };
 
+  const onArrange = () => {
+    executeArrange({
+      maxSearchingTime: 0,
+      objectiveOption: [0, 0, 0, 0, 0, 0],
+      objectiveWeight: [0, 0, 0, 0, 0, 0],
+      solver: 0,
+      strategy: 0,
+    })
+      .then((res) => {
+        refetch();
+        setNotification({
+          message: 'Execute Arrange success',
+          severity: 'success',
+        });
+      })
+      .catch((err) =>
+        setNotification({
+          message: 'Execute Arrange success',
+          severity: 'error',
+        })
+      );
+  };
+
   return (
     <Stack direction="column" spacing={2}>
       <Stack direction="column" spacing={1}>
@@ -124,6 +148,7 @@ const TimeTableModifyForm = () => {
             />
           }
           fullWidth
+          onClick={onArrange}
         >
           Arrange
         </Button>

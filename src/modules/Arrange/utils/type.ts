@@ -97,3 +97,10 @@ export interface ExecuteInfo {
   executeTime: string;
   semesterId: number;
 }
+export interface SettingParams {
+  maxSearchingTime: number;
+  solver: number;
+  strategy: number;
+  objectiveOption: number[];
+  objectiveWeight: number[];
+}

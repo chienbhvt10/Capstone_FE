@@ -13,3 +13,4 @@ export const API_GET_ALL_EXECUTE_INFO = '/arrange/execute-info';
 export const API_CREATE_EXECUTE_INFO = '/arrange/execute-info';
 export const API_LOCK_UNLOCK_TASK = '/arrange/lock-and-unlock-task';
 export const API_UNLOCK_ALL_TASK = '/arrange/unlock-all-task';
+export const API_EXECUTE = '/arrange/execute';

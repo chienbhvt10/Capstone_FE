@@ -133,7 +133,7 @@ const TimeTable = () => {
                         align="center"
                         sx={{
                           border: '1px solid #ccc',
-                          backgroundColor: task.preAssign ? '#fff5dd' : '#fff',
+                          backgroundColor: task.preAssign ? '#ffff6d' : '#fff',
                           '&:hover': {
                             backgroundColor: '#DDF5FF',
                             cursor: 'pointer',

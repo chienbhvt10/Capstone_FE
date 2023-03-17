@@ -9,9 +9,12 @@ import {
   API_LOCK_UNLOCK_TASK,
   API_MODIFY_TIMETABLE,
   API_UNLOCK_ALL_TASK,
+  API_EXECUTE,
 } from '../constants/api-path';
+
 import {
   LecturerAssign,
+  SettingParams,
   TaskDetail,
   TimeSlotResponse,
   TimeTableModifyParam,
@@ -27,7 +30,9 @@ export const getATask = async (taskId: number) => {
   return HttpClient.get<number, CommonResponse<TaskDetail>>(url);
 };
 
-export const executeArrange = async () => {};
+export const executeArrange = async (params: SettingParams) => {
+  return HttpClient.post<typeof params, CommonResponse>(API_EXECUTE, params);
+};
 
 export const getExecutedArrangeInfo = async (executeId: number) => {
   const url = API_GET_SCHEDULE + executeId;
