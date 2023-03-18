@@ -8,26 +8,30 @@ import { useEffect, useMemo, useState } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
-import { TimeSlot } from '../../utils/type';
-import { getTimeSlots } from '~/services/timeslot';
-import { getTimeSlotTableColumns } from '../../utils/columns';
+import { Lecturer } from '~/modules/Lecturer/util/type';
+import { getLecturers } from '~/services/lecturer';
+import { getLecturersTableColumns } from '../util/columns';
 
-const TimeSlotTable = () => {
-  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+const SubjectTable = () => {
+  const [lecturers, setLecturers] = useState<Lecturer[]>([]);
 
   useEffect(() => {
-    getTimeSlots().then((res) => {
+    getLecturers().then((res) => {
       if (res.data) {
-        setTimeSlots(res.data);
+        setLecturers(res.data);
       }
     });
   }, []);
 
-  const columns = useMemo(() => getTimeSlotTableColumns(), []);
+  const columns = useMemo(() => getLecturersTableColumns(), []);
+
+  const onEdit = (item: any) => () => {};
+
+  const onDelete = (item: any) => () => {};
 
   return (
     <Container maxWidth="lg">
-      <TableContainer sx={{ maxHeight: 400 }}>
+      <TableContainer sx={{ maxHeight: 550 }}>
         <TableCustom>
           <TableHead>
             <TableRow>
@@ -47,27 +51,24 @@ const TimeSlotTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {timeSlots?.length &&
-              timeSlots?.length > 0 &&
-              timeSlots.map((item) => (
+            {lecturers?.length &&
+              lecturers?.length > 0 &&
+              lecturers.map((item) => (
                 <TableRow role="checkbox" tabIndex={-1} key={item.id}>
+                  <TableCellCustom align="center" border={true} hover={true}>
+                    <Typography variant="body1">{item.shortName}</Typography>
+                  </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
                     <Typography variant="body1">{item.name}</Typography>
                   </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.description}</Typography>
-                  </TableCellCustom>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.slot1}</Typography>
-                  </TableCellCustom>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.slot2}</Typography>
+                    <Typography variant="body1">{item.email}</Typography>
                   </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
                     <TableToolCustom
                       item={item}
-                      onEdit={(item: TimeSlot) => () => {}}
-                      onDelete={(item: TimeSlot) => () => {}}
+                      onEdit={onEdit}
+                      onDelete={onDelete}
                     />
                   </TableCellCustom>
                 </TableRow>
@@ -79,4 +80,4 @@ const TimeSlotTable = () => {
   );
 };
 
-export default TimeSlotTable;
+export default SubjectTable;

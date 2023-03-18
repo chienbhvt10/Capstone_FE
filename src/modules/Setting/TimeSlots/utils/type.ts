@@ -55,7 +55,6 @@ export interface TimeSlot {
   name: string;
   description: string;
   semesterId: number;
-  orderNumber: number;
   slot1: string;
   slot2: string;
 }

@@ -1,4 +1,10 @@
-import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
@@ -14,9 +20,20 @@ import {
   modifyTimetable,
   unLockAllTask,
 } from '../../../services/arrange';
+import SettingModelDialog from './SettingModelDialog';
+import { Fragment, useState } from 'react';
 
 const TimeTableModifyForm = () => {
-  const { taskSelect, setTaskSelect, lecturers, rooms, refetch } = useArrange();
+  const {
+    taskSelect,
+    setTaskSelect,
+    lecturers,
+    rooms,
+    refetch,
+    loadingTimeTableModify,
+  } = useArrange();
+  const [openDialog, setOpen] = useState<boolean>(false);
+
   const setNotification = useNotification();
 
   const onChangeLecturerSelect = (event: SelectChangeEvent<number>) => {
@@ -38,6 +55,10 @@ const TimeTableModifyForm = () => {
 
   const onModifyTimeTable = async () => {
     try {
+      if (!taskSelect) {
+        setNotification({ message: 'Select task before', severity: 'error' });
+        return;
+      }
       const res = await modifyTimetable({
         lecturerId: taskSelect?.lecturerId || null,
         taskId: taskSelect?.taskId || null,
@@ -109,191 +130,209 @@ const TimeTableModifyForm = () => {
       );
   };
 
-  const onArrange = () => {
-    executeArrange({
-      maxSearchingTime: 0,
-      objectiveOption: [0, 0, 0, 0, 0, 0],
-      objectiveWeight: [0, 0, 0, 0, 0, 0],
-      solver: 0,
-      strategy: 0,
-    })
-      .then((res) => {
-        refetch();
-        setNotification({
-          message: 'Execute Arrange success',
-          severity: 'success',
-        });
-      })
-      .catch((err) =>
-        setNotification({
-          message: 'Execute Arrange success',
-          severity: 'error',
-        })
-      );
+  const onCloseDialog = () => {
+    setOpen(false);
+  };
+
+  const onOpen = () => {
+    setOpen(true);
   };
 
   return (
-    <Stack direction="column" spacing={2}>
-      <Stack direction="column" spacing={1}>
-        <Typography variant="body1" align="center">
-          Action
-        </Typography>
-        <Divider variant="fullWidth" />
-        <Button
-          startIcon={
-            <Image
-              src={images.iconArrange}
-              sx={{ width: 25, height: 25 }}
-              alt=""
-            />
-          }
-          fullWidth
-          onClick={onArrange}
-        >
-          Arrange
-        </Button>
-        <Button
-          startIcon={
-            <Image
-              src={images.iconImport}
-              sx={{ width: 18, height: 18 }}
-              alt=""
-            />
-          }
-          fullWidth
-        >
-          Import Timetable
-        </Button>
-        <Button
-          onClick={exportInImportFormat}
-          startIcon={
-            <Image
-              src={images.iconExport}
-              sx={{ width: 18, height: 18 }}
-              alt=""
-            />
-          }
-          fullWidth
-        >
-          Export in import format
-        </Button>
-        <Button
-          startIcon={
-            <Image
-              src={images.iconExport}
-              sx={{ width: 18, height: 18 }}
-              alt=""
-            />
-          }
-          fullWidth
-        >
-          Export group by lecturer
-        </Button>
-      </Stack>
-      <Stack direction="column" spacing={1}>
-        <Typography variant="body1" align="center">
-          Timetable Modify
-        </Typography>
-        <Divider variant="fullWidth" />
-        <Stack
-          direction="row"
-          sx={{ justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Typography variant="body2" sx={{ width: 80 }}>
-            Subject
+    <Stack
+      direction="column"
+      spacing={2}
+      sx={{
+        border: '1px solid #ccc',
+        p: 2,
+        borderRadius: 1,
+        width: 250,
+      }}
+    >
+      <Stack direction="column" spacing={2}>
+        <Stack direction="column" spacing={1}>
+          <Typography variant="body1" align="center">
+            Action
           </Typography>
-          <TextField
-            variant="outlined"
-            value={taskSelect?.subjectCode || ''}
-            disabled
-          />
-        </Stack>
-        <Stack
-          direction="row"
-          sx={{ justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Typography variant="body2" sx={{ width: 80 }}>
-            Room
-          </Typography>
-          <TextField
-            variant="outlined"
-            value={taskSelect?.roomName || ''}
-            disabled
-          />
-        </Stack>
-        <Stack
-          direction="row"
-          sx={{ justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Typography variant="body2" sx={{ width: 80 }}>
-            TimeSlot
-          </Typography>
-          <TextField
-            variant="outlined"
-            value={taskSelect?.timeSlotName || ''}
-            disabled
-          />
-        </Stack>
-        <Stack
-          direction="row"
-          sx={{ justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Typography variant="body2" sx={{ width: 80 }}>
-            Lecturer
-          </Typography>
-          <Select
-            value={taskSelect?.lecturerId || 0}
-            onChange={onChangeLecturerSelect}
+          <Divider variant="fullWidth" />
+          <Button
+            startIcon={
+              <Image
+                src={images.iconArrange}
+                sx={{ width: 25, height: 25 }}
+                alt=""
+              />
+            }
+            fullWidth
+            onClick={onOpen}
           >
-            <MenuItem disabled value={0}>
-              <em style={{ fontSize: 14 }}>Select Lecturer</em>
-            </MenuItem>
-            {lecturers &&
-              lecturers.length &&
-              lecturers?.map((item) => (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.shortName}
-                </MenuItem>
-              ))}
-          </Select>
+            Arrange
+          </Button>
+          <Button
+            startIcon={
+              <Image
+                src={images.iconImport}
+                sx={{ width: 18, height: 18 }}
+                alt=""
+              />
+            }
+            fullWidth
+          >
+            Import Timetable
+          </Button>
+          <Button
+            onClick={exportInImportFormat}
+            startIcon={
+              <Image
+                src={images.iconExport}
+                sx={{ width: 18, height: 18 }}
+                alt=""
+              />
+            }
+            fullWidth
+          >
+            Export in import format
+          </Button>
+          <Button
+            startIcon={
+              <Image
+                src={images.iconExport}
+                sx={{ width: 18, height: 18 }}
+                alt=""
+              />
+            }
+            fullWidth
+          >
+            Export group by lecturer
+          </Button>
         </Stack>
-        <Stack
-          direction="row"
-          sx={{ justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Typography variant="body2" sx={{ width: 80 }}>
-            Room
+        <Stack direction="column" spacing={1} sx={{ position: 'relative' }}>
+          <Typography variant="body1" align="center">
+            Timetable Modify
           </Typography>
-          <Select value={taskSelect?.roomId || 0} onChange={onChangeRoomSelect}>
-            <MenuItem disabled value={0}>
-              <em style={{ fontSize: 14 }}>Select Room</em>
-            </MenuItem>
-            {rooms &&
-              rooms.length &&
-              rooms?.map((item) => (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </Stack>
-        <Button fullWidth onClick={onModifyTimeTable}>
-          Edit
-        </Button>
-        <Button
-          fullWidth
-          onClick={onPreAssignTask(
-            taskSelect?.taskId || 0,
-            taskSelect?.lecturerId || 0
+          <Divider variant="fullWidth" />
+          {loadingTimeTableModify ? (
+            <Box
+              sx={{
+                minHeight: 250,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Fragment>
+              <Stack
+                direction="row"
+                sx={{ justifyContent: 'center', alignItems: 'center' }}
+              >
+                <Typography variant="body2" sx={{ width: 80 }}>
+                  Subject
+                </Typography>
+                <TextField
+                  variant="outlined"
+                  value={taskSelect?.subjectCode || ''}
+                  disabled
+                />
+              </Stack>
+              <Stack
+                direction="row"
+                sx={{ justifyContent: 'center', alignItems: 'center' }}
+              >
+                <Typography variant="body2" sx={{ width: 80 }}>
+                  Room
+                </Typography>
+                <TextField
+                  variant="outlined"
+                  value={taskSelect?.roomName || ''}
+                  disabled
+                />
+              </Stack>
+              <Stack
+                direction="row"
+                sx={{ justifyContent: 'center', alignItems: 'center' }}
+              >
+                <Typography variant="body2" sx={{ width: 80 }}>
+                  TimeSlot
+                </Typography>
+                <TextField
+                  variant="outlined"
+                  value={taskSelect?.timeSlotName || ''}
+                  disabled
+                />
+              </Stack>
+              <Stack
+                direction="row"
+                sx={{ justifyContent: 'center', alignItems: 'center' }}
+              >
+                <Typography variant="body2" sx={{ width: 80 }}>
+                  Lecturer
+                </Typography>
+                <Select
+                  value={taskSelect?.lecturerId || 0}
+                  onChange={onChangeLecturerSelect}
+                >
+                  <MenuItem disabled value={0}>
+                    <em style={{ fontSize: 14 }}>Select Lecturer</em>
+                  </MenuItem>
+                  {lecturers &&
+                    lecturers.length &&
+                    lecturers?.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.shortName}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </Stack>
+              <Stack
+                direction="row"
+                sx={{ justifyContent: 'center', alignItems: 'center' }}
+              >
+                <Typography variant="body2" sx={{ width: 80 }}>
+                  Room
+                </Typography>
+                <Select
+                  value={taskSelect?.roomId || 0}
+                  onChange={onChangeRoomSelect}
+                >
+                  <MenuItem disabled value={0}>
+                    <em style={{ fontSize: 14 }}>Select Room</em>
+                  </MenuItem>
+                  {rooms &&
+                    rooms.length &&
+                    rooms?.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </Stack>
+            </Fragment>
           )}
-          disabled={!taskSelect?.lecturerId || !!!taskSelect}
-        >
-          Lock/UnLock Task
-        </Button>
-        <Button fullWidth onClick={onUnLockAll}>
-          UnLock All
-        </Button>
+          <Button fullWidth onClick={onModifyTimeTable}>
+            Edit
+          </Button>
+          <Button
+            fullWidth
+            onClick={onPreAssignTask(
+              taskSelect?.taskId || 0,
+              taskSelect?.lecturerId || 0
+            )}
+            disabled={!taskSelect?.lecturerId || !!!taskSelect}
+          >
+            Un/PreAssign Task
+          </Button>
+          <Button fullWidth onClick={onUnLockAll}>
+            UnPreAssign All
+          </Button>
+        </Stack>
       </Stack>
+      <SettingModelDialog
+        openDialog={openDialog}
+        onCloseDialog={onCloseDialog}
+      />
     </Stack>
   );
 };

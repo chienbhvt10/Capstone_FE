@@ -1,8 +1,7 @@
 import { Stack } from '@mui/material';
 import PageWrapper from '~/components/PageWrapper';
-import FilterForm from './components/FilterForm';
 import TimeTable from './components/TimeTable';
-import TimetableModify from './components/TimetableModify';
+import TimeTableModifyForm from './components/TimeTableModifyForm';
 import ToolBox from './components/ToolBox';
 
 interface Props {}
@@ -22,7 +21,7 @@ const ArrangePage = (props: Props) => {
         }}
       >
         <Stack direction="row" spacing={2}>
-          <TimetableModify />
+          <TimeTableModifyForm />
           <Stack
             direction="column"
             spacing={2}

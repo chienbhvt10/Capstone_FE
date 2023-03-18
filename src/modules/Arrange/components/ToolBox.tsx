@@ -8,13 +8,8 @@ import FilterForm from './FilterForm';
 const ToolBox = () => {
   const { executeId, setExecuteId, executeInfos } = useArrange();
 
-  const onGetScheduleByExecuteId = async (executeId: number) => {
-    setExecuteId(executeId);
-  };
-
-  const onChangeExecuteId = (event: SelectChangeEvent<number>) => {
+  const onChangeExecuteId = async (event: SelectChangeEvent<number>) => {
     setExecuteId(event.target.value as number);
-    onGetScheduleByExecuteId(Number(event.target.value));
   };
 
   return (

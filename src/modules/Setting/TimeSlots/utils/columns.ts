@@ -29,14 +29,8 @@ export const getTimeSlotTableColumns = () => {
       align: 'center',
     },
     {
-      id: 'OrderNumber',
-      label: 'OrderNumber',
-      minWidth: 100,
-      align: 'center',
-    },
-    {
-      id: 'Tool',
-      label: '',
+      id: 'Action',
+      label: 'Action',
       minWidth: 50,
       align: 'center',
     }

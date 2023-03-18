@@ -42,19 +42,19 @@ const listItem: ListItem[] = [
       <Image src={images.iconTimetable} alt="" sx={{ width: 25, height: 25 }} />
     ),
   },
-  {
-    title: 'Manage',
-    path: MANAGE_PATH,
-    icon: (
-      <Image src={images.iconManage} alt="" sx={{ width: 25, height: 25 }} />
-    ),
-  },
-  {
-    title: 'Register',
-    path: REGISTER_PATH,
+  // {
+  //   title: 'Manage',
+  //   path: MANAGE_PATH,
+  //   icon: (
+  //     <Image src={images.iconManage} alt="" sx={{ width: 25, height: 25 }} />
+  //   ),
+  // },
+  // {
+  //   title: 'Register',
+  //   path: REGISTER_PATH,
 
-    icon: <Image src={images.iconEdit} alt="" sx={{ width: 25, height: 25 }} />,
-  },
+  //   icon: <Image src={images.iconEdit} alt="" sx={{ width: 25, height: 25 }} />,
+  // },
   {
     title: 'Arrange',
     path: ARRANGE_PATH,
@@ -70,8 +70,8 @@ const listItem: ListItem[] = [
     ),
     subItems: [
       {
-        title: 'Models',
-        path: 'settings/models',
+        title: 'Lecturers',
+        path: 'settings/lecturers',
       },
       {
         title: 'Subjects',

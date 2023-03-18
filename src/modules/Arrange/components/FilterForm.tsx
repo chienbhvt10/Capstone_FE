@@ -34,16 +34,11 @@ const options: Option[] = [
   },
 ];
 
-const selectedOptions: Option[] = [
-  {
-    id: 1,
-    label: 'value1',
-  },
-];
-
 const FilterForm = () => {
   const { rooms, lecturers, subjects, classes, refetch } = useArrange();
-  const [semestersSelector, setSemestersSelector] = useState(selectedOptions);
+  const [semestersSelector, setSemestersSelector] = useState<Option | null>(
+    null
+  );
   const [lecturersSelector, setLecturersSelector] = useState<Lecturer[]>([]);
   const [classesSelector, setClassesSelector] = useState<Class[]>([]);
   const [roomsSelector, setRoomsSelector] = useState<Room[]>([]);
@@ -51,7 +46,7 @@ const FilterForm = () => {
 
   const onChangeSemestersSelector = (
     event: SyntheticEvent,
-    newValue: Option[]
+    newValue: Option | null
   ) => {
     setSemestersSelector(newValue);
   };
@@ -84,39 +79,22 @@ const FilterForm = () => {
   const onSearch = () => {};
 
   const onClearSearch = () => {
-    refetch();
+    setSubjectsSelector([]);
+    setRoomsSelector([]);
+    setClassesSelector([]);
+    setLecturersSelector([]);
+    setSemestersSelector(null);
   };
 
   return (
     <Box
       id="scroll-filter-form"
-      sx={{ border: '1px solid #ccc', p: 2, borderRadius: 1, width: 1, mr: 2 }}
+      sx={{ border: '1px solid #ccc', p: 1, borderRadius: 1, width: 1, mr: 2 }}
     >
-      <Stack direction="column" spacing={2}>
+      <Stack direction="column" spacing={1}>
         <Stack direction="row" spacing={2}>
           <Autocomplete
-            sx={{ maxWidth: 300, width: 1 }}
-            size="small"
-            multiple
-            disableCloseOnSelect
-            filterSelectedOptions
-            getOptionLabel={(option) => option.label}
-            isOptionEqualToValue={(option, value) => {
-              return option.id === value.id;
-            }}
-            options={options}
-            value={semestersSelector}
-            onChange={onChangeSemestersSelector}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                label="Select Semester"
-              />
-            )}
-          />
-          <Autocomplete
-            sx={{ maxWidth: 300, width: 1 }}
+            sx={{ maxWidth: 250, width: 1 }}
             size="small"
             multiple
             disableCloseOnSelect
@@ -137,7 +115,7 @@ const FilterForm = () => {
             )}
           />
           <Autocomplete
-            sx={{ maxWidth: 300, width: 1 }}
+            sx={{ maxWidth: 250, width: 1 }}
             size="small"
             multiple
             disableCloseOnSelect
@@ -157,10 +135,30 @@ const FilterForm = () => {
               />
             )}
           />
+          <Autocomplete
+            sx={{ maxWidth: 220, width: 1 }}
+            size="small"
+            disableCloseOnSelect
+            filterSelectedOptions
+            getOptionLabel={(option) => option.label}
+            isOptionEqualToValue={(option, value) => {
+              return option.id === value.id;
+            }}
+            options={options}
+            value={semestersSelector}
+            onChange={onChangeSemestersSelector}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Select Semester"
+              />
+            )}
+          />
         </Stack>
         <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
           <Autocomplete
-            sx={{ maxWidth: 300, width: 1 }}
+            sx={{ maxWidth: 250, width: 1 }}
             size="small"
             multiple
             disableCloseOnSelect
@@ -177,7 +175,7 @@ const FilterForm = () => {
             )}
           />
           <Autocomplete
-            sx={{ maxWidth: 300, width: 1 }}
+            sx={{ maxWidth: 250, width: 1 }}
             size="small"
             multiple
             disableCloseOnSelect

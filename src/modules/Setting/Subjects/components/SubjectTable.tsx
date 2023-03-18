@@ -65,9 +65,6 @@ const SubjectTable = () => {
                     <Typography variant="body1">{item.department}</Typography>
                   </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.orderNumber}</Typography>
-                  </TableCellCustom>
-                  <TableCellCustom align="center" border={true} hover={true}>
                     <TableToolCustom
                       item={item}
                       onEdit={onEdit}

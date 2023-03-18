@@ -1,24 +1,24 @@
 import { Column } from './type';
 
-export const getSubjectTableColumns = () => {
+export const getLecturersTableColumns = () => {
   const columns: Column[] = [];
 
   columns.push(
     {
-      id: 'SubjectCode',
-      label: 'Subject Code',
+      id: 'Email',
+      label: 'Email',
       minWidth: 100,
       align: 'center',
     },
     {
-      id: 'SubjectName',
-      label: 'Subject Name',
+      id: 'Name',
+      label: 'Name',
       minWidth: 100,
       align: 'center',
     },
     {
-      id: 'Department',
-      label: 'Department',
+      id: 'Short Name',
+      label: 'Short Name',
       minWidth: 100,
       align: 'center',
     },

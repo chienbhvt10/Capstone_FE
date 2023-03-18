@@ -18,6 +18,7 @@ import { getLecturers } from '~/services/lecturer';
 import { getRooms } from '~/services/room';
 import { getSubjects } from '~/services/subject';
 import { getTimeSlots } from '~/services/timeslot';
+import wait from '~/utils/wait';
 
 export interface ArrangeContextValue {
   lecturersTaskAssignInfo: LecturerAssign[];
@@ -45,6 +46,10 @@ export interface ArrangeContextValue {
   setClasses: React.Dispatch<React.SetStateAction<Class[]>>;
   executeInfos: ExecuteInfo[];
   setExecuteInfos: React.Dispatch<React.SetStateAction<ExecuteInfo[]>>;
+  loadingTimeTable: boolean;
+  setLoadingTimeTable: React.Dispatch<React.SetStateAction<boolean>>;
+  loadingTimeTableModify: boolean;
+  setLoadingTimeTableModify: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ArrangeContext = createContext<ArrangeContextValue | null>(null);
@@ -70,22 +75,30 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [classes, setClasses] = useState<Class[]>([]);
   const [executeInfos, setExecuteInfos] = useState<ExecuteInfo[]>([]);
+  const [loadingTimeTable, setLoadingTimeTable] = useState<boolean>(false);
+  const [loadingTimeTableModify, setLoadingTimeTableModify] =
+    useState<boolean>(false);
 
   useEffect(() => {
+    setLoadingTimeTable(true);
     getExecutedArrangeInfo(executeId).then((res) => {
       if (res.data && res.data.length > 0) {
         setLecturersTaskAssignInfo(res.data);
       }
-    });
-
-    getTaskNotAssign().then((res) => {
-      if (
-        res.data &&
-        res.data.timeSlotInfos &&
-        res.data.timeSlotInfos.length > 0
-      ) {
-        setTasksNotAssigned(res.data);
-      }
+      getTaskNotAssign()
+        .then((res) => {
+          if (
+            res.data &&
+            res.data.timeSlotInfos &&
+            res.data.timeSlotInfos.length > 0
+          ) {
+            setTasksNotAssigned(res.data);
+          }
+        })
+        .finally(async () => {
+          await wait(300);
+          setLoadingTimeTable(false);
+        });
     });
   }, [executeId, refresh]);
 
@@ -130,6 +143,8 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   return (
     <ArrangeContext.Provider
       value={{
+        loadingTimeTableModify,
+        loadingTimeTable,
         executeInfos,
         classes,
         rooms,
@@ -140,6 +155,8 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         taskSelect,
         tasksNotAssignedInfo,
         lecturersTaskAssignInfo,
+        setLoadingTimeTable,
+        setLoadingTimeTableModify,
         refetch,
         setExecuteInfos,
         setClasses,

@@ -1,5 +1,5 @@
 import { Outlet, RouteObject } from 'react-router-dom';
-import ModelSetting from '~/modules/Setting/Models';
+import LecturersSetting from '~/modules/Setting/Lecturers';
 import PreferenceLevelSetting from '~/modules/Setting/PreferenceLevel';
 import RoomsSettings from '~/modules/Setting/Rooms';
 import SubjectsSetting from '~/modules/Setting/Subjects';
@@ -11,8 +11,12 @@ const settingRoutes: RouteObject = {
   children: [
     {
       index: true,
+      path: 'lecturers',
+      element: <LecturersSetting />,
+    },
+    {
       path: 'models',
-      element: <ModelSetting />,
+      element: <TimeSlotsSetting />,
     },
     {
       path: 'subjects',
