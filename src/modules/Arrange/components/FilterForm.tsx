@@ -9,6 +9,7 @@ import { Lecturer } from '~/modules/Lecturer/util/type';
 import { Room } from '~/modules/Setting/Rooms/util/type';
 import { Subject } from '~/modules/Setting/Subjects/util/type';
 import { Class } from '../utils/type';
+import { searchTask } from '~/services/arrange';
 
 interface Option {
   id: number;
@@ -35,7 +36,16 @@ const options: Option[] = [
 ];
 
 const FilterForm = () => {
-  const { rooms, lecturers, subjects, classes, refetch } = useArrange();
+  const {
+    rooms,
+    lecturers,
+    subjects,
+    classes,
+    setLoadingTimeTable,
+    setLecturersTaskAssignInfo,
+    setTasksNotAssigned,
+    refetch,
+  } = useArrange();
   const [semestersSelector, setSemestersSelector] = useState<Option | null>(
     null
   );
@@ -76,7 +86,33 @@ const FilterForm = () => {
     setSubjectsSelector(newValue);
   };
 
-  const onSearch = () => {};
+  const onSearch = async () => {
+    try {
+      setLoadingTimeTable(true);
+      const res = await searchTask({
+        classIds: classesSelector.map((item) => item.id),
+        lecturerIds: lecturersSelector.map((item) => item.id),
+        roomId: roomsSelector.map((item) => item.id),
+        subjectIds: subjectsSelector.map((item) => item.id),
+        semesterId: semestersSelector?.id || 0,
+      });
+
+      if (res.data?.dataAssign && res.data.dataAssign.length > 0) {
+        setLecturersTaskAssignInfo(res.data.dataAssign);
+      }
+
+      if (
+        res.data?.dataNotAssign &&
+        res.data.dataNotAssign.timeSlotInfos &&
+        res.data.dataNotAssign.timeSlotInfos.length > 0
+      ) {
+        setTasksNotAssigned(res.data.dataNotAssign);
+      }
+    } catch (err) {
+    } finally {
+      setLoadingTimeTable(false);
+    }
+  };
 
   const onClearSearch = () => {
     setSubjectsSelector([]);
@@ -84,6 +120,7 @@ const FilterForm = () => {
     setClassesSelector([]);
     setLecturersSelector([]);
     setSemestersSelector(null);
+    refetch();
   };
 
   return (

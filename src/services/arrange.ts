@@ -10,10 +10,13 @@ import {
   API_MODIFY_TIMETABLE,
   API_UNLOCK_ALL_TASK,
   API_EXECUTE,
+  API_SEARCH_TASK,
 } from '../constants/api-path';
 
 import {
   LecturerAssign,
+  SearchTaskParams,
+  SearchTaskResponse,
   SettingParams,
   TaskDetail,
   TimeSlotResponse,
@@ -78,4 +81,9 @@ export const unLockAllTask = async () => {
   return HttpClient.put<null, CommonResponse>(API_UNLOCK_ALL_TASK);
 };
 
-export const searchInThisExecutedArrange = async () => {};
+export const searchTask = async (params: SearchTaskParams) => {
+  return HttpClient.post<typeof params, CommonResponse<SearchTaskResponse>>(
+    API_SEARCH_TASK,
+    params
+  );
+};

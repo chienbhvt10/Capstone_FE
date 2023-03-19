@@ -1,6 +1,7 @@
 export const API_GET_ROOMS = '/distance/get-rooms';
 export const API_GET_ALL_LECTURER = '/lecturer';
 export const API_IMPORT_TIME_TABLE = '/arrange/import-time-table';
+export const API_SEARCH_TASK = '/arrange/search-tasks';
 export const API_EXPORT_IN_IMPORT_FORMAT = '/arrange/export-in-import-format';
 export const API_GET_SCHEDULE = '/arrange/get-schedule/';
 export const API_GET_TASK_NOT_ASSIGNED = '/arrange/get-tasks-not-assigned';

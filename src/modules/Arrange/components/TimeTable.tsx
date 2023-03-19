@@ -291,8 +291,7 @@ const TimeTable = () => {
                         verticalAlign: 'top',
                       }}
                     >
-                      {task?.length &&
-                        task?.length > 0 &&
+                      {task?.length > 0 &&
                         task.map((item, index) => (
                           <Box
                             onClick={onClickGetTaskDetails(item.taskId)}

@@ -104,3 +104,16 @@ export interface SettingParams {
   objectiveOption: number[];
   objectiveWeight: number[];
 }
+
+export interface SearchTaskParams {
+  semesterId: number;
+  classIds: number[];
+  lecturerIds: number[];
+  subjectIds: number[];
+  roomId: number[];
+}
+
+export interface SearchTaskResponse {
+  dataAssign: LecturerAssign[];
+  dataNotAssign: TimeSlotResponse;
+}
