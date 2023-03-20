@@ -10,23 +10,28 @@ export interface Column {
 }
 
 export interface LecturerSubjectsPreferenceLevel {
-  id: number;
-  lecturer: string;
-  subjects: {
-    id: number;
-    name: string;
-    preferenceLevel: number;
-  }[];
+  lecturerId: number;
+  semesterId: number;
+  lecturerName: string;
+  preferenceInfos: LecturerSubjectsPreferenceInfo[];
+}
+export interface LecturerSubjectsPreferenceInfo {
+  preferenceId: number;
+  preferenceLevel: number;
+  subjectId: number;
 }
 
 export interface LecturerSlotsPreferenceLevel {
-  id: number;
-  lecturer: string;
-  slots: {
-    id: number;
-    name: string;
-    preferenceLevel: number;
-  }[];
+  lecturerId: number;
+  semesterId: number;
+  lecturerName: string;
+  preferenceInfos: LecturerSlotsPreferenceInfo[];
+}
+
+export interface LecturerSlotsPreferenceInfo {
+  preferenceId: number;
+  preferenceLevel: number;
+  timeSlotId: number;
 }
 
 export interface SubjectPreferenceLevelItems {
@@ -37,4 +42,14 @@ export interface SubjectPreferenceLevelItems {
 export interface SlotPreferenceLevelItems {
   value: number;
   label: string;
+}
+
+export interface UpdateSlotPreferenceLevel {
+  preferenceId: number;
+  preferenceLevel: number;
+}
+
+export interface UpdateSubjectPreferenceLevel {
+  preferenceId: number;
+  preferenceLevel: number;
 }

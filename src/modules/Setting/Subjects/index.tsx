@@ -24,7 +24,7 @@ const SubjectsSetting = () => {
         <Typography variant="h6" sx={{ alignSelf: 'flex-start', ml: 4 }}>
           Subject Setting
         </Typography>
-        <SubjectForm />
+        {/* <SubjectForm /> */}
         <SubjectTable />
       </Stack>
     </PageWrapper>

@@ -1,86 +1,136 @@
-import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Table from '@mui/material/Table';
-import { SelectChangeEvent } from '@mui/material';
+import { Box, CircularProgress, SelectChangeEvent } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
-import {
-  lecturerSlotPreferenceLevel,
-  slotPreferenceLevelItems,
-} from '../utils/data';
-import { getTableSlotColumns } from '../utils/slotColumns';
-import { useState } from 'react';
-import { useMemo } from 'react';
-import { SlotPreferenceLevelItems } from '../utils/types';
+import { useEffect, useMemo, useState } from 'react';
 import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
-import TableCustom from '~/components/TableComponents/TableCustom';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
+import TableCustom from '~/components/TableComponents/TableCustom';
+import useArrange from '~/hooks/useArrange';
+import {
+  getSlotPreferenceLevels,
+  updateSlotPreferenceLevel,
+} from '~/services/preferenceLevel';
+import wait from '~/utils/wait';
+import { slotPreferenceLevelItems } from '../utils/data';
+import { getTableSlotColumns } from '../utils/slotColumns';
+import {
+  LecturerSlotsPreferenceInfo,
+  LecturerSlotsPreferenceLevel,
+  SlotPreferenceLevelItems,
+} from '../utils/types';
+import useNotification from '~/hooks/useNotification';
 
 const SlotPreferenceLevel = () => {
-  const theme = useTheme();
-  const [currentSelectValue, setCurrentSelectValue] = useState<string>('');
+  const { timeSlots } = useArrange();
+  const setNotification = useNotification();
+  const columns = useMemo(() => getTableSlotColumns(timeSlots), [timeSlots]);
+  const [loadingTable, setLoadingTable] = useState<boolean>(false);
+  const [slotPreferenceLevels, setSlotPreferenceLevels] = useState<
+    LecturerSlotsPreferenceLevel[]
+  >([]);
 
-  const columns = useMemo(() => getTableSlotColumns(), []);
+  useEffect(() => {
+    setLoadingTable(true);
+    getSlotPreferenceLevels()
+      .then((res) => {
+        if (res.data && res.data.length > 0) {
+          setSlotPreferenceLevels(res.data);
+        }
+      })
+      .finally(async () => {
+        await wait(500);
+        setLoadingTable(false);
+      });
+  }, []);
 
-  const onChangeSelect = (
-    event: SelectChangeEvent<string>,
-    child: React.ReactNode
-  ) => {
-    setCurrentSelectValue(event.target.value);
+  const onEdit = (item: LecturerSlotsPreferenceInfo, value: number) => {
+    updateSlotPreferenceLevel({
+      preferenceId: item.preferenceId,
+      preferenceLevel: value,
+    })
+      .then((res) =>
+        setNotification({
+          message: 'Update success',
+          severity: 'success',
+        })
+      )
+      .catch((err) =>
+        setNotification({
+          message: 'Update error',
+          severity: 'error',
+        })
+      );
   };
 
   return (
-    <TableContainer sx={{ maxHeight: 550 }}>
-      <TableCustom>
-        <TableHead>
-          <TableRow>
-            {columns.map((item) => (
-              <TableCellCustom
-                key={item.id}
-                align={item.align}
-                sticky={item.sticky}
-                stickyPosition={item.stickyPosition}
-                minWidth={item.minWidth}
-                minHeight={item.minHeight}
-              >
-                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                  {item.label}
-                </Typography>
-              </TableCellCustom>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {lecturerSlotPreferenceLevel.map((item, index) => (
-            <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
-              <TableCellCustom
-                align="center"
-                sticky={true}
-                stickyPosition="left"
-                minHeight={60}
-              >
-                <Typography variant="body1">{item.lecturer}</Typography>
-              </TableCellCustom>
-              {item.slots.map((slot, index) => (
-                <TableCellCustom key={index + 2} align="center" minHeight={60}>
-                  <TableCellSelect<SlotPreferenceLevelItems>
-                    value={slot.preferenceLevel}
-                    selectTitle="Select preference level"
-                    selectItems={slotPreferenceLevelItems}
-                    item={slot}
-                  />
+    <TableContainer sx={{ maxHeight: 550, position: 'relative' }}>
+      {loadingTable ? (
+        <Box sx={{ minHeight: 450 }}>
+          <CircularProgress
+            sx={{
+              position: 'absolute',
+              top: '40%',
+              left: '50%',
+              display: 'block',
+            }}
+          />
+        </Box>
+      ) : (
+        <TableCustom>
+          <TableHead>
+            <TableRow>
+              {columns.map((item) => (
+                <TableCellCustom
+                  key={item.id}
+                  align={item.align}
+                  sticky={item.sticky}
+                  stickyPosition={item.stickyPosition}
+                  minWidth={item.minWidth}
+                  minHeight={item.minHeight}
+                >
+                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                    {item.label}
+                  </Typography>
                 </TableCellCustom>
               ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </TableCustom>
+          </TableHead>
+          <TableBody>
+            {slotPreferenceLevels.length > 0 &&
+              slotPreferenceLevels.map((item, index) => (
+                <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
+                  <TableCellCustom
+                    align="center"
+                    sticky={true}
+                    stickyPosition="left"
+                    minHeight={60}
+                  >
+                    <Typography variant="body1">{item.lecturerName}</Typography>
+                  </TableCellCustom>
+                  {item.preferenceInfos.length > 0 &&
+                    item.preferenceInfos.map((slot, index) => (
+                      <TableCellCustom
+                        key={index + 2}
+                        align="center"
+                        minHeight={60}
+                      >
+                        <TableCellSelect<SlotPreferenceLevelItems>
+                          value={slot.preferenceLevel}
+                          selectTitle="Select preference level"
+                          selectItems={slotPreferenceLevelItems}
+                          item={slot}
+                          callback={onEdit}
+                        />
+                      </TableCellCustom>
+                    ))}
+                </TableRow>
+              ))}
+          </TableBody>
+        </TableCustom>
+      )}
     </TableContainer>
   );
 };

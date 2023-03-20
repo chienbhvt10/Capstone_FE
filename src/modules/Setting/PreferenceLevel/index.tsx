@@ -3,7 +3,6 @@ import { Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import PageWrapper from '~/components/PageWrapper';
 import SlotPreferenceLevel from './SlotPreferenceLevel';
@@ -30,7 +29,6 @@ const PreferenceLevelSetting = () => {
           height: 'calc(100vh - 60px)',
         }}
       >
-        <Typography variant="h6">Preference Level</Typography>
         <TabContext value={tab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={tab} onChange={handleChange}>

@@ -2,7 +2,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import type { SelectChangeEvent } from '@mui/material';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Option {
   value: number;
@@ -14,10 +14,11 @@ interface Props<T extends Option> {
   value: number | string;
   selectItems: T[];
   selectTitle: string;
+  callback?: (item: any, selectValue: any) => void;
 }
 
 const TableCellSelect = <T extends Option>(props: Props<T>) => {
-  const { item, value, selectItems, selectTitle } = props;
+  const { item, value, selectItems, selectTitle, callback } = props;
   const [selectValue, setSelectValue] = useState(value);
 
   const onChangeSelect = (
@@ -25,6 +26,7 @@ const TableCellSelect = <T extends Option>(props: Props<T>) => {
     child: React.ReactNode
   ) => {
     setSelectValue(event.target.value);
+    callback && callback(item, event.target.value);
   };
 
   return (

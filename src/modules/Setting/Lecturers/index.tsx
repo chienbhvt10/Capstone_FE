@@ -24,7 +24,7 @@ const LecturersSetting = () => {
         <Typography variant="h6" sx={{ alignSelf: 'flex-start', ml: 4 }}>
           Lecturer Setting
         </Typography>
-        <LecturerForm />
+        {/* <LecturerForm /> */}
         <LecturerTable />
       </Stack>
     </PageWrapper>
