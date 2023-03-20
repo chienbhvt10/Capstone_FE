@@ -9,6 +9,7 @@ import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import useArrange from '~/hooks/useArrange';
+import useNotification from '~/hooks/useNotification';
 import {
   getSubjectPreferenceLevels,
   updateSubjectPreferenceLevel,
@@ -17,12 +18,10 @@ import wait from '~/utils/wait';
 import { subjectPreferenceLevelItems } from '../utils/data';
 import { getTableSubjectColumns } from '../utils/subjectColumns';
 import {
-  LecturerSlotsPreferenceInfo,
   LecturerSubjectsPreferenceInfo,
   LecturerSubjectsPreferenceLevel,
   SubjectPreferenceLevelItems,
 } from '../utils/types';
-import useNotification from '~/hooks/useNotification';
 
 const SubjectPreferenceLevel = () => {
   const { subjects } = useArrange();

@@ -47,8 +47,7 @@ const TimeSlotTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {timeSlots?.length &&
-              timeSlots?.length > 0 &&
+            {timeSlots?.length > 0 &&
               timeSlots.map((item) => (
                 <TableRow role="checkbox" tabIndex={-1} key={item.id}>
                   <TableCellCustom align="center" border={true} hover={true}>

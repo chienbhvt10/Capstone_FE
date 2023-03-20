@@ -12,6 +12,7 @@ export const getTableSlotColumns = (slots?: TimeSlot[]) => {
     sticky: true,
     stickyPosition: 'left',
   });
+
   const columnsDefined: Column[] =
     slots?.map((item) => ({
       id: item.id + '',

@@ -10,34 +10,43 @@ export interface Column {
   format?: ((value: number) => string) | null;
 }
 
-export interface SlotWeightData {
-  id: number;
-  slot: string;
-  slots: {
-    id: number;
-    name: string;
-    slotWeight: number;
-  }[];
+export interface AreaSlotWeightInfos {
+  slotWeightId: number;
+  slotWeight: number;
+  timeSlotId: number;
+}
+
+export interface AreaSlotWeightData {
+  timeSlotId: number;
+  semesterId: number;
+  timeSlotName: string;
+  areaSlotWeightInfos: AreaSlotWeightInfos[];
+}
+
+export interface SlotConflictInfos {
+  conflictId: number;
+  conflict: boolean;
+  timeSlotId: number;
 }
 
 export interface SlotConflictData {
-  id: number;
-  slot: string;
-  slots: {
-    id: number;
-    name: string;
-    conflictLevel: number;
-  }[];
+  timeSlotId: number;
+  semesterId: number;
+  timeSlotName: string;
+  slotConflictInfos: SlotConflictInfos[];
+}
+
+export interface SlotCompatibilityInfos {
+  compatibilityId: number;
+  compatibilityLevel: number;
+  timeSlotId: number;
 }
 
 export interface SlotCompatibilityData {
-  id: number;
-  slot: string;
-  slots: {
-    id: number;
-    name: string;
-    conflictLevel: number;
-  }[];
+  timeSlotId: number;
+  semesterId: number;
+  timeSlotName: string;
+  slotCompatibilityInfos: SlotCompatibilityInfos[];
 }
 
 export interface SlotConflictSelectItem {
@@ -57,4 +66,19 @@ export interface TimeSlot {
   semesterId: number;
   slot1: string;
   slot2: string;
+}
+
+export interface UpdateTimeSlotCompatibility {
+  compatibilityId: number;
+  compatibilityLevel: number;
+}
+
+export interface UpdateTimeSlotConflict {
+  conflictId: number;
+  conflict: boolean;
+}
+
+export interface UpdateAreaSlotWeight {
+  slotWeightId: number;
+  slotWeight: number;
 }

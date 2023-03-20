@@ -1,21 +1,73 @@
+import { Box, CircularProgress, TableCell } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { useMemo } from 'react';
-import { getTableSlotCompatibilityColumns } from '../utils/columns';
-import { slotCompatibilityData, slotConflictItem } from '../utils/data';
-import { SlotConflictSelectItem } from '../utils/type';
-import TableCustom from '~/components/TableComponents/TableCustom';
-import TableCellCustom from '~/components/TableComponents/TableCellCustom';
-import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
 import { useTheme } from '@mui/material/styles';
-import { Box, TableCell } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
+import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
+import TableCellCustom from '~/components/TableComponents/TableCellCustom';
+import TableCustom from '~/components/TableComponents/TableCustom';
+import useArrange from '~/hooks/useArrange';
+import useNotification from '~/hooks/useNotification';
+import {
+  getTimeSlotCompatibilities,
+  updateTimeSlotCompatibility,
+} from '~/services/timeslot';
+import wait from '~/utils/wait';
+import { getTableSlotCompatibilityColumns } from '../utils/columns';
+import {
+  SlotCompatibilityData,
+  SlotCompatibilityInfos,
+  SlotConflictSelectItem,
+} from '../utils/type';
+import { slotConflictItem } from '../utils/data';
 
 const TimeSlotCompatibility = () => {
   const theme = useTheme();
-  const columns = useMemo(() => getTableSlotCompatibilityColumns(), []);
+  const { timeSlots } = useArrange();
+  const setNotification = useNotification();
+  const columns = useMemo(
+    () => getTableSlotCompatibilityColumns(timeSlots),
+    [timeSlots]
+  );
+  const [loadingTable, setLoadingTable] = useState<boolean>(false);
+  const [timeSlotCompatibility, setTimeSlotCompatibility] =
+    useState<SlotCompatibilityData[]>();
+
+  useEffect(() => {
+    setLoadingTable(true);
+    getTimeSlotCompatibilities()
+      .then((res) => {
+        if (res.data && res.data.length > 0) {
+          setTimeSlotCompatibility(res.data);
+        }
+      })
+      .finally(async () => {
+        await wait(500);
+        setLoadingTable(false);
+      });
+  }, []);
+
+  const onEdit = (item: SlotCompatibilityInfos, value: number) => {
+    updateTimeSlotCompatibility({
+      compatibilityId: item.compatibilityId,
+      compatibilityLevel: value,
+    })
+      .then((res) => {
+        setNotification({
+          message: 'Update success',
+          severity: 'success',
+        });
+      })
+      .catch((err) =>
+        setNotification({
+          message: 'Update error',
+          severity: 'error',
+        })
+      );
+  };
 
   return (
     <TableContainer sx={{ maxHeight: 500 }}>
@@ -53,39 +105,54 @@ const TimeSlotCompatibility = () => {
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
-          {slotCompatibilityData.map((item, index) => (
-            <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
-              <TableCellCustom
-                key={index + 1}
-                align="center"
-                stickyPosition="left"
-                sticky={true}
-                minHeight={60}
-                border={true}
-                hover={true}
-              >
-                <Typography variant="body1">{item.slot}</Typography>
-              </TableCellCustom>
-              {item.slots.map((slot, index) => (
-                <TableCellCustom
-                  key={index + 2}
-                  align="center"
-                  minHeight={60}
-                  border={true}
-                  hover={true}
-                >
-                  <TableCellSelect<SlotConflictSelectItem>
-                    value={slot.conflictLevel}
-                    item={slot}
-                    selectItems={slotConflictItem}
-                    selectTitle="Select conflict level"
-                  />
-                </TableCellCustom>
+        {loadingTable ? (
+          <Box sx={{ minHeight: 450 }}>
+            <CircularProgress
+              sx={{
+                position: 'absolute',
+                top: '40%',
+                left: '50%',
+                display: 'block',
+              }}
+            />
+          </Box>
+        ) : (
+          <TableBody>
+            {timeSlotCompatibility?.length &&
+              timeSlotCompatibility.map((item, index) => (
+                <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
+                  <TableCellCustom
+                    key={index + 1}
+                    align="center"
+                    stickyPosition="left"
+                    sticky={true}
+                    minHeight={60}
+                    border={true}
+                    hover={true}
+                  >
+                    <Typography variant="body1">{item.timeSlotName}</Typography>
+                  </TableCellCustom>
+                  {item.slotCompatibilityInfos.map((slot, index) => (
+                    <TableCellCustom
+                      key={index + 2}
+                      align="center"
+                      minHeight={60}
+                      border={true}
+                      hover={true}
+                    >
+                      <TableCellSelect<SlotConflictSelectItem>
+                        value={slot.compatibilityLevel}
+                        item={slot}
+                        selectItems={slotConflictItem}
+                        selectTitle="Select conflict level"
+                        callback={onEdit}
+                      />
+                    </TableCellCustom>
+                  ))}
+                </TableRow>
               ))}
-            </TableRow>
-          ))}
-        </TableBody>
+          </TableBody>
+        )}
       </TableCustom>
     </TableContainer>
   );

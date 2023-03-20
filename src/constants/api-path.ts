@@ -17,3 +17,6 @@ export const API_UNLOCK_ALL_TASK = '/arrange/unlock-all-task';
 export const API_EXECUTE = '/arrange/execute';
 export const API_SUBJECT_PREFERENCE_LEVELS = '/preference-level/subject';
 export const API_SLOT_PREFERENCE_LEVELS = '/preference-level/slot';
+export const API_TIME_SLOT_COMPATIBILITY = '/time-slot/compatibility';
+export const API_TIME_SLOT_CONFLICT = '/time-slot/conflict';
+export const API_AREA_TIME_SLOT_WEIGHT = '/time-slot/slot-weight';

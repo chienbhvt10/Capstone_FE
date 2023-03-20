@@ -51,8 +51,7 @@ const SubjectTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {subjects?.length &&
-              subjects?.length > 0 &&
+            {subjects?.length > 0 &&
               subjects.map((item) => (
                 <TableRow role="checkbox" tabIndex={-1} key={item.id}>
                   <TableCellCustom align="center" border={true} hover={true}>

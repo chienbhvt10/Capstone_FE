@@ -1,4 +1,4 @@
-import { Column } from './type';
+import { Column, TimeSlot } from './type';
 
 export const getTimeSlotTableColumns = () => {
   const columns: Column[] = [];
@@ -39,7 +39,7 @@ export const getTimeSlotTableColumns = () => {
   return [...columns];
 };
 
-export const getTableSlotConflictColumns = (slots?: any) => {
+export const getTableSlotConflictColumns = (slots?: TimeSlot[]) => {
   const columns: Column[] = [];
 
   columns.push({
@@ -52,112 +52,22 @@ export const getTableSlotConflictColumns = (slots?: any) => {
     zIndex: 1111,
   });
 
-  const subjectsClone = [
-    {
-      id: 'A24',
-      label: 'A24',
-    },
-    {
-      id: 'A42',
-      label: 'A42',
-    },
-    {
-      id: 'P24',
-      label: 'P24',
-    },
-    {
-      id: 'P42',
-      label: 'P42',
-    },
-    {
-      id: 'A25',
-      label: 'A25',
+  const columnsDefined: Column[] =
+    slots?.map((item) => ({
+      id: item.id + '',
+      label: item.name,
+      minWidth: 60,
       align: 'center',
-    },
-    {
-      id: 'A52',
-      label: 'A52',
-    },
-    {
-      id: 'P25',
-      label: 'P25',
-    },
-    {
-      id: 'P52',
-      label: 'P52',
-    },
-    {
-      id: 'A35',
-      label: 'A35',
-    },
-    {
-      id: 'A53',
-      label: 'A53',
-    },
-    {
-      id: 'P35',
-      label: 'P35',
-    },
-    {
-      id: 'P53',
-      label: 'P53',
-    },
-    {
-      id: 'A36',
-      label: 'A36',
-    },
-    {
-      id: 'A63',
-      label: 'A63',
-    },
-    {
-      id: 'P36',
-      label: 'P36',
-    },
-    {
-      id: 'P63',
-      label: 'P63',
-    },
-    {
-      id: 'A46',
-      label: 'A46',
-    },
-    {
-      id: 'A64',
-      label: 'A64',
-    },
-    {
-      id: 'P46',
-      label: 'P46',
-    },
-    {
-      id: 'P64',
-      label: 'P64',
-    },
-    {
-      id: 'A77',
-      label: 'A77',
-    },
-    {
-      id: 'P77',
-      label: 'P77',
-    },
-  ];
-
-  const columnsDefined: Column[] = subjectsClone.map((item) => ({
-    ...item,
-    minWidth: 60,
-    align: 'center',
-    minHeight: null,
-    sticky: null,
-    stickyPosition: null,
-    format: null,
-  }));
+      minHeight: null,
+      sticky: true,
+      stickyPosition: null,
+      format: null,
+    })) ?? [];
 
   return [...columns, ...columnsDefined];
 };
 
-export const getTableSlotCompatibilityColumns = (slots?: any) => {
+export const getTableSlotCompatibilityColumns = (slots?: TimeSlot[]) => {
   const columns: Column[] = [];
 
   columns.push({
@@ -170,112 +80,22 @@ export const getTableSlotCompatibilityColumns = (slots?: any) => {
     zIndex: 1111,
   });
 
-  const subjectsClone = [
-    {
-      id: 'A24',
-      label: 'A24',
-    },
-    {
-      id: 'A42',
-      label: 'A42',
-    },
-    {
-      id: 'P24',
-      label: 'P24',
-    },
-    {
-      id: 'P42',
-      label: 'P42',
-    },
-    {
-      id: 'A25',
-      label: 'A25',
+  const columnsDefined: Column[] =
+    slots?.map((item) => ({
+      id: item.id + '',
+      label: item.name,
+      minWidth: 60,
       align: 'center',
-    },
-    {
-      id: 'A52',
-      label: 'A52',
-    },
-    {
-      id: 'P25',
-      label: 'P25',
-    },
-    {
-      id: 'P52',
-      label: 'P52',
-    },
-    {
-      id: 'A35',
-      label: 'A35',
-    },
-    {
-      id: 'A53',
-      label: 'A53',
-    },
-    {
-      id: 'P35',
-      label: 'P35',
-    },
-    {
-      id: 'P53',
-      label: 'P53',
-    },
-    {
-      id: 'A36',
-      label: 'A36',
-    },
-    {
-      id: 'A63',
-      label: 'A63',
-    },
-    {
-      id: 'P36',
-      label: 'P36',
-    },
-    {
-      id: 'P63',
-      label: 'P63',
-    },
-    {
-      id: 'A46',
-      label: 'A46',
-    },
-    {
-      id: 'A64',
-      label: 'A64',
-    },
-    {
-      id: 'P46',
-      label: 'P46',
-    },
-    {
-      id: 'P64',
-      label: 'P64',
-    },
-    {
-      id: 'A77',
-      label: 'A77',
-    },
-    {
-      id: 'P77',
-      label: 'P77',
-    },
-  ];
-
-  const columnsDefined: Column[] = subjectsClone.map((item) => ({
-    ...item,
-    minWidth: 60,
-    align: 'center',
-    minHeight: null,
-    sticky: true,
-    stickyPosition: null,
-    format: null,
-  }));
+      minHeight: null,
+      sticky: true,
+      stickyPosition: null,
+      format: null,
+    })) ?? [];
 
   return [...columns, ...columnsDefined];
 };
 
-export const getTableAreaSlotWeightColumns = (slots?: any) => {
+export const getTableAreaSlotWeightColumns = (slots?: TimeSlot[]) => {
   const columns: Column[] = [];
 
   columns.push({
@@ -288,107 +108,17 @@ export const getTableAreaSlotWeightColumns = (slots?: any) => {
     zIndex: 1111,
   });
 
-  const subjectsClone = [
-    {
-      id: 'A24',
-      label: 'A24',
-    },
-    {
-      id: 'A42',
-      label: 'A42',
-    },
-    {
-      id: 'P24',
-      label: 'P24',
-    },
-    {
-      id: 'P42',
-      label: 'P42',
-    },
-    {
-      id: 'A25',
-      label: 'A25',
+  const columnsDefined: Column[] =
+    slots?.map((item) => ({
+      id: item.id + '',
+      label: item.name,
+      minWidth: 60,
       align: 'center',
-    },
-    {
-      id: 'A52',
-      label: 'A52',
-    },
-    {
-      id: 'P25',
-      label: 'P25',
-    },
-    {
-      id: 'P52',
-      label: 'P52',
-    },
-    {
-      id: 'A35',
-      label: 'A35',
-    },
-    {
-      id: 'A53',
-      label: 'A53',
-    },
-    {
-      id: 'P35',
-      label: 'P35',
-    },
-    {
-      id: 'P53',
-      label: 'P53',
-    },
-    {
-      id: 'A36',
-      label: 'A36',
-    },
-    {
-      id: 'A63',
-      label: 'A63',
-    },
-    {
-      id: 'P36',
-      label: 'P36',
-    },
-    {
-      id: 'P63',
-      label: 'P63',
-    },
-    {
-      id: 'A46',
-      label: 'A46',
-    },
-    {
-      id: 'A64',
-      label: 'A64',
-    },
-    {
-      id: 'P46',
-      label: 'P46',
-    },
-    {
-      id: 'P64',
-      label: 'P64',
-    },
-    {
-      id: 'A77',
-      label: 'A77',
-    },
-    {
-      id: 'P77',
-      label: 'P77',
-    },
-  ];
-
-  const columnsDefined: Column[] = subjectsClone.map((item) => ({
-    ...item,
-    minWidth: 60,
-    align: 'center',
-    minHeight: null,
-    sticky: null,
-    stickyPosition: null,
-    format: null,
-  }));
+      minHeight: null,
+      sticky: true,
+      stickyPosition: null,
+      format: null,
+    })) ?? [];
 
   return [...columns, ...columnsDefined];
 };
