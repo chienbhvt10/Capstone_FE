@@ -8,6 +8,7 @@ import PageWrapper from '~/components/PageWrapper';
 import RoomTable from './components/DistanceTable';
 import { useState } from 'react';
 import BuildingForm from './components/BuildingForm';
+import BuildingTable from './components/BuildingTable';
 
 const DistanceSetting = () => {
   const [tab, setTab] = useState('1');
@@ -38,7 +39,19 @@ const DistanceSetting = () => {
             </Tabs>
           </Box>
           <TabPanel value="1">
-            <BuildingForm />
+            <Stack
+              direction="column"
+              spacing={2}
+              sx={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                maxWidth: 700,
+                margin: '0 auto',
+              }}
+            >
+              <BuildingForm />
+              <BuildingTable />
+            </Stack>
           </TabPanel>
           <TabPanel value="2">
             <RoomTable />

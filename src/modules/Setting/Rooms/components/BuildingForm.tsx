@@ -21,7 +21,7 @@ const BuildingForm = () => {
       direction="row"
       sx={{
         marginLeft: 0,
-        maxWidth: 1300,
+        width: 1,
         justifyContent: 'center',
         alignItems: 'center',
       }}
@@ -31,16 +31,21 @@ const BuildingForm = () => {
         onChange={onChangeName}
         variant="outlined"
         label="Name"
-        sx={{ maxWidth: 300, width: 1 }}
+        sx={{ maxWidth: 250, width: 1 }}
       />
       <TextField
         value={shortName}
         onChange={onChangeShortName}
         variant="outlined"
         label="Short Name"
-        sx={{ maxWidth: 300, width: 1 }}
+        sx={{ maxWidth: 250, width: 1 }}
       />
-      <Button startIcon={<AddIcon />} onClick={onCreateBuilding}>
+      <Button
+        startIcon={<AddIcon />}
+        onClick={onCreateBuilding}
+        size="medium"
+        sx={{ width: 100 }}
+      >
         Building
       </Button>
     </Stack>
