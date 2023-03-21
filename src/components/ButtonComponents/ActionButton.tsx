@@ -13,7 +13,7 @@ import UploadIcon from '@mui/icons-material/Upload';
 import type { LoadingButtonProps } from '@mui/lab/LoadingButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useState } from 'react';
-import Logger from 'utils/Logger';
+import Logger from '~/utils/Logger';
 
 // TODO: Implements text: Cancel, Save, Update,...
 
@@ -59,7 +59,7 @@ const ActionButton = (props: Props) => {
       setSubmitting(true);
       await onSubmit();
     } catch (error) {
-      Logger.log(error);
+      console.log(error);
     } finally {
       setSubmitting(false);
     }

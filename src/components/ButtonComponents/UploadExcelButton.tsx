@@ -7,7 +7,7 @@ import UploadInput from './UploadInput';
 import ActionButton from './ActionButton';
 
 interface Props extends Omit<ButtonProps, 'onSelect'> {
-  onSelect: (file: File | null) => void;
+  onSelect: (file: File) => void;
   title: string;
 }
 

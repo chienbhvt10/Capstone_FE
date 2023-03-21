@@ -17,12 +17,15 @@ import useNotification from '~/hooks/useNotification';
 import {
   executeArrange,
   exportInImportFormat,
+  importTimeTable,
   lockAndUnLockTask,
   modifyTimetable,
   unLockAllTask,
 } from '../../../services/arrange';
 import SettingModelDialog from './SettingModelDialog';
 import { Fragment, useState } from 'react';
+import UploadExcelButton from '~/components/ButtonComponents/UploadExcelButton';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 const TimeTableModifyForm = () => {
   const {
@@ -44,6 +47,7 @@ const TimeTableModifyForm = () => {
       });
     }
   };
+
   const onChangeRoomSelect = (event: SelectChangeEvent<number>) => {
     if (taskSelect) {
       setTaskSelect({
@@ -133,6 +137,25 @@ const TimeTableModifyForm = () => {
     setOpen(true);
   };
 
+  const handleUploadExcel = async (file: File) => {
+    try {
+      const formData = new FormData();
+
+      formData.append('file', file, file.name);
+
+      await importTimeTable(formData);
+      setNotification({
+        message: 'Upload file success',
+        severity: 'success',
+      });
+    } catch (error) {
+      setNotification({
+        message: 'Upload file failed',
+        severity: 'error',
+      });
+    }
+  };
+
   return (
     <Stack
       direction="column"
@@ -163,42 +186,20 @@ const TimeTableModifyForm = () => {
           >
             Arrange
           </Button>
-          <Button
-            startIcon={
-              <Image
-                src={images.iconImport}
-                sx={{ width: 18, height: 18 }}
-                alt=""
-              />
-            }
-            fullWidth
-          >
-            Import Timetable
-          </Button>
+          <UploadExcelButton
+            onSelect={handleUploadExcel}
+            title="Import Timetable"
+          />
+
           <Button
             onClick={onExportInImportFormat}
-            startIcon={
-              <Image
-                src={images.iconExport}
-                sx={{ width: 18, height: 18 }}
-                alt=""
-              />
-            }
+            startIcon={<FileDownloadIcon />}
             fullWidth
           >
             Export in import format
           </Button>
 
-          <Button
-            startIcon={
-              <Image
-                src={images.iconExport}
-                sx={{ width: 18, height: 18 }}
-                alt=""
-              />
-            }
-            fullWidth
-          >
+          <Button startIcon={<FileDownloadIcon />} fullWidth>
             Export group by lecturer
           </Button>
         </Stack>
