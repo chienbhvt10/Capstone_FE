@@ -66,52 +66,53 @@ const AreaSlotWeight = () => {
   };
   return (
     <TableContainer sx={{ maxHeight: 500 }}>
-      <TableCustom>
-        <TableHead>
-          <TableRow>
-            {columns.map((item) => (
-              <TableCell
-                key={item.id}
-                align={item.align}
-                sx={{
-                  left: item.stickyPosition === 'left' ? 0 : 'unset',
-                  right: item.stickyPosition === 'right' ? 0 : 'unset',
-                  zIndex: item.zIndex
-                    ? item.zIndex
-                    : item.sticky
-                    ? theme.zIndex.appBar + 10
-                    : theme.zIndex.appBar,
-                }}
-              >
-                <Box
+      {loadingTable ? (
+        <Box
+          sx={{
+            minHeight: 450,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <TableCustom>
+          <TableHead>
+            <TableRow>
+              {columns.map((item) => (
+                <TableCell
+                  key={item.id}
+                  align={item.align}
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    minWidth: item.minWidth,
-                    minHeight: item.minHeight,
+                    left: item.stickyPosition === 'left' ? 0 : 'unset',
+                    right: item.stickyPosition === 'right' ? 0 : 'unset',
+                    zIndex: item.zIndex
+                      ? item.zIndex
+                      : item.sticky
+                      ? theme.zIndex.appBar + 10
+                      : theme.zIndex.appBar,
                   }}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                    {item.label}
-                  </Typography>
-                </Box>
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        {loadingTable ? (
-          <Box sx={{ minHeight: 450 }}>
-            <CircularProgress
-              sx={{
-                position: 'absolute',
-                top: '40%',
-                left: '50%',
-                display: 'block',
-              }}
-            />
-          </Box>
-        ) : (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      minWidth: item.minWidth,
+                      minHeight: item.minHeight,
+                    }}
+                  >
+                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                      {item.label}
+                    </Typography>
+                  </Box>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+
           <TableBody>
             {areaSlotWeight?.length &&
               areaSlotWeight.map((item, index) => (
@@ -147,8 +148,8 @@ const AreaSlotWeight = () => {
                 </TableRow>
               ))}
           </TableBody>
-        )}
-      </TableCustom>
+        </TableCustom>
+      )}
     </TableContainer>
   );
 };

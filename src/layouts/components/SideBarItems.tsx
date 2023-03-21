@@ -78,8 +78,8 @@ const listItem: ListItem[] = [
         path: 'settings/subjects',
       },
       {
-        title: 'Rooms',
-        path: 'settings/rooms',
+        title: 'Building & Distance',
+        path: 'settings/distance',
       },
       {
         title: 'TimeSlot',

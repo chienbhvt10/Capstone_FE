@@ -15,7 +15,7 @@ import { getExecutedArrangeInfo, getTaskNotAssign } from '~/services/arrange';
 import { getClasses } from '~/services/class';
 import { getExecuteInfos } from '~/services/execute';
 import { getLecturers } from '~/services/lecturer';
-import { getRooms } from '~/services/room';
+import { getRooms } from '~/services/distance';
 import { getSubjects } from '~/services/subject';
 import { getTimeSlots } from '~/services/timeslot';
 import wait from '~/utils/wait';

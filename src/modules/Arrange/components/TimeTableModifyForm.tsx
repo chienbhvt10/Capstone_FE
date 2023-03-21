@@ -16,6 +16,7 @@ import useArrange from '~/hooks/useArrange';
 import useNotification from '~/hooks/useNotification';
 import {
   executeArrange,
+  exportInImportFormat,
   lockAndUnLockTask,
   modifyTimetable,
   unLockAllTask,
@@ -33,7 +34,6 @@ const TimeTableModifyForm = () => {
     loadingTimeTableModify,
   } = useArrange();
   const [openDialog, setOpen] = useState<boolean>(false);
-
   const setNotification = useNotification();
 
   const onChangeLecturerSelect = (event: SelectChangeEvent<number>) => {
@@ -80,20 +80,15 @@ const TimeTableModifyForm = () => {
     }
   };
 
-  const exportInImportFormat = () => {
-    const url = 'https://localhost:7279/Timetable-20230306171426222.xlsx';
-    fetch(url)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(new Blob([blob]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'Timetable-20230306171426222.xlsx');
-        document.body.appendChild(link);
-        link.click();
-        link?.parentNode?.removeChild(link);
-      })
-      .catch((error) => console.log(error));
+  const onExportInImportFormat = async () => {
+    const res = await exportInImportFormat();
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'Timetable.xlsx');
+    document.body.appendChild(link);
+    link.click();
+    link?.parentNode?.removeChild(link);
   };
 
   const onPreAssignTask = (taskId: number, lecturerId: number) => () => {
@@ -181,7 +176,7 @@ const TimeTableModifyForm = () => {
             Import Timetable
           </Button>
           <Button
-            onClick={exportInImportFormat}
+            onClick={onExportInImportFormat}
             startIcon={
               <Image
                 src={images.iconExport}
@@ -193,6 +188,7 @@ const TimeTableModifyForm = () => {
           >
             Export in import format
           </Button>
+
           <Button
             startIcon={
               <Image

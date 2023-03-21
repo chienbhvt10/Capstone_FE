@@ -1,4 +1,4 @@
-export const API_GET_ROOMS = '/distance/get-rooms';
+export const API_GET_ROOMS = '/distance/room';
 export const API_GET_ALL_LECTURER = '/lecturer';
 export const API_IMPORT_TIME_TABLE = '/arrange/import-time-table';
 export const API_SEARCH_TASK = '/arrange/search-tasks';
@@ -20,3 +20,5 @@ export const API_SLOT_PREFERENCE_LEVELS = '/preference-level/slot';
 export const API_TIME_SLOT_COMPATIBILITY = '/time-slot/compatibility';
 export const API_TIME_SLOT_CONFLICT = '/time-slot/conflict';
 export const API_AREA_TIME_SLOT_WEIGHT = '/time-slot/slot-weight';
+export const API_BUILDING = '/distance/building';
+export const API_DISTANCE = '/distance';

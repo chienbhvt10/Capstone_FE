@@ -70,15 +70,15 @@ const TimeSlotConflict = () => {
   return (
     <TableContainer sx={{ maxHeight: 500 }}>
       {loadingTable ? (
-        <Box sx={{ minHeight: 450 }}>
-          <CircularProgress
-            sx={{
-              position: 'absolute',
-              top: '40%',
-              left: '50%',
-              display: 'block',
-            }}
-          />
+        <Box
+          sx={{
+            minHeight: 450,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <CircularProgress />
         </Box>
       ) : (
         <TableCustom>

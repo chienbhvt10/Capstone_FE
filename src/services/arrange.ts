@@ -42,11 +42,10 @@ export const getExecutedArrangeInfo = async (executeId: number) => {
   return HttpClient.get<number, CommonResponse<LecturerAssign[]>>(url);
 };
 
-export const exportInImportFormat = async (params: any) => {
-  return HttpClient.post<any, CommonResponse>(
-    API_EXPORT_IN_IMPORT_FORMAT,
-    params
-  );
+export const exportInImportFormat = async () => {
+  return HttpClient.get(API_EXPORT_IN_IMPORT_FORMAT, {
+    responseType: 'blob',
+  });
 };
 
 export const importTimeTable = async (params: FormData) => {
@@ -56,9 +55,6 @@ export const importTimeTable = async (params: FormData) => {
     { headers: { 'Content-Type': 'multipart/form-data' } }
   );
 };
-
-export const swapLecturer = async () => {};
-export const swapRoom = async () => {};
 
 export const modifyTimetable = async (params: TimeTableModifyParam) => {
   return HttpClient.put<typeof params, CommonResponse>(

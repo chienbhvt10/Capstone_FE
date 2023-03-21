@@ -3,19 +3,37 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
-import { getRoomsDistanceColumns } from '../util/columns';
-import { roomDistanceData } from '../util/data';
+import { getBuildingColumns } from '../util/columns';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
+import { Building } from '../util/type';
+import { getAllBuilding } from '~/services/distance';
+import useRefresh from '~/hooks/useRefresh';
 
-const RoomTable = () => {
-  const columns = useMemo(() => getRoomsDistanceColumns(), []);
+interface Props {}
 
-  const onEdit = (item: any) => () => {};
+const BuildingTable = (props: Props) => {
+  const columns = useMemo(() => getBuildingColumns(), []);
+  const [buildingData, setBuildingData] = useState<Building[]>([]);
+  const [refresh, refetch] = useRefresh();
 
-  const onDelete = (item: any) => () => {};
+  useEffect(() => {
+    getAllBuilding().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setBuildingData(res.data);
+      }
+    });
+  }, [refresh]);
+
+  const onEdit = (item: Building) => () => {
+    refetch();
+  };
+
+  const onDelete = (item: Building) => () => {
+    refetch();
+  };
 
   return (
     <TableContainer sx={{ maxHeight: 550 }}>
@@ -38,16 +56,13 @@ const RoomTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {roomDistanceData.map((item, index) => (
+          {buildingData.map((item, index) => (
             <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
               <TableCellCustom align="center" border={true} hover={true}>
-                <Typography variant="body1">{item.building1}</Typography>
+                <Typography variant="body1">{item.name}</Typography>
               </TableCellCustom>
               <TableCellCustom align="center" border={true} hover={true}>
-                <Typography variant="body1">{item.building2}</Typography>
-              </TableCellCustom>
-              <TableCellCustom align="center" border={true} hover={true}>
-                <Typography variant="body1">{item.distance}</Typography>
+                <Typography variant="body1">{item.shortName}</Typography>
               </TableCellCustom>
               <TableCellCustom align="center" border={true} hover={true}>
                 <TableToolCustom
@@ -64,4 +79,4 @@ const RoomTable = () => {
   );
 };
 
-export default RoomTable;
+export default BuildingTable;

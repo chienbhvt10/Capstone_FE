@@ -1,9 +1,21 @@
-import { Box, Stack, Typography } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import { TabContext, TabPanel } from '@mui/lab';
+import { Button, Stack } from '@mui/material';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import PageWrapper from '~/components/PageWrapper';
-import RoomForm from './components/RoomForm';
-import RoomTable from './components/RoomTable';
+import RoomTable from './components/DistanceTable';
+import { useState } from 'react';
+import BuildingForm from './components/BuildingForm';
 
-const RoomsSettings = () => {
+const DistanceSetting = () => {
+  const [tab, setTab] = useState('1');
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setTab(newValue);
+  };
+
   return (
     <PageWrapper title="Distance Setting">
       {/* <PageBreadcrumbs title={'Arrange'} breadcrumbs={[]} /> */}
@@ -18,12 +30,23 @@ const RoomsSettings = () => {
           height: 'calc(100vh - 60px)',
         }}
       >
-        <Typography variant="h6">Distance Settings</Typography>
-        <RoomForm />
-        <RoomTable />
+        <TabContext value={tab}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={tab} onChange={handleChange}>
+              <Tab label="Building" value="1" />
+              <Tab label="Distance" value="2" />
+            </Tabs>
+          </Box>
+          <TabPanel value="1">
+            <BuildingForm />
+          </TabPanel>
+          <TabPanel value="2">
+            <RoomTable />
+          </TabPanel>
+        </TabContext>
       </Stack>
     </PageWrapper>
   );
 };
 
-export default RoomsSettings;
+export default DistanceSetting;
