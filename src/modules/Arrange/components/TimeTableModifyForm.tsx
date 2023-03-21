@@ -1,6 +1,8 @@
 import {
+  Backdrop,
   Box,
   CircularProgress,
+  LinearProgress,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -38,6 +40,7 @@ const TimeTableModifyForm = () => {
   } = useArrange();
   const [openDialog, setOpen] = useState<boolean>(false);
   const setNotification = useNotification();
+  const [loadingUploadExcel, setLoadingUploadExcel] = useState<boolean>(false);
 
   const onChangeLecturerSelect = (event: SelectChangeEvent<number>) => {
     if (taskSelect) {
@@ -139,6 +142,7 @@ const TimeTableModifyForm = () => {
 
   const handleUploadExcel = async (file: File) => {
     try {
+      setLoadingUploadExcel(true);
       const formData = new FormData();
 
       formData.append('file', file, file.name);
@@ -153,6 +157,8 @@ const TimeTableModifyForm = () => {
         message: 'Upload file failed',
         severity: 'error',
       });
+    } finally {
+      setLoadingUploadExcel(false);
     }
   };
 
@@ -330,6 +336,19 @@ const TimeTableModifyForm = () => {
         openDialog={openDialog}
         onCloseDialog={onCloseDialog}
       />
+      <Backdrop
+        sx={{
+          color: '#fff',
+          mt: '0 !important',
+          zIndex: 9999,
+        }}
+        open={loadingUploadExcel}
+      >
+        <Stack direction="column" spacing={2} sx={{ alignItems: 'center' }}>
+          <CircularProgress sx={{ color: 'white' }} />
+          <Typography variant="body1">Importing timetable ...</Typography>
+        </Stack>
+      </Backdrop>
     </Stack>
   );
 };

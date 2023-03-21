@@ -1,4 +1,6 @@
+import LockIcon from '@mui/icons-material/Lock';
 import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -9,12 +11,10 @@ import { useTheme } from '@mui/material/styles';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import useArrange from '~/hooks/useArrange';
+import wait from '~/utils/wait';
 import { getATask } from '../../../services/arrange';
 import { getTableTimeSlotColumns } from '../utils/column';
 import { notAssignRows } from '../utils/row';
-import LockIcon from '@mui/icons-material/Lock';
-import CircularProgress from '@mui/material/CircularProgress';
-import wait from '~/utils/wait';
 
 const TimeTable = () => {
   const theme = useTheme();
