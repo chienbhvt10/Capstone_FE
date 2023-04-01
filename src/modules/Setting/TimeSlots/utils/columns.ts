@@ -43,9 +43,9 @@ export const getTableSlotConflictColumns = (slots?: TimeSlot[]) => {
   const columns: Column[] = [];
 
   columns.push({
-    id: 'Lecturer',
-    label: 'Lecturer',
-    minWidth: 100,
+    id: 'TimeSlot',
+    label: 'TimeSlot',
+    minWidth: 60,
     align: 'center',
     sticky: true,
     stickyPosition: 'left',
@@ -71,9 +71,9 @@ export const getTableSlotCompatibilityColumns = (slots?: TimeSlot[]) => {
   const columns: Column[] = [];
 
   columns.push({
-    id: 'Lecturer',
-    label: 'Lecturer',
-    minWidth: 100,
+    id: 'TimeSlot',
+    label: 'TimeSlot',
+    minWidth: 60,
     align: 'center',
     sticky: true,
     stickyPosition: 'left',
@@ -99,9 +99,9 @@ export const getTableAreaSlotWeightColumns = (slots?: TimeSlot[]) => {
   const columns: Column[] = [];
 
   columns.push({
-    id: 'Lecturer',
-    label: 'Lecturer',
-    minWidth: 100,
+    id: 'TimeSlot',
+    label: 'TimeSlot',
+    minWidth: 60,
     align: 'center',
     sticky: true,
     stickyPosition: 'left',

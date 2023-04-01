@@ -35,13 +35,13 @@ interface ListItem {
 }
 
 const listItem: ListItem[] = [
-  {
-    title: 'Time Table',
-    path: TIMETABLE_PATH,
-    icon: (
-      <Image src={images.iconTimetable} alt="" sx={{ width: 25, height: 25 }} />
-    ),
-  },
+  // {
+  //   title: 'Time Table',
+  //   path: TIMETABLE_PATH,
+  //   icon: (
+  //     <Image src={images.iconTimetable} alt="" sx={{ width: 25, height: 25 }} />
+  //   ),
+  // },
   // {
   //   title: 'Manage',
   //   path: MANAGE_PATH,

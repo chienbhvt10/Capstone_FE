@@ -152,6 +152,7 @@ const TimeTableModifyForm = () => {
         message: 'Upload file success',
         severity: 'success',
       });
+      refetch();
     } catch (error) {
       setNotification({
         message: 'Upload file failed',
