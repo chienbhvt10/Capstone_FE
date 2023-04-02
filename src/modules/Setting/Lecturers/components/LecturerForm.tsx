@@ -11,6 +11,7 @@ const LecturerForm = () => {
       sx={{
         maxWidth: 1200,
         px: 4,
+        mt: 2,
         alignItems: 'flex-end',
       }}
     >

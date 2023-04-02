@@ -123,7 +123,7 @@ const TimeSlotConflict = () => {
                   align="center"
                   stickyPosition="left"
                   sticky={true}
-                  minHeight={60}
+                  minHeight={40}
                   border={true}
                   hover={true}
                 >
@@ -133,7 +133,7 @@ const TimeSlotConflict = () => {
                   <TableCellCustom
                     key={index + 2}
                     align="center"
-                    minHeight={60}
+                    minHeight={40}
                     border={true}
                     hover={true}
                     onDoubleClick={onEdit(slot, slot.conflict)}

@@ -51,18 +51,17 @@ const SubjectTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {lecturers?.length &&
-              lecturers?.length > 0 &&
+            {lecturers?.length > 0 &&
               lecturers.map((item) => (
                 <TableRow role="checkbox" tabIndex={-1} key={item.id}>
                   <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.shortName}</Typography>
+                    <Typography variant="body1">{item.email}</Typography>
                   </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
                     <Typography variant="body1">{item.name}</Typography>
                   </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.email}</Typography>
+                    <Typography variant="body1">{item.shortName}</Typography>
                   </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
                     <TableToolCustom

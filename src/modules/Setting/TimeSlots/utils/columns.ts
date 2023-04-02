@@ -56,7 +56,7 @@ export const getTableSlotConflictColumns = (slots?: TimeSlot[]) => {
     slots?.map((item) => ({
       id: item.id + '',
       label: item.name,
-      minWidth: 60,
+      minWidth: 40,
       align: 'center',
       minHeight: null,
       sticky: true,

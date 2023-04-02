@@ -107,6 +107,7 @@ const SlotPreferenceLevel = () => {
                     sticky={true}
                     stickyPosition="left"
                     minHeight={60}
+                    border={true}
                   >
                     <Typography variant="body1">{item.lecturerName}</Typography>
                   </TableCellCustom>
@@ -116,6 +117,7 @@ const SlotPreferenceLevel = () => {
                         key={index + 2}
                         align="center"
                         minHeight={60}
+                        border={true}
                       >
                         <TableCellSelect<SlotPreferenceLevelItems>
                           value={slot.preferenceLevel}

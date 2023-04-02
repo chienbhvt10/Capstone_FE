@@ -1,8 +1,8 @@
 import { RouteObject, useRoutes } from 'react-router-dom';
+import ArrangePage from '~/modules/Arrange';
 import NotFound from '~/modules/Errors/NotFound';
 import AdminLayout from '../layouts/AdminLayout';
 import AuthLayout from '../layouts/AuthLayout';
-import TimeTablePage from '../modules/TimeTable';
 import arrangeRoutes from './ArrangeRoutes';
 import authRoutes from './AuthRoutes';
 import manageRoutes from './ManageRoutes';
@@ -18,7 +18,7 @@ const routes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <TimeTablePage />,
+        element: <ArrangePage />,
       },
       arrangeRoutes,
       registerRoutes,
