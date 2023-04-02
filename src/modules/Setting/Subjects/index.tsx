@@ -1,17 +1,29 @@
 import { Stack } from '@mui/material';
-import Typography from '@mui/material/Typography';
-
+import { useEffect, useState } from 'react';
 import PageWrapper from '~/components/PageWrapper';
-import SubjectTable from './components/SubjectTable';
+import { getSubjects } from '~/services/subject';
 import SubjectForm from './components/SubjectForm';
+import SubjectTable from './components/SubjectTable';
+import { Subject } from './util/type';
 
 const SubjectsSetting = () => {
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [editingItem, setEditingItem] = useState<Subject | null>(null);
+
+  useEffect(() => {
+    getSubjects().then((res) => {
+      if (res.data) {
+        setSubjects(res.data);
+      }
+    });
+  }, []);
+
   return (
     <PageWrapper title="Subjects Setting">
-      {/* <PageBreadcrumbs title={'Arrange'} breadcrumbs={[]} /> */}
       <Stack
         direction="column"
-        spacing={4}
+        spacing={2}
         sx={{
           backgroundColor: 'background.paper',
           p: 2,
@@ -21,8 +33,19 @@ const SubjectsSetting = () => {
           height: 'calc(100vh - 60px)',
         }}
       >
-        <SubjectForm />
-        <SubjectTable />
+        <SubjectForm
+          subjects={subjects}
+          setSubjects={setSubjects}
+          editMode={editMode}
+          editingItem={editingItem}
+          setEditMode={setEditMode}
+        />
+        <SubjectTable
+          subjects={subjects}
+          setSubjects={setSubjects}
+          setEditMode={setEditMode}
+          setEditingItem={setEditingItem}
+        />
       </Stack>
     </PageWrapper>
   );

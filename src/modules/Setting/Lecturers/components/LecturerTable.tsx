@@ -4,30 +4,41 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
 import { Lecturer } from '~/modules/Lecturer/util/type';
-import { getLecturers } from '~/services/lecturer';
+import { deleteLecturer } from '~/services/lecturer';
 import { getLecturersTableColumns } from '../util/columns';
 
-const SubjectTable = () => {
-  const [lecturers, setLecturers] = useState<Lecturer[]>([]);
+interface Props {
+  lecturers: Lecturer[];
+  setLecturers: React.Dispatch<React.SetStateAction<Lecturer[]>>;
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditingItem: React.Dispatch<React.SetStateAction<Lecturer | null>>;
+}
 
-  useEffect(() => {
-    getLecturers().then((res) => {
-      if (res.data) {
-        setLecturers(res.data);
-      }
-    });
-  }, []);
+const LecturerTable = (props: Props) => {
+  const { lecturers, setLecturers, setEditMode, setEditingItem } = props;
 
   const columns = useMemo(() => getLecturersTableColumns(), []);
 
-  const onEdit = (item: any) => () => {};
+  const onEdit = (item: Lecturer) => () => {
+    setEditMode(true);
+    setEditingItem(item);
+  };
 
-  const onDelete = (item: any) => () => {};
+  const onDelete = (item: Lecturer) => async () => {
+    await deleteLecturer(item.id)
+      .then((res) => {
+        const newLecturer = lecturers.filter(
+          (lecturer) => item.id != lecturer.id
+        );
+        setLecturers(newLecturer);
+      })
+      .catch((err) => {});
+  };
 
   return (
     <Container maxWidth="lg">
@@ -79,4 +90,4 @@ const SubjectTable = () => {
   );
 };
 
-export default SubjectTable;
+export default LecturerTable;

@@ -4,30 +4,38 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
-import { getSubjects } from '~/services/subject';
+import { deleteSubject } from '~/services/subject';
 import { getSubjectTableColumns } from '../util/columns';
 import { Subject } from '../util/type';
 
-const SubjectTable = () => {
-  const [subjects, setSubjects] = useState<Subject[]>([]);
+interface Props {
+  subjects: Subject[];
+  setSubjects: React.Dispatch<React.SetStateAction<Subject[]>>;
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditingItem: React.Dispatch<React.SetStateAction<Subject | null>>;
+}
 
-  useEffect(() => {
-    getSubjects().then((res) => {
-      if (res.data) {
-        setSubjects(res.data);
-      }
-    });
-  }, []);
-
+const SubjectTable = (props: Props) => {
+  const { subjects, setSubjects, setEditMode, setEditingItem } = props;
   const columns = useMemo(() => getSubjectTableColumns(), []);
 
-  const onEdit = (item: any) => () => {};
+  const onEdit = (item: Subject) => async () => {
+    setEditMode(true);
+    setEditingItem(item);
+  };
 
-  const onDelete = (item: any) => () => {};
+  const onDelete = (item: Subject) => async () => {
+    await deleteSubject(item.id)
+      .then((res) => {
+        const newSubject = subjects.filter((subject) => item.id != subject.id);
+        setSubjects(newSubject);
+      })
+      .catch((err) => {});
+  };
 
   return (
     <Container maxWidth="lg">
