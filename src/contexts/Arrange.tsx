@@ -80,13 +80,12 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
     useState<boolean>(false);
 
   useEffect(() => {
-    setLoadingTimeTable(true);
-    getExecutedArrangeInfo(executeId).then((res) => {
-      if (res.data && res.data.length > 0) {
-        setLecturersTaskAssignInfo(res.data);
-      }
-      getTaskNotAssign()
-        .then((res) => {
+    if (executeId) {
+      getExecutedArrangeInfo(executeId).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setLecturersTaskAssignInfo(res.data);
+        }
+        getTaskNotAssign().then((res) => {
           if (
             res.data &&
             res.data.timeSlotInfos &&
@@ -94,12 +93,9 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
           ) {
             setTasksNotAssigned(res.data);
           }
-        })
-        .finally(async () => {
-          await wait(300);
-          setLoadingTimeTable(false);
         });
-    });
+      });
+    }
   }, [executeId, refresh]);
 
   useEffect(() => {
