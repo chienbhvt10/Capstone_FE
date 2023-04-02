@@ -47,25 +47,47 @@ const TimeSlotConflict = () => {
       });
   }, [refresh]);
 
-  const onEdit = (item: SlotConflictInfos, value: boolean) => () => {
-    updateTimeSlotConflict({
-      conflictId: item.conflictId,
-      conflict: !value,
-    })
-      .then((res) => {
-        setNotification({
-          message: 'Update success',
-          severity: 'success',
-        });
-        refetch();
+  const onEdit =
+    (
+      slotConflictData: SlotConflictData,
+      slotConflictInfos: SlotConflictInfos,
+      value: boolean
+    ) =>
+    () => {
+      updateTimeSlotConflict({
+        conflictId: slotConflictInfos.conflictId,
+        conflict: !value,
       })
-      .catch((err) =>
-        setNotification({
-          message: 'Update error',
-          severity: 'error',
+        .then((res) => {
+          const newSlotConflictData = timeSlotConflict.map((item) => {
+            if (item.timeSlotId === slotConflictData.timeSlotId) {
+              const newSlotConflictInfos = item.slotConflictInfos.map(
+                (subItem) => {
+                  if (subItem.conflictId === slotConflictInfos.conflictId) {
+                    return {
+                      ...subItem,
+                      conflict: !value,
+                    };
+                  }
+                  return subItem;
+                }
+              );
+              return {
+                ...item,
+                slotConflictInfos: newSlotConflictInfos,
+              };
+            }
+            return item;
+          });
+          setTimeSlotConflict(newSlotConflictData);
         })
-      );
-  };
+        .catch((err) =>
+          setNotification({
+            message: 'Update error',
+            severity: 'error',
+          })
+        );
+    };
 
   return (
     <TableContainer sx={{ maxHeight: 500 }}>
@@ -136,7 +158,7 @@ const TimeSlotConflict = () => {
                     minHeight={40}
                     border={true}
                     hover={true}
-                    onDoubleClick={onEdit(slot, slot.conflict)}
+                    onDoubleClick={onEdit(item, slot, slot.conflict)}
                   >
                     {slot.conflict ? 'x' : ''}
                   </TableCellCustom>
