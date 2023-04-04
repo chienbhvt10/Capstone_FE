@@ -5,7 +5,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useEffect, useState } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
-import { getTimeSlotSegments, getTimeSlots } from '~/services/timeslot';
+import {
+  deleteTimeSlotSegment,
+  getTimeSlotSegments,
+  getTimeSlots,
+} from '~/services/timeslot';
 import { timeSlotColumns } from '../../utils/columns';
 import { TimeSlotSegment } from '../../utils/type';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
@@ -29,7 +33,14 @@ const TimeSlotTable = (props: Props) => {
     });
   }, [refresh]);
 
-  const onDelete = (item: any) => () => {};
+  const onDelete = (item: TimeSlotSegment) => async () => {
+    await deleteTimeSlotSegment(item.timeSlotId).then((res) => {
+      const newTimeSlot = timeSlots.filter(
+        (t) => t.timeSlotId !== item.timeSlotId
+      );
+      setTimeSlots(newTimeSlot);
+    });
+  };
 
   return (
     <TableContainer

@@ -34,17 +34,15 @@ export const createTimeSlotSegment = (params: CreateTimeSlotSegmentParams) => {
   return HttpClient.post<typeof params, CommonResponse>(url, params);
 };
 
+export const deleteTimeSlotSegment = async (params: number) => {
+  const url = API_GET_TIME_SLOT_SEGMENT + `\\${params}`;
+  return HttpClient.delete<typeof params, CommonResponse>(url);
+};
+
 export const updateTimeSlotConflict = async (
   params: UpdateTimeSlotConflict
 ) => {
   const url = API_TIME_SLOT_CONFLICT;
-  return HttpClient.put<typeof params, CommonResponse>(url, params);
-};
-
-export const updateTimeSlotCompatibility = async (
-  params: UpdateTimeSlotCompatibility
-) => {
-  const url = API_TIME_SLOT_COMPATIBILITY;
   return HttpClient.put<typeof params, CommonResponse>(url, params);
 };
 
@@ -56,11 +54,6 @@ export const updateAreaSlotWeight = async (params: UpdateAreaSlotWeight) => {
 export const getTimeSlotConflicts = async () => {
   const url = API_TIME_SLOT_CONFLICT;
   return HttpClient.get<null, CommonResponse<SlotConflictData[]>>(url);
-};
-
-export const getTimeSlotCompatibilities = async () => {
-  const url = API_TIME_SLOT_COMPATIBILITY;
-  return HttpClient.get<null, CommonResponse<SlotCompatibilityData[]>>(url);
 };
 
 export const getAreaSlotWeights = async () => {
