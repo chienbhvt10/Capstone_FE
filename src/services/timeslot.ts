@@ -1,8 +1,10 @@
 import {
   AreaSlotWeightData,
+  CreateTimeSlotSegmentParams,
   SlotCompatibilityData,
   SlotConflictData,
   TimeSlot,
+  TimeSlotSegment,
   UpdateAreaSlotWeight,
   UpdateTimeSlotCompatibility,
   UpdateTimeSlotConflict,
@@ -10,6 +12,7 @@ import {
 import {
   API_AREA_TIME_SLOT_WEIGHT,
   API_GET_TIME_SLOT,
+  API_GET_TIME_SLOT_SEGMENT,
   API_TIME_SLOT_COMPATIBILITY,
   API_TIME_SLOT_CONFLICT,
 } from '../constants/api-path';
@@ -19,6 +22,16 @@ import { CommonResponse } from '~/utils/TypeCommon';
 export const getTimeSlots = () => {
   const url = API_GET_TIME_SLOT;
   return HttpClient.get<null, CommonResponse<TimeSlot[]>>(url);
+};
+
+export const getTimeSlotSegments = () => {
+  const url = API_GET_TIME_SLOT_SEGMENT;
+  return HttpClient.get<null, CommonResponse<TimeSlotSegment[]>>(url);
+};
+
+export const createTimeSlotSegment = (params: CreateTimeSlotSegmentParams) => {
+  const url = API_GET_TIME_SLOT_SEGMENT;
+  return HttpClient.post<typeof params, CommonResponse>(url, params);
 };
 
 export const updateTimeSlotConflict = async (

@@ -62,10 +62,8 @@ export interface AreaSlotWeightSelectItem {
 export interface TimeSlot {
   id: number;
   name: string;
-  description: string;
+  amorPm: boolean;
   semesterId: number;
-  slot1: string;
-  slot2: string;
 }
 
 export interface UpdateTimeSlotCompatibility {
@@ -81,4 +79,44 @@ export interface UpdateTimeSlotConflict {
 export interface UpdateAreaSlotWeight {
   slotWeightId: number;
   slotWeight: number;
+}
+
+export interface TimeSlotSegment {
+  amorPm: number;
+  semesterId: number;
+  slotSegments: SlotSegment[];
+  timeSlotId: number;
+  timeSlotName: string;
+}
+export interface SlotSegment {
+  segmentId: number;
+  dayId: number;
+  day: string;
+  segment: number;
+}
+
+export interface SlotDay {
+  id: number;
+  selected?: boolean;
+}
+
+export interface Slot {
+  id: number;
+  slotDays: SlotDay[];
+}
+
+export interface TimeSlotSelect {
+  id: number;
+  slotSelected: SlotDay[];
+}
+
+export interface CreateTimeSlotSegmentParams {
+  daySession: number;
+  name: string;
+  segments: CreateSegmentData[];
+}
+
+export interface CreateSegmentData {
+  day: number;
+  segment: number;
 }

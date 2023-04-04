@@ -122,7 +122,7 @@ const AreaSlotWeight = () => {
                     align="center"
                     stickyPosition="left"
                     sticky={true}
-                    minHeight={60}
+                    minHeight={40}
                     border={true}
                     hover={true}
                   >
@@ -132,7 +132,7 @@ const AreaSlotWeight = () => {
                     <TableCellCustom
                       key={index + 2}
                       align="center"
-                      minHeight={60}
+                      minHeight={40}
                       border={true}
                       hover={true}
                     >
@@ -140,7 +140,7 @@ const AreaSlotWeight = () => {
                         value={slot.slotWeight}
                         item={slot}
                         selectItems={areaSlotWeightItem}
-                        selectTitle="Select conflict level"
+                        selectTitle="Select area slot weight"
                         callback={onEdit}
                       />
                     </TableCellCustom>

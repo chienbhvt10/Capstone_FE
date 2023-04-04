@@ -17,3 +17,8 @@ export enum STRATEGY {
   COMPROMISED_PROGRAMMING = 3,
   PARETO_BASED = 4,
 }
+
+export enum DAY_SESSION {
+  AM = 1,
+  PM = 0,
+}

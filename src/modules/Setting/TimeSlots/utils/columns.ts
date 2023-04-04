@@ -56,7 +56,7 @@ export const getTableSlotConflictColumns = (slots?: TimeSlot[]) => {
     slots?.map((item) => ({
       id: item.id + '',
       label: item.name,
-      minWidth: 40,
+      minWidth: 25,
       align: 'center',
       minHeight: null,
       sticky: true,
@@ -112,7 +112,7 @@ export const getTableAreaSlotWeightColumns = (slots?: TimeSlot[]) => {
     slots?.map((item) => ({
       id: item.id + '',
       label: item.name,
-      minWidth: 60,
+      minWidth: 40,
       align: 'center',
       minHeight: null,
       sticky: true,
@@ -124,7 +124,7 @@ export const getTableAreaSlotWeightColumns = (slots?: TimeSlot[]) => {
 };
 
 export const slotColumns: readonly Column[] = [
-  { id: '', label: '', minWidth: 80, minHeight: 30, align: 'center' },
+  { id: 'Slot', label: 'Slot', minWidth: 80, minHeight: 30, align: 'center' },
   { id: 'MON', label: 'MON', minWidth: 80, minHeight: 30, align: 'center' },
   {
     id: 'TUE',
@@ -222,8 +222,15 @@ export const timeSlotColumns: readonly Column[] = [
     align: 'center',
   },
   {
-    id: 'tool',
-    label: '',
+    id: 'Day Session',
+    label: 'Day Session',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+  },
+  {
+    id: 'Action',
+    label: 'Action',
     minWidth: 50,
     minHeight: 30,
     align: 'center',

@@ -1,5 +1,5 @@
 import { TabContext, TabPanel } from '@mui/lab';
-import { Stack, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -7,9 +7,7 @@ import { useState } from 'react';
 import PageWrapper from '~/components/PageWrapper';
 import AreaSlotWeight from './AreaSlotWeight';
 import TimeSlotSetting from './TimeSlotSetting';
-import TimeSlotCompatibility from './TimeslotCompatibility';
 import TimeSlotConflict from './TimeslotConflict';
-import TimeSlotTable from './TimeSlotSetting/components/TimeSlotTable';
 
 const TimeSlotsSettingPage = () => {
   const [tab, setTab] = useState('1');
@@ -37,41 +35,16 @@ const TimeSlotsSettingPage = () => {
             <Tabs value={tab} onChange={handleChange}>
               <Tab label="TimeSlot Setting" value="1" />
               <Tab label="TimeSlot Conflict" value="2" />
-              <Tab label="TimeSlot Compatibility" value="3" />
               <Tab label="Area Slot Weight" value="4" />
             </Tabs>
           </Box>
           <TabPanel value="1" sx={{ p: 0 }}>
-            <TimeSlotTable />
+            <TimeSlotSetting />
           </TabPanel>
           <TabPanel value="2" sx={{ p: 0 }}>
             <TimeSlotConflict />
           </TabPanel>
-          <TabPanel value="3" sx={{ p: 0 }}>
-            <TimeSlotCompatibility />
-            <Stack
-              direction="row"
-              sx={{
-                maxWidth: 450,
-                justifyContent: 'flex-end',
-                fontSize: '13px',
-                marginLeft: 'auto',
-              }}
-            >
-              <ul>
-                Note:
-                <li> O-01</li>
-                <li>
-                  Giải thích timeslot compatibility là tham số đánh giá mức độ
-                  phù hợp giữa 2 timeslot từ -5 đến 5, -5 là không thể xếp cùng
-                  nhau, 5 là phù hợp để xếp cùng nhau
-                </li>
-                <li>
-                  Là độ ưu tiên xếp cho các timeslot đấy cùng 1 giảng viên
-                </li>
-              </ul>
-            </Stack>
-          </TabPanel>
+
           <TabPanel value="4" sx={{ p: 0 }}>
             <AreaSlotWeight />
             <Stack

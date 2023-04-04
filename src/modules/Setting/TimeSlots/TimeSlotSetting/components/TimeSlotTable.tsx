@@ -1,80 +1,100 @@
-import { Container } from '@mui/material';
+import { Table } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
-import TableCustom from '~/components/TableComponents/TableCustom';
+import { getTimeSlotSegments, getTimeSlots } from '~/services/timeslot';
+import { timeSlotColumns } from '../../utils/columns';
+import { TimeSlotSegment } from '../../utils/type';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
-import { TimeSlot } from '../../utils/type';
-import { getTimeSlots } from '~/services/timeslot';
-import { getTimeSlotTableColumns } from '../../utils/columns';
+import { DAY_SESSION } from '~/constants';
+import useRefresh from '~/hooks/useRefresh';
 
-const TimeSlotTable = () => {
-  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+interface Props {
+  refresh: any;
+}
+
+const TimeSlotTable = (props: Props) => {
+  const { refresh } = props;
+
+  const [timeSlots, setTimeSlots] = useState<TimeSlotSegment[]>([]);
 
   useEffect(() => {
-    getTimeSlots().then((res) => {
+    getTimeSlotSegments().then((res) => {
       if (res.data) {
         setTimeSlots(res.data);
       }
     });
-  }, []);
+  }, [refresh]);
 
-  const columns = useMemo(() => getTimeSlotTableColumns(), []);
+  const onDelete = (item: any) => () => {};
 
   return (
-    <Container maxWidth="lg">
-      <TableContainer sx={{ maxHeight: 400 }}>
-        <TableCustom>
-          <TableHead>
-            <TableRow>
-              {columns.map((item) => (
+    <TableContainer
+      sx={{
+        maxWidth: 1200,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        mt: 2,
+      }}
+    >
+      <Table stickyHeader aria-label="sticky table" sx={{ borderSpacing: 2 }}>
+        <TableHead>
+          <TableRow>
+            {timeSlotColumns.map((item) => (
+              <TableCellCustom
+                key={item.id + 'a'}
+                align={item.align}
+                minWidth={item.minWidth}
+                minHeight={item.minHeight}
+              >
+                {item.label}
+              </TableCellCustom>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {timeSlots.map((item) => (
+            <TableRow
+              role="checkbox"
+              tabIndex={-1}
+              key={item.timeSlotId + 989789458}
+            >
+              <TableCellCustom align="center" border={true} hover={true}>
+                {item.timeSlotName}
+              </TableCellCustom>
+              {item.slotSegments?.map((slotSegment) => (
                 <TableCellCustom
-                  key={item.id}
-                  align={item.align}
-                  stickyPosition={item.stickyPosition}
-                  sticky={item.sticky}
-                  minWidth={100}
+                  key={Math.random() + 1 + slotSegment.segmentId}
+                  align="center"
+                  border={true}
+                  hover={true}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                    {item.label}
-                  </Typography>
+                  {slotSegment.segment !== 0 ? (
+                    `Slot ${slotSegment.segment}`
+                  ) : (
+                    <>&#8209;</>
+                  )}
                 </TableCellCustom>
               ))}
+              <TableCellCustom align="center" border={true} hover={true}>
+                {DAY_SESSION[item.amorPm]}
+              </TableCellCustom>
+              <TableCellCustom align="center" border={true} hover={true}>
+                <TableToolCustom
+                  item={item}
+                  onDelete={onDelete}
+                  displayEditButton={false}
+                />
+              </TableCellCustom>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {timeSlots?.length > 0 &&
-              timeSlots.map((item) => (
-                <TableRow role="checkbox" tabIndex={-1} key={item.id}>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.name}</Typography>
-                  </TableCellCustom>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.description}</Typography>
-                  </TableCellCustom>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.slot1}</Typography>
-                  </TableCellCustom>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.slot2}</Typography>
-                  </TableCellCustom>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <TableToolCustom
-                      item={item}
-                      onEdit={(item: TimeSlot) => () => {}}
-                      onDelete={(item: TimeSlot) => () => {}}
-                    />
-                  </TableCellCustom>
-                </TableRow>
-              ))}
-          </TableBody>
-        </TableCustom>
-      </TableContainer>
-    </Container>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

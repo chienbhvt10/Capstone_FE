@@ -7,6 +7,7 @@ export const API_GET_SCHEDULE = '/arrange/get-schedule/';
 export const API_GET_TASK_NOT_ASSIGNED = '/arrange/get-tasks-not-assigned';
 export const API_GET_A_TASK = '/arrange/get-a-task/';
 export const API_GET_TIME_SLOT = '/time-slot';
+export const API_GET_TIME_SLOT_SEGMENT = '/time-slot/segment';
 export const API_MODIFY_TIMETABLE = '/arrange/timetable-modify';
 export const API_SUBJECT = '/subject';
 export const API_GET_ALL_CLASSES = '/class';
