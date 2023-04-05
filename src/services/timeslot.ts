@@ -1,28 +1,50 @@
 import {
   AreaSlotWeightData,
+  CreateTimeSlotParams,
   CreateTimeSlotSegmentParams,
-  SlotCompatibilityData,
   SlotConflictData,
+  SlotSegment,
   TimeSlot,
   TimeSlotSegment,
   UpdateAreaSlotWeight,
-  UpdateTimeSlotCompatibility,
   UpdateTimeSlotConflict,
+  UpdateTimeSlotParams,
+  UpdateTimeSlotSegmentParams,
 } from '~/modules/Setting/TimeSlots/utils/type';
+import HttpClient from '~/utils/HttpClient';
+import { CommonResponse } from '~/utils/TypeCommon';
 import {
   API_AREA_TIME_SLOT_WEIGHT,
   API_GET_TIME_SLOT,
   API_GET_TIME_SLOT_SEGMENT,
-  API_TIME_SLOT_COMPATIBILITY,
   API_TIME_SLOT_CONFLICT,
 } from '../constants/api-path';
-import HttpClient from '~/utils/HttpClient';
-import { CommonResponse } from '~/utils/TypeCommon';
+
+//#region TimeSlot Api
 
 export const getTimeSlots = () => {
   const url = API_GET_TIME_SLOT;
   return HttpClient.get<null, CommonResponse<TimeSlot[]>>(url);
 };
+
+export const createTimeSlot = (params: CreateTimeSlotParams) => {
+  const url = API_GET_TIME_SLOT;
+  return HttpClient.post<typeof params, CommonResponse>(url, params);
+};
+
+export const updateTimeSlot = async (params: UpdateTimeSlotParams) => {
+  const url = API_GET_TIME_SLOT;
+  return HttpClient.put<typeof params, CommonResponse>(url, params);
+};
+
+export const deleteTimeSlot = async (params: number) => {
+  const url = API_GET_TIME_SLOT + `\\${params}`;
+  return HttpClient.delete<typeof params, CommonResponse>(url);
+};
+
+//#endregion
+
+//#region TimeSlotSegment Api
 
 export const getTimeSlotSegments = () => {
   const url = API_GET_TIME_SLOT_SEGMENT;
@@ -31,7 +53,20 @@ export const getTimeSlotSegments = () => {
 
 export const createTimeSlotSegment = (params: CreateTimeSlotSegmentParams) => {
   const url = API_GET_TIME_SLOT_SEGMENT;
-  return HttpClient.post<typeof params, CommonResponse>(url, params);
+  return HttpClient.post<typeof params, CommonResponse<SlotSegment>>(
+    url,
+    params
+  );
+};
+
+export const updateTimeSlotSegment = async (
+  params: UpdateTimeSlotSegmentParams
+) => {
+  const url = API_GET_TIME_SLOT_SEGMENT;
+  return HttpClient.put<typeof params, CommonResponse<SlotSegment>>(
+    url,
+    params
+  );
 };
 
 export const deleteTimeSlotSegment = async (params: number) => {
@@ -39,9 +74,13 @@ export const deleteTimeSlotSegment = async (params: number) => {
   return HttpClient.delete<typeof params, CommonResponse>(url);
 };
 
-export const deleteTimeSlot = async (params: number) => {
-  const url = API_GET_TIME_SLOT + `\\${params}`;
-  return HttpClient.delete<typeof params, CommonResponse>(url);
+//#endregion
+
+//#region TimeSlot conflict Api
+
+export const getTimeSlotConflicts = async () => {
+  const url = API_TIME_SLOT_CONFLICT;
+  return HttpClient.get<null, CommonResponse<SlotConflictData[]>>(url);
 };
 
 export const updateTimeSlotConflict = async (
@@ -51,17 +90,16 @@ export const updateTimeSlotConflict = async (
   return HttpClient.put<typeof params, CommonResponse>(url, params);
 };
 
+//#endregion
+
+//#region Area TimeSlot Weight Api
 export const updateAreaSlotWeight = async (params: UpdateAreaSlotWeight) => {
   const url = API_AREA_TIME_SLOT_WEIGHT;
   return HttpClient.put<typeof params, CommonResponse>(url, params);
-};
-
-export const getTimeSlotConflicts = async () => {
-  const url = API_TIME_SLOT_CONFLICT;
-  return HttpClient.get<null, CommonResponse<SlotConflictData[]>>(url);
 };
 
 export const getAreaSlotWeights = async () => {
   const url = API_AREA_TIME_SLOT_WEIGHT;
   return HttpClient.get<null, CommonResponse<AreaSlotWeightData[]>>(url);
 };
+//#endregion

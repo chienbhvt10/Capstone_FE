@@ -1,16 +1,15 @@
-import ClickAwayListener from '@mui/base/ClickAwayListener';
+import ClearIcon from '@mui/icons-material/Clear';
+import { IconButton, type SelectChangeEvent } from '@mui/material';
 import Box from '@mui/material/Box';
-import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import { Fragment, useState } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
-import useNotification from '~/hooks/useNotification';
 import {
   DaySessionSelectItem,
   SlotSegment,
   TimeSlotSegment,
 } from '../../utils/type';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import type { SelectChangeEvent } from '@mui/material';
 
 interface Props {
   timeSlotSegment: TimeSlotSegment;
@@ -49,14 +48,14 @@ const EditableCell = (props: Props) => {
   ) => {
     event.stopPropagation();
     setSelectValue(event.target.value);
-    callback && callback(timeSlotSegment, slotSegment, value);
-  };
-
-  const handleClickAway = () => {
+    callback && callback(timeSlotSegment, slotSegment, event.target.value);
     if (editMode) {
       setEditMode(false);
-      callback && callback(timeSlotSegment, slotSegment, value);
     }
+  };
+
+  const stopEditMode = () => {
+    setEditMode(false);
   };
 
   return (
@@ -72,10 +71,14 @@ const EditableCell = (props: Props) => {
       }}
       onDoubleClick={(event) => !editMode && onEditMode()}
     >
-      <ClickAwayListener onClickAway={handleClickAway}>
-        <Box onClick={(event) => event.stopPropagation()} sx={{ width: 0.95 }}>
-          {editMode ? (
-            <Select value={selectValue} onChange={onChangeSelect}>
+      <Box sx={{ width: 0.95 }}>
+        {editMode ? (
+          <Fragment>
+            <Select
+              value={selectValue}
+              onChange={onChangeSelect}
+              sx={{ width: 0.7 }}
+            >
               <MenuItem disabled value="">
                 <em>{selectTitle}</em>
               </MenuItem>
@@ -85,11 +88,27 @@ const EditableCell = (props: Props) => {
                 </MenuItem>
               ))}
             </Select>
-          ) : (
-            text
-          )}
-        </Box>
-      </ClickAwayListener>
+            <IconButton
+              onClick={stopEditMode}
+              sx={{
+                p: 0,
+                position: 'absolute',
+                top: 0,
+                right: -2,
+              }}
+            >
+              <ClearIcon
+                fontSize="small"
+                sx={{
+                  color: 'error.main',
+                }}
+              />
+            </IconButton>
+          </Fragment>
+        ) : (
+          text
+        )}
+      </Box>
     </TableCellCustom>
   );
 };

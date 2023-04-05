@@ -180,6 +180,14 @@ export const timeSlotColumns: readonly Column[] = [
     sticky: true,
   },
   {
+    id: 'Day Session',
+    label: 'Day Session',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+    sticky: true,
+  },
+  {
     id: 'MON',
     label: 'MON',
     minWidth: 80,
@@ -230,14 +238,6 @@ export const timeSlotColumns: readonly Column[] = [
   {
     id: 'SUN',
     label: 'SUN',
-    minWidth: 80,
-    minHeight: 30,
-    align: 'center',
-    sticky: true,
-  },
-  {
-    id: 'Day Session',
-    label: 'Day Session',
     minWidth: 80,
     minHeight: 30,
     align: 'center',

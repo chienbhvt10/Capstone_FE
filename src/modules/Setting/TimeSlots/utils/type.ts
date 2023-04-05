@@ -36,19 +36,6 @@ export interface SlotConflictData {
   slotConflictInfos: SlotConflictInfos[];
 }
 
-export interface SlotCompatibilityInfos {
-  compatibilityId: number;
-  compatibilityLevel: number;
-  timeSlotId: number;
-}
-
-export interface SlotCompatibilityData {
-  timeSlotId: number;
-  semesterId: number;
-  timeSlotName: string;
-  slotCompatibilityInfos: SlotCompatibilityInfos[];
-}
-
 export interface SlotConflictSelectItem {
   value: number;
   label: string;
@@ -76,11 +63,6 @@ export interface TimeSlot {
   semesterId: number;
 }
 
-export interface UpdateTimeSlotCompatibility {
-  compatibilityId: number;
-  compatibilityLevel: number;
-}
-
 export interface UpdateTimeSlotConflict {
   conflictId: number;
   conflict: boolean;
@@ -99,6 +81,7 @@ export interface TimeSlotSegment {
   timeSlotName: string;
 }
 export interface SlotSegment {
+  slotId: number;
   segmentId: number;
   dayId: number;
   day: string;
@@ -120,7 +103,7 @@ export interface TimeSlotSelect {
   slotSelected: SlotDay[];
 }
 
-export interface CreateTimeSlotSegmentParams {
+export interface CreateTimeSlotParams {
   daySession: number;
   name: string;
   segments: CreateSegmentData[];
@@ -129,4 +112,23 @@ export interface CreateTimeSlotSegmentParams {
 export interface CreateSegmentData {
   day: number;
   segment: number;
+}
+
+export interface UpdateTimeSlotSegmentParams {
+  segmentId: number;
+  slotId: number;
+  dayOfWeek: number;
+  segment: number;
+}
+
+export interface CreateTimeSlotSegmentParams {
+  slotId: number;
+  dayOfWeek: number;
+  segment: number;
+}
+
+export interface UpdateTimeSlotParams {
+  id: number;
+  amorPm: number;
+  name?: string;
 }

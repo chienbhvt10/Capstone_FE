@@ -13,7 +13,6 @@ import UploadIcon from '@mui/icons-material/Upload';
 import type { LoadingButtonProps } from '@mui/lab/LoadingButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useState } from 'react';
-import Logger from '~/utils/Logger';
 
 // TODO: Implements text: Cancel, Save, Update,...
 

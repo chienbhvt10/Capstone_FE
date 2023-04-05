@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { forwardRef, useImperativeHandle } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { createTimeSlotSegment } from '~/services/timeslot';
+import { createTimeSlot } from '~/services/timeslot';
 import Validation from '~/utils/Validation';
 import { FiltersRef } from '~/utils/form';
 import { CreateSegmentData } from '../../utils/type';
@@ -49,7 +49,7 @@ const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
 
   const onSubmit: SubmitHandler<CreateTimeSlotForm> = async (value) => {
     const segmentValue = onGetValueSegment();
-    await createTimeSlotSegment({
+    await createTimeSlot({
       daySession: value.daySession,
       name: value.name,
       segments: segmentValue,

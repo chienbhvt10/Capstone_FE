@@ -11,9 +11,12 @@ import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
 import { DAY_SESSION } from '~/constants';
 import {
+  createTimeSlotSegment,
   deleteTimeSlot,
   deleteTimeSlotSegment,
   getTimeSlotSegments,
+  updateTimeSlot,
+  updateTimeSlotSegment,
 } from '~/services/timeslot';
 import { timeSlotColumns } from '../../utils/columns';
 import { daySessionItem, getSlotSelectItem } from '../../utils/data';
@@ -66,8 +69,91 @@ const TimeSlotTable = (props: Props) => {
       });
     };
 
-  const onEdit = (item: TimeSlotSegment, value: number) => {
-    console.log(item, value);
+  const onEditSlotSegment = async (
+    item: TimeSlotSegment,
+    slotSegment?: SlotSegment,
+    value?: number
+  ) => {
+    if (slotSegment?.segmentId !== 0) {
+      await updateTimeSlotSegment({
+        segmentId: slotSegment?.segmentId || 0,
+        dayOfWeek: slotSegment?.dayId || 0,
+        segment: value || 0,
+        slotId: slotSegment?.slotId || 0,
+      }).then((res) => {
+        const newTimeSlot = timeSlots.map((timeSlot) => {
+          if (timeSlot.timeSlotId === item.timeSlotId) {
+            const newSlotSegment = timeSlot.slotSegments.map((ss) => {
+              if (ss.dayId === slotSegment?.dayId) {
+                return {
+                  ...ss,
+                  segment: value || 0,
+                };
+              }
+              return ss;
+            });
+            return {
+              ...timeSlot,
+              slotSegments: newSlotSegment,
+            };
+          }
+          return timeSlot;
+        });
+        setTimeSlots(newTimeSlot);
+      });
+      return;
+    }
+    await createTimeSlotSegment({
+      dayOfWeek: slotSegment?.dayId || 0,
+      segment: value || 0,
+      slotId: item?.timeSlotId || 0,
+    }).then((res) => {
+      if (res.data) {
+        const newTimeSlot = timeSlots.map((timeSlot) => {
+          if (timeSlot.timeSlotId === item.timeSlotId) {
+            const newSlotSegment = timeSlot.slotSegments.map((ss) => {
+              if (ss.dayId === slotSegment.dayId) {
+                return {
+                  ...ss,
+                  segmentId: res.data?.segmentId || 0,
+                  segment: value || 0,
+                };
+              }
+              return ss;
+            });
+            return {
+              ...timeSlot,
+              slotSegments: newSlotSegment,
+            };
+          }
+          return timeSlot;
+        });
+        setTimeSlots(newTimeSlot);
+      }
+    });
+  };
+
+  const onEditDaySession = async (
+    item: TimeSlotSegment,
+    slotSegment?: SlotSegment,
+    value?: number
+  ) => {
+    await updateTimeSlot({
+      id: item.timeSlotId || 0,
+      amorPm: value || 0,
+      name: item.timeSlotName || '',
+    }).then((res) => {
+      const newTimeSlot = timeSlots.map((timeSlot) => {
+        if (timeSlot.timeSlotId === item.timeSlotId) {
+          return {
+            ...timeSlot,
+            amorPm: value || 0,
+          };
+        }
+        return timeSlot;
+      });
+      setTimeSlots(newTimeSlot);
+    });
   };
 
   return (
@@ -104,13 +190,23 @@ const TimeSlotTable = (props: Props) => {
               tabIndex={-1}
               key={timeSlot.timeSlotId + 989789458}
             >
-              <TableCellCustom align="center" border={true} hover={true}>
+              <TableCellCustom align="center" border={true}>
                 {timeSlot.timeSlotName}
               </TableCellCustom>
+              <EditableCell
+                key={timeSlot.timeSlotId + timeSlot.timeSlotName}
+                timeSlotSegment={timeSlot}
+                text={DAY_SESSION[timeSlot.amorPm]}
+                value={timeSlot.amorPm}
+                selectItems={daySessionItem}
+                selectTitle="Select Day Session"
+                callback={onEditDaySession}
+              />
               {timeSlot.slotSegments?.map((slotSegment) => (
                 <EditableCell
                   key={Math.random() + 1 + slotSegment.segmentId}
                   timeSlotSegment={timeSlot}
+                  slotSegment={slotSegment}
                   text={
                     slotSegment.segment !== 0 ? (
                       <Typography variant="body2">
@@ -122,41 +218,30 @@ const TimeSlotTable = (props: Props) => {
                           )}
                           sx={{
                             position: 'absolute',
-                            top: 5,
-                            right: 5,
+                            top: 0,
+                            right: 0,
                           }}
                         >
                           <ClearIcon
                             fontSize="small"
                             sx={{
                               color: 'error.main',
-                              '&:hover': {
-                                color: 'error.light',
-                              },
                             }}
                           />
                         </IconButton>
                       </Typography>
                     ) : (
-                      '-'
+                      ''
                     )
                   }
                   value={slotSegment.segment}
                   selectItems={getSlotSelectItem(numberSlots)}
                   selectTitle="Select Segment"
-                  callback={() => {}}
+                  callback={onEditSlotSegment}
                 />
               ))}
-              <EditableCell
-                key={timeSlot.timeSlotId + timeSlot.timeSlotName}
-                timeSlotSegment={timeSlot}
-                text={DAY_SESSION[timeSlot.amorPm]}
-                value={timeSlot.amorPm}
-                selectItems={daySessionItem}
-                selectTitle="Select Day Session"
-                callback={() => {}}
-              />
-              <TableCellCustom align="center" border={true} hover={true}>
+
+              <TableCellCustom align="center" border={true}>
                 <TableToolCustom
                   item={timeSlot}
                   onDelete={onDelete}
