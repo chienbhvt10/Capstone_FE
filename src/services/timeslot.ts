@@ -39,6 +39,11 @@ export const deleteTimeSlotSegment = async (params: number) => {
   return HttpClient.delete<typeof params, CommonResponse>(url);
 };
 
+export const deleteTimeSlot = async (params: number) => {
+  const url = API_GET_TIME_SLOT + `\\${params}`;
+  return HttpClient.delete<typeof params, CommonResponse>(url);
+};
+
 export const updateTimeSlotConflict = async (
   params: UpdateTimeSlotConflict
 ) => {

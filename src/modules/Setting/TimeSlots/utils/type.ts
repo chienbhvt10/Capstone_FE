@@ -59,6 +59,16 @@ export interface AreaSlotWeightSelectItem {
   label: string;
 }
 
+export interface DaySessionSelectItem {
+  value: number;
+  label: string;
+}
+
+export interface SlotSelectItem {
+  value: number;
+  label: string;
+}
+
 export interface TimeSlot {
   id: number;
   name: string;

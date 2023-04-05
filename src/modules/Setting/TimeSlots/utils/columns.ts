@@ -177,14 +177,23 @@ export const timeSlotColumns: readonly Column[] = [
     minWidth: 80,
     minHeight: 30,
     align: 'center',
+    sticky: true,
   },
-  { id: 'MON', label: 'MON', minWidth: 80, minHeight: 30, align: 'center' },
+  {
+    id: 'MON',
+    label: 'MON',
+    minWidth: 80,
+    minHeight: 30,
+    align: 'center',
+    sticky: true,
+  },
   {
     id: 'TUE',
     label: 'TUE',
     minWidth: 80,
     minHeight: 30,
     align: 'center',
+    sticky: true,
   },
   {
     id: 'WED',
@@ -192,6 +201,7 @@ export const timeSlotColumns: readonly Column[] = [
     minWidth: 80,
     minHeight: 30,
     align: 'center',
+    sticky: true,
   },
   {
     id: 'THU',
@@ -199,6 +209,7 @@ export const timeSlotColumns: readonly Column[] = [
     minWidth: 80,
     minHeight: 30,
     align: 'center',
+    sticky: true,
   },
   {
     id: 'FRI',
@@ -206,6 +217,7 @@ export const timeSlotColumns: readonly Column[] = [
     minWidth: 80,
     minHeight: 30,
     align: 'center',
+    sticky: true,
   },
   {
     id: 'SAT',
@@ -213,6 +225,7 @@ export const timeSlotColumns: readonly Column[] = [
     minWidth: 80,
     minHeight: 30,
     align: 'center',
+    sticky: true,
   },
   {
     id: 'SUN',
@@ -220,6 +233,7 @@ export const timeSlotColumns: readonly Column[] = [
     minWidth: 80,
     minHeight: 30,
     align: 'center',
+    sticky: true,
   },
   {
     id: 'Day Session',
@@ -227,6 +241,7 @@ export const timeSlotColumns: readonly Column[] = [
     minWidth: 80,
     minHeight: 30,
     align: 'center',
+    sticky: true,
   },
   {
     id: 'Action',
@@ -234,5 +249,6 @@ export const timeSlotColumns: readonly Column[] = [
     minWidth: 50,
     minHeight: 30,
     align: 'center',
+    sticky: true,
   },
 ];

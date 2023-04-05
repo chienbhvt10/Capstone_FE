@@ -64,6 +64,7 @@ const AreaSlotWeight = () => {
         })
       );
   };
+
   return (
     <TableContainer sx={{ maxHeight: 500 }}>
       {loadingTable ? (

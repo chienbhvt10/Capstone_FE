@@ -1,27 +1,32 @@
+import ClearIcon from '@mui/icons-material/Clear';
 import { Table } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
-import {
-  deleteTimeSlotSegment,
-  getTimeSlotSegments,
-  getTimeSlots,
-} from '~/services/timeslot';
-import { timeSlotColumns } from '../../utils/columns';
-import { TimeSlotSegment } from '../../utils/type';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
 import { DAY_SESSION } from '~/constants';
-import useRefresh from '~/hooks/useRefresh';
+import {
+  deleteTimeSlot,
+  deleteTimeSlotSegment,
+  getTimeSlotSegments,
+} from '~/services/timeslot';
+import { timeSlotColumns } from '../../utils/columns';
+import { daySessionItem, getSlotSelectItem } from '../../utils/data';
+import { SlotSegment, TimeSlotSegment } from '../../utils/type';
+import EditableCell from './EditableCell';
 
 interface Props {
   refresh: any;
+  numberSlots: number;
 }
 
 const TimeSlotTable = (props: Props) => {
-  const { refresh } = props;
+  const { refresh, numberSlots } = props;
 
   const [timeSlots, setTimeSlots] = useState<TimeSlotSegment[]>([]);
 
@@ -34,12 +39,35 @@ const TimeSlotTable = (props: Props) => {
   }, [refresh]);
 
   const onDelete = (item: TimeSlotSegment) => async () => {
-    await deleteTimeSlotSegment(item.timeSlotId).then((res) => {
+    await deleteTimeSlot(item.timeSlotId).then((res) => {
       const newTimeSlot = timeSlots.filter(
         (t) => t.timeSlotId !== item.timeSlotId
       );
       setTimeSlots(newTimeSlot);
     });
+  };
+
+  const onDeleteTimeSlotSegment =
+    (timeSlot: TimeSlotSegment, slotSegment: SlotSegment) => async () => {
+      await deleteTimeSlotSegment(slotSegment.segmentId).then((res) => {
+        const newTimeSlot = timeSlots.map((ts) => {
+          if (ts.timeSlotId === timeSlot.timeSlotId) {
+            const newSegments = ts.slotSegments.map((s) => {
+              if (s.segmentId === slotSegment.segmentId) {
+                return { ...s, segment: 0 };
+              }
+              return s;
+            });
+            return { ...ts, slotSegments: newSegments };
+          }
+          return ts;
+        });
+        setTimeSlots(newTimeSlot);
+      });
+    };
+
+  const onEdit = (item: TimeSlotSegment, value: number) => {
+    console.log(item, value);
   };
 
   return (
@@ -50,6 +78,7 @@ const TimeSlotTable = (props: Props) => {
         flexDirection: 'column',
         alignItems: 'center',
         mt: 2,
+        maxHeight: 400,
       }}
     >
       <Table stickyHeader aria-label="sticky table" sx={{ borderSpacing: 2 }}>
@@ -61,6 +90,7 @@ const TimeSlotTable = (props: Props) => {
                 align={item.align}
                 minWidth={item.minWidth}
                 minHeight={item.minHeight}
+                sticky={item.sticky}
               >
                 {item.label}
               </TableCellCustom>
@@ -68,35 +98,67 @@ const TimeSlotTable = (props: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {timeSlots.map((item) => (
+          {timeSlots.map((timeSlot) => (
             <TableRow
               role="checkbox"
               tabIndex={-1}
-              key={item.timeSlotId + 989789458}
+              key={timeSlot.timeSlotId + 989789458}
             >
               <TableCellCustom align="center" border={true} hover={true}>
-                {item.timeSlotName}
+                {timeSlot.timeSlotName}
               </TableCellCustom>
-              {item.slotSegments?.map((slotSegment) => (
-                <TableCellCustom
+              {timeSlot.slotSegments?.map((slotSegment) => (
+                <EditableCell
                   key={Math.random() + 1 + slotSegment.segmentId}
-                  align="center"
-                  border={true}
-                  hover={true}
-                >
-                  {slotSegment.segment !== 0 ? (
-                    `Slot ${slotSegment.segment}`
-                  ) : (
-                    <>&#8209;</>
-                  )}
-                </TableCellCustom>
+                  timeSlotSegment={timeSlot}
+                  text={
+                    slotSegment.segment !== 0 ? (
+                      <Typography variant="body2">
+                        Slot {slotSegment.segment}
+                        <IconButton
+                          onClick={onDeleteTimeSlotSegment(
+                            timeSlot,
+                            slotSegment
+                          )}
+                          sx={{
+                            position: 'absolute',
+                            top: 5,
+                            right: 5,
+                          }}
+                        >
+                          <ClearIcon
+                            fontSize="small"
+                            sx={{
+                              color: 'error.main',
+                              '&:hover': {
+                                color: 'error.light',
+                              },
+                            }}
+                          />
+                        </IconButton>
+                      </Typography>
+                    ) : (
+                      '-'
+                    )
+                  }
+                  value={slotSegment.segment}
+                  selectItems={getSlotSelectItem(numberSlots)}
+                  selectTitle="Select Segment"
+                  callback={() => {}}
+                />
               ))}
-              <TableCellCustom align="center" border={true} hover={true}>
-                {DAY_SESSION[item.amorPm]}
-              </TableCellCustom>
+              <EditableCell
+                key={timeSlot.timeSlotId + timeSlot.timeSlotName}
+                timeSlotSegment={timeSlot}
+                text={DAY_SESSION[timeSlot.amorPm]}
+                value={timeSlot.amorPm}
+                selectItems={daySessionItem}
+                selectTitle="Select Day Session"
+                callback={() => {}}
+              />
               <TableCellCustom align="center" border={true} hover={true}>
                 <TableToolCustom
-                  item={item}
+                  item={timeSlot}
                   onDelete={onDelete}
                   displayEditButton={false}
                 />
