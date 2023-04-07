@@ -60,24 +60,21 @@ const TimeSlotSetting = () => {
 
   const onGetValueSegment = (): CreateSegmentData[] => {
     let newArray: CreateSegmentData[] = [];
-    currentSlots
-      .map((slot) =>
-        slot.slotDays.map((day) => {
-          if (day.selected) {
-            return {
-              day: day.id,
-              segment: slot.id,
-            };
-          }
-        })
-      )
-      .forEach((item) =>
-        item.map((subitem) => {
-          if (typeof subitem !== 'undefined') {
-            newArray = [...newArray, subitem];
-          }
-        })
-      );
+    currentSlots.forEach((slot) => {
+      const newSlotDay = slot.slotDays.forEach((day) => {
+        if (day.selected) {
+          newArray = [...newArray, { day: day.id, segment: slot.id }];
+        }
+      });
+      return newSlotDay;
+    });
+
+    for (let day = 1; day <= 7; day++) {
+      if (!newArray.map((item) => item.day).includes(day)) {
+        newArray = [...newArray, { day: day, segment: 0 }];
+      }
+    }
+
     return newArray;
   };
 

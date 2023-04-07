@@ -103,34 +103,34 @@ const TimeSlotTable = (props: Props) => {
       });
       return;
     }
-    await createTimeSlotSegment({
-      dayOfWeek: slotSegment?.dayId || 0,
-      segment: value || 0,
-      slotId: item?.timeSlotId || 0,
-    }).then((res) => {
-      if (res.data) {
-        const newTimeSlot = timeSlots.map((timeSlot) => {
-          if (timeSlot.timeSlotId === item.timeSlotId) {
-            const newSlotSegment = timeSlot.slotSegments.map((ss) => {
-              if (ss.dayId === slotSegment.dayId) {
-                return {
-                  ...ss,
-                  segmentId: res.data?.segmentId || 0,
-                  segment: value || 0,
-                };
-              }
-              return ss;
-            });
-            return {
-              ...timeSlot,
-              slotSegments: newSlotSegment,
-            };
-          }
-          return timeSlot;
-        });
-        setTimeSlots(newTimeSlot);
-      }
-    });
+    // await createTimeSlotSegment({
+    //   dayOfWeek: slotSegment?.dayId || 0,
+    //   segment: value || 0,
+    //   slotId: item?.timeSlotId || 0,
+    // }).then((res) => {
+    //   if (res.data) {
+    //     const newTimeSlot = timeSlots.map((timeSlot) => {
+    //       if (timeSlot.timeSlotId === item.timeSlotId) {
+    //         const newSlotSegment = timeSlot.slotSegments.map((ss) => {
+    //           if (ss.dayId === slotSegment.dayId) {
+    //             return {
+    //               ...ss,
+    //               segmentId: res.data?.segmentId || 0,
+    //               segment: value || 0,
+    //             };
+    //           }
+    //           return ss;
+    //         });
+    //         return {
+    //           ...timeSlot,
+    //           slotSegments: newSlotSegment,
+    //         };
+    //       }
+    //       return timeSlot;
+    //     });
+    //     setTimeSlots(newTimeSlot);
+    //   }
+    // });
   };
 
   const onEditDaySession = async (
