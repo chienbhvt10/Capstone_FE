@@ -11,6 +11,9 @@ import TableToolCustom from '~/components/TableComponents/TableToolCustom';
 import { Lecturer } from '~/modules/Lecturer/util/type';
 import { deleteLecturer } from '~/services/lecturer';
 import { getLecturersTableColumns } from '../util/columns';
+import { useTheme } from '@mui/material/styles';
+import TableCell from '@mui/material/TableCell';
+import Box from '@mui/material/Box';
 
 interface Props {
   lecturers: Lecturer[];
@@ -20,6 +23,7 @@ interface Props {
 }
 
 const LecturerTable = (props: Props) => {
+  const theme = useTheme();
   const { lecturers, setLecturers, setEditMode, setEditingItem } = props;
 
   const columns = useMemo(() => getLecturersTableColumns(), []);
@@ -47,17 +51,33 @@ const LecturerTable = (props: Props) => {
           <TableHead>
             <TableRow>
               {columns.map((item) => (
-                <TableCellCustom
+                <TableCell
                   key={item.id}
                   align={item.align}
-                  stickyPosition={item.stickyPosition}
-                  sticky={item.sticky}
-                  minWidth={100}
+                  sx={{
+                    left: item.stickyPosition === 'left' ? 0 : 'unset',
+                    right: item.stickyPosition === 'right' ? 0 : 'unset',
+                    zIndex: item.zIndex
+                      ? item.zIndex
+                      : item.sticky
+                      ? theme.zIndex.appBar + 10
+                      : theme.zIndex.appBar,
+                  }}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                    {item.label}
-                  </Typography>
-                </TableCellCustom>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      minWidth: item.minWidth,
+                      minHeight: item.minHeight,
+                    }}
+                  >
+                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                      {item.label}
+                    </Typography>
+                  </Box>
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>

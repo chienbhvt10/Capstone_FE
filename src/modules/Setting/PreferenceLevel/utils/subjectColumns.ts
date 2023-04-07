@@ -10,6 +10,7 @@ export const getTableSubjectColumns = (subjects?: Subject[]) => {
     align: 'center',
     sticky: true,
     stickyPosition: 'left',
+    zIndex: 1111,
   });
 
   const columnsDefined: Column[] =

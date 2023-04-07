@@ -6,6 +6,7 @@ export interface Column {
   align?: 'right' | 'center' | 'left';
   sticky?: boolean | null;
   stickyPosition?: ('right' | 'left') | null;
+  zIndex?: number;
   format?: ((value: number) => string) | null;
 }
 

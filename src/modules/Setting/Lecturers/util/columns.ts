@@ -9,24 +9,28 @@ export const getLecturersTableColumns = () => {
       label: 'Email',
       minWidth: 100,
       align: 'center',
+      sticky: true,
     },
     {
       id: 'Name',
       label: 'Name',
       minWidth: 100,
       align: 'center',
+      sticky: true,
     },
     {
       id: 'Short Name',
       label: 'Short Name',
       minWidth: 100,
       align: 'center',
+      sticky: true,
     },
     {
       id: 'Action',
       label: 'Action',
       minWidth: 50,
       align: 'center',
+      sticky: true,
     }
   );
 

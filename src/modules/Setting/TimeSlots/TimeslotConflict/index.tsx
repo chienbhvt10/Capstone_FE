@@ -8,30 +8,37 @@ import { useTheme } from '@mui/material/styles';
 import { useEffect, useMemo, useState } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
-import { getTableSlotConflictColumns } from '../utils/columns';
-import { SlotConflictData, SlotConflictInfos } from '../utils/type';
+import useArrange from '~/hooks/useArrange';
+import useNotification from '~/hooks/useNotification';
 import {
   getTimeSlotConflicts,
+  getTimeSlots,
   updateTimeSlotConflict,
 } from '~/services/timeslot';
 import wait from '~/utils/wait';
-import useNotification from '~/hooks/useNotification';
-import useArrange from '~/hooks/useArrange';
-import useRefresh from '~/hooks/useRefresh';
+import { getTableSlotConflictColumns } from '../utils/columns';
+import { SlotConflictData, SlotConflictInfos, TimeSlot } from '../utils/type';
 
 const TimeSlotConflict = () => {
   const theme = useTheme();
-  const { timeSlots } = useArrange();
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const setNotification = useNotification();
   const columns = useMemo(
     () => getTableSlotConflictColumns(timeSlots),
     [timeSlots]
   );
+
+  useEffect(() => {
+    getTimeSlots().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setTimeSlots(res.data || []);
+      }
+    });
+  }, []);
   const [timeSlotConflict, setTimeSlotConflict] = useState<SlotConflictData[]>(
     []
   );
   const [loadingTable, setLoadingTable] = useState<boolean>(false);
-  const [refresh, refetch] = useRefresh();
 
   useEffect(() => {
     setLoadingTable(true);
@@ -45,7 +52,7 @@ const TimeSlotConflict = () => {
         await wait(500);
         setLoadingTable(false);
       });
-  }, [refresh]);
+  }, []);
 
   const onEdit =
     (
@@ -160,7 +167,7 @@ const TimeSlotConflict = () => {
                     hover={true}
                     onDoubleClick={onEdit(item, slot, slot.conflict)}
                   >
-                    <Typography variant="h6" sx={{ lineHeight: 1 }}>
+                    <Typography variant="body1" sx={{ lineHeight: 1 }}>
                       {slot.conflict ? 'x' : <>&#8209;</>}
                     </Typography>
                   </TableCellCustom>

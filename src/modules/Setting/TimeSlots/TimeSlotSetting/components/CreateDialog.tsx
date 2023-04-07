@@ -56,6 +56,7 @@ const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
     }).then((res) => {
       refetch();
       onCloseCreateDialog();
+      handleReset();
     });
   };
 

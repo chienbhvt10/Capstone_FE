@@ -1,5 +1,6 @@
-import { Box, CircularProgress, SelectChangeEvent } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -8,12 +9,14 @@ import { useEffect, useMemo, useState } from 'react';
 import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
-import useArrange from '~/hooks/useArrange';
+import useNotification from '~/hooks/useNotification';
 import {
   getSlotPreferenceLevels,
   updateSlotPreferenceLevel,
 } from '~/services/preferenceLevel';
+import { getTimeSlots } from '~/services/timeslot';
 import wait from '~/utils/wait';
+import { TimeSlot } from '../../TimeSlots/utils/type';
 import { slotPreferenceLevelItems } from '../utils/data';
 import { getTableSlotColumns } from '../utils/slotColumns';
 import {
@@ -21,16 +24,25 @@ import {
   LecturerSlotsPreferenceLevel,
   SlotPreferenceLevelItems,
 } from '../utils/types';
-import useNotification from '~/hooks/useNotification';
+import { useTheme } from '@mui/material/styles';
 
 const SlotPreferenceLevel = () => {
-  const { timeSlots } = useArrange();
+  const theme = useTheme();
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const setNotification = useNotification();
   const columns = useMemo(() => getTableSlotColumns(timeSlots), [timeSlots]);
   const [loadingTable, setLoadingTable] = useState<boolean>(false);
   const [slotPreferenceLevels, setSlotPreferenceLevels] = useState<
     LecturerSlotsPreferenceLevel[]
   >([]);
+
+  useEffect(() => {
+    getTimeSlots().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setTimeSlots(res.data || []);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     setLoadingTable(true);
@@ -83,18 +95,33 @@ const SlotPreferenceLevel = () => {
           <TableHead>
             <TableRow>
               {columns.map((item) => (
-                <TableCellCustom
+                <TableCell
                   key={item.id}
                   align={item.align}
-                  sticky={item.sticky}
-                  stickyPosition={item.stickyPosition}
-                  minWidth={item.minWidth}
-                  minHeight={item.minHeight}
+                  sx={{
+                    left: item.stickyPosition === 'left' ? 0 : 'unset',
+                    right: item.stickyPosition === 'right' ? 0 : 'unset',
+                    zIndex: item.zIndex
+                      ? item.zIndex
+                      : item.sticky
+                      ? theme.zIndex.appBar + 10
+                      : theme.zIndex.appBar,
+                  }}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                    {item.label}
-                  </Typography>
-                </TableCellCustom>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      minWidth: item.minWidth,
+                      minHeight: item.minHeight,
+                    }}
+                  >
+                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                      {item.label}
+                    </Typography>
+                  </Box>
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>

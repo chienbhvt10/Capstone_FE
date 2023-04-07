@@ -11,6 +11,7 @@ export const getTableSlotColumns = (slots?: TimeSlot[]) => {
     align: 'center',
     sticky: true,
     stickyPosition: 'left',
+    zIndex: 1111,
   });
 
   const columnsDefined: Column[] =

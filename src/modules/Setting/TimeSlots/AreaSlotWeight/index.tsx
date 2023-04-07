@@ -11,23 +11,38 @@ import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import useArrange from '~/hooks/useArrange';
 import useNotification from '~/hooks/useNotification';
-import { getAreaSlotWeights, updateAreaSlotWeight } from '~/services/timeslot';
+import {
+  getAreaSlotWeights,
+  getTimeSlots,
+  updateAreaSlotWeight,
+} from '~/services/timeslot';
 import wait from '~/utils/wait';
 import { getTableAreaSlotWeightColumns } from '../utils/columns';
 import {
   AreaSlotWeightData,
   AreaSlotWeightInfos,
   AreaSlotWeightSelectItem,
+  TimeSlot,
 } from '../utils/type';
 import { areaSlotWeightItem } from '../utils/data';
 
 const AreaSlotWeight = () => {
   const theme = useTheme();
-  const { timeSlots } = useArrange();
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+
   const columns = useMemo(
     () => getTableAreaSlotWeightColumns(timeSlots),
     [timeSlots]
   );
+
+  useEffect(() => {
+    getTimeSlots().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setTimeSlots(res.data || []);
+      }
+    });
+  }, []);
+
   const setNotification = useNotification();
   const [loadingTable, setLoadingTable] = useState<boolean>(false);
   const [areaSlotWeight, setAreaSlotWeight] = useState<AreaSlotWeightData[]>();
