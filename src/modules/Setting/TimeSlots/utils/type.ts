@@ -76,9 +76,14 @@ export interface UpdateAreaSlotWeight {
 export interface TimeSlotSegment {
   amorPm: number;
   semesterId: number;
-  slotSegments: SlotSegment[];
   timeSlotId: number;
   timeSlotName: string;
+  segmentByDays: SegmentByDay[];
+}
+
+export interface SegmentByDay {
+  dayId: number;
+  slotSegments: SlotSegment[];
 }
 export interface SlotSegment {
   slotId: number;

@@ -19,7 +19,7 @@ interface Props {
   selectItems: DaySessionSelectItem[];
   selectTitle: string;
   callback: (
-    timeSlotSegment: TimeSlotSegment,
+    timeSlotSegment?: TimeSlotSegment,
     slotSegment?: SlotSegment,
     value?: number
   ) => void;

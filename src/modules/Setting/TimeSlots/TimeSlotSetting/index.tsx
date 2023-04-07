@@ -109,7 +109,11 @@ const TimeSlotSetting = () => {
         </Stack>
       </Container>
       <Container maxWidth="lg">
-        <TimeSlotTable refresh={refresh} numberSlots={numberSlots} />
+        <TimeSlotTable
+          refresh={refresh}
+          refetch={refetch}
+          numberSlots={numberSlots}
+        />
       </Container>
       <CreateTimeSlotDialog
         open={showCreateDialog}
