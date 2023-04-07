@@ -40,19 +40,33 @@ const EditableCellForSegment = (props: Props) => {
       }}
     >
       <Stack direction="column" spacing={1} sx={{ width: 1, my: 1 }}>
-        {segmentByDay.slotSegments.map((slotSegment) => (
+        {segmentByDay.slotSegments.length > 1 ? (
+          segmentByDay.slotSegments.map((slotSegment) => (
+            <SelectSegment
+              timeSlot={timeSlot}
+              key={Math.random()}
+              slotSegment={slotSegment}
+              segmentByDay={segmentByDay}
+              deleteSegment={deleteSegment}
+              updateSegment={updateSegment}
+              selectItems={selectItems}
+              selectTitle={selectTitle}
+              value={slotSegment.segment}
+            />
+          ))
+        ) : (
           <SelectSegment
             timeSlot={timeSlot}
-            deleteSegment={deleteSegment}
             key={Math.random()}
-            slotSegment={slotSegment}
+            slotSegment={segmentByDay.slotSegments[0]}
             segmentByDay={segmentByDay}
+            deleteSegment={deleteSegment}
             updateSegment={updateSegment}
             selectItems={selectItems}
             selectTitle={selectTitle}
-            value={slotSegment.segment}
+            value={segmentByDay.slotSegments[0].segment}
           />
-        ))}
+        )}
       </Stack>
     </TableCellCustom>
   );

@@ -126,7 +126,7 @@ const SelectSegment = (props: Props) => {
           </IconButton>
         </Fragment>
       ) : (
-        ''
+        '-'
       )}
     </Box>
   );

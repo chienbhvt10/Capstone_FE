@@ -53,7 +53,12 @@ const TimeSlotTable = (props: Props) => {
   };
 
   const onDeleteTimeSlotSegment = async (slotSegment?: SlotSegment) => {
-    await deleteTimeSlotSegment(slotSegment?.segmentId || 0).then((res) => {
+    await updateTimeSlotSegment({
+      segmentId: slotSegment?.segmentId || 0,
+      dayOfWeek: slotSegment?.dayId || 0,
+      segment: 0,
+      slotId: slotSegment?.slotId || 0,
+    }).then((res) => {
       refetch();
     });
   };
