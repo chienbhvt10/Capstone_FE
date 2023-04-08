@@ -16,7 +16,7 @@ interface SubjectForm {
 }
 
 const schema = Validation.shape({
-  name: Validation.string().required('Name is required'),
+  name: Validation.string(),
   code: Validation.string().required('Code is required'),
   department: Validation.string().required('Department is required'),
 });
@@ -27,10 +27,13 @@ interface Props {
   editMode: boolean;
   editingItem: Subject | null;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  refresh: any;
+  refetch: React.DispatchWithoutAction;
 }
 
 const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
-  const { subjects, setSubjects, editMode, editingItem, setEditMode } = props;
+  const { subjects, setSubjects, editMode, editingItem, setEditMode, refetch } =
+    props;
 
   const {
     register,
@@ -62,18 +65,8 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
         name: value.name,
       })
         .then((res) => {
-          const newSubject = subjects.map((subject) => {
-            if (subject.id === editingItem?.id) {
-              return {
-                ...editingItem,
-                ...value,
-                id: editingItem?.id,
-              };
-            }
-            return subject;
-          });
+          refetch();
           setEditMode(false);
-          setSubjects(newSubject);
           handleReset();
         })
         .catch((err) => {});
@@ -86,7 +79,7 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
       code: value.code,
     })
       .then((res) => {
-        setSubjects([...subjects, res.data]);
+        refetch();
         handleReset();
       })
       .catch((err) => {});
@@ -106,21 +99,22 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
     <Stack
       direction="row"
       sx={{
-        maxWidth: 1200,
-        px: 4,
-        mt: 2,
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack
-          direction="row"
-          spacing={2}
-          sx={{ justifyContent: 'center', alignItems: 'flex-start' }}
+          direction="column"
+          spacing={0}
+          sx={{
+            p: 2,
+            border: '1px solid #ccc',
+            borderRadius: 0.5,
+          }}
         >
-          <Stack direction="row">
+          <Stack direction="column">
             <Typography variant="body2">
-              Short Name{' '}
+              Subject Code{' '}
               <Typography component="span" sx={{ color: 'error.main' }}>
                 *
               </Typography>
@@ -138,12 +132,12 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
             </Stack>
           </Stack>
 
-          <Stack direction="row">
+          <Stack direction="column">
             <Typography variant="body2">
               Name{' '}
-              <Typography component="span" sx={{ color: 'error.main' }}>
+              {/* <Typography component="span" sx={{ color: 'error.main' }}>
                 *
-              </Typography>
+              </Typography> */}
             </Typography>
             <Stack direction="column">
               <TextField
@@ -158,7 +152,7 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
             </Stack>
           </Stack>
 
-          <Stack direction="row">
+          <Stack direction="column">
             <Typography variant="body2">
               Department{' '}
               <Typography component="span" sx={{ color: 'error.main' }}>
@@ -177,18 +171,25 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
               </Typography>
             </Stack>
           </Stack>
-
-          <Button
-            type="submit"
-            startIcon={editMode ? <SaveIcon /> : <AddIcon />}
-            size="medium"
-            sx={{ width: 100 }}
-          >
-            Subject
-          </Button>
-          <Button size="medium" sx={{ width: 80 }} onClick={handleReset}>
-            Clear
-          </Button>
+          <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
+            <Button
+              type="submit"
+              startIcon={editMode ? <SaveIcon /> : <AddIcon />}
+              size="medium"
+              sx={{
+                width: 100,
+                backgroundColor: editMode ? '#FD5555' : '#3DA2FF',
+                '&:hover': {
+                  backgroundColor: editMode ? '#ff2727' : '#3DA2FF',
+                },
+              }}
+            >
+              Subject
+            </Button>
+            <Button size="medium" sx={{ width: 80 }} onClick={handleReset}>
+              Clear
+            </Button>
+          </Stack>
         </Stack>
       </form>
     </Stack>

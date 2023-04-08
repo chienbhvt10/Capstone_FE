@@ -35,12 +35,18 @@ const SettingModelDialog = (props: Props) => {
   const [O04_Level, setO04_Level] = useState<number>(0);
   const [O05_Level, setO05_Level] = useState<number>(0);
   const [O06_Level, setO06_Level] = useState<number>(0);
+  const [O07_Level, setO07_Level] = useState<number>(0);
+  const [O08_Level, setO08_Level] = useState<number>(0);
+
   const [O01_Activated, setO01_Activated] = useState<boolean>(false);
   const [O02_Activated, setO02_Activated] = useState<boolean>(false);
   const [O03_Activated, setO03_Activated] = useState<boolean>(false);
   const [O04_Activated, setO04_Activated] = useState<boolean>(false);
   const [O05_Activated, setO05_Activated] = useState<boolean>(false);
   const [O06_Activated, setO06_Activated] = useState<boolean>(false);
+  const [O07_Activated, setO07_Activated] = useState<boolean>(false);
+  const [O08_Activated, setO08_Activated] = useState<boolean>(false);
+
   const [loadingExecuted, setLoadingExecuted] = useState<boolean>(false);
 
   const setNotification = useNotification();
@@ -130,6 +136,28 @@ const SettingModelDialog = (props: Props) => {
     setO06_Activated(event.target.checked);
   };
 
+  const onChangeO07Level = (event: ChangeEvent<HTMLInputElement>) => {
+    if (Number.isInteger(parseInt(event.target.value))) {
+      setO07_Level(parseInt(event.target.value));
+    }
+    if (event.target.value === '') setMaxSearchingTime(0);
+  };
+
+  const onChangeO07Activated = (event: ChangeEvent<HTMLInputElement>) => {
+    setO07_Activated(event.target.checked);
+  };
+
+  const onChangeO08Level = (event: ChangeEvent<HTMLInputElement>) => {
+    if (Number.isInteger(parseInt(event.target.value))) {
+      setO08_Level(parseInt(event.target.value));
+    }
+    if (event.target.value === '') setMaxSearchingTime(0);
+  };
+
+  const onChangeO08Activated = (event: ChangeEvent<HTMLInputElement>) => {
+    setO08_Activated(event.target.checked);
+  };
+
   const onArrange = () => {
     if (solver === 0 || strategy === 0 || maxSearchingTime === 0) {
       setNotification({
@@ -148,6 +176,8 @@ const SettingModelDialog = (props: Props) => {
         O04_Activated ? 1 : 0,
         O05_Activated ? 1 : 0,
         O06_Activated ? 1 : 0,
+        O07_Activated ? 1 : 0,
+        O08_Activated ? 1 : 0,
       ],
       objectiveWeight: [
         O01_Level,
@@ -156,6 +186,8 @@ const SettingModelDialog = (props: Props) => {
         O04_Level,
         O05_Level,
         O06_Level,
+        O07_Level,
+        O08_Level,
       ],
       solver: solver,
       strategy: strategy,
@@ -238,9 +270,7 @@ const SettingModelDialog = (props: Props) => {
         </Grid>
         <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
           <Grid item xs={4}>
-            <Typography variant="body1">
-              O-01: Evaluate the cost of time between lessons
-            </Typography>
+            <Typography variant="body1">O-01: Minimize working day</Typography>
           </Grid>
           <Grid item xs={4}>
             <TextField
@@ -267,7 +297,7 @@ const SettingModelDialog = (props: Props) => {
         <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
           <Grid item xs={4}>
             <Typography variant="body1">
-              O-02: Minimize number of subjects per lecturer per semester
+              O-02: Minimize day's session working{' '}
             </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -294,7 +324,7 @@ const SettingModelDialog = (props: Props) => {
         </Grid>{' '}
         <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
           <Grid item xs={4}>
-            <Typography variant="body1">O-03: Quota of classes</Typography>
+            <Typography variant="body1">O-03: Minimize waiting time</Typography>
           </Grid>
           <Grid item xs={4}>
             <TextField
@@ -321,8 +351,7 @@ const SettingModelDialog = (props: Props) => {
         <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
           <Grid item xs={4}>
             <Typography variant="body1">
-              O-04: Select the priority of moving distance between 2 consecutive
-              slots
+              O-04: Minimize number of subjects per lecturer per semester
             </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -349,9 +378,7 @@ const SettingModelDialog = (props: Props) => {
         </Grid>{' '}
         <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
           <Grid item xs={4}>
-            <Typography variant="body1">
-              O-05: Preference level of subjects
-            </Typography>
+            <Typography variant="body1">O-05: Quota of classes</Typography>
           </Grid>
           <Grid item xs={4}>
             <TextField
@@ -378,7 +405,8 @@ const SettingModelDialog = (props: Props) => {
         <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
           <Grid item xs={4}>
             <Typography variant="body1">
-              O-06: Preference level of slots
+              O-06: Select the priority of moving distance between 2 consecutive
+              slots
             </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -396,6 +424,62 @@ const SettingModelDialog = (props: Props) => {
                 onChange={onChangeO06Activated}
               />
               {O06_Activated && (
+                <Typography variant="body2" sx={{ color: 'red' }}>
+                  Activated Objective
+                </Typography>
+              )}
+            </Stack>
+          </Grid>
+        </Grid>
+        <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
+          <Grid item xs={4}>
+            <Typography variant="body1">
+              O-07: Preference level of subjects
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              onChange={onChangeO07Level}
+              variant="outlined"
+              value={O07_Level}
+              sx={{ maxWidth: 350, width: 1 }}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Stack direction="row">
+              <Checkbox
+                checked={O07_Activated}
+                onChange={onChangeO07Activated}
+              />
+              {O07_Activated && (
+                <Typography variant="body2" sx={{ color: 'red' }}>
+                  Activated Objective
+                </Typography>
+              )}
+            </Stack>
+          </Grid>
+        </Grid>
+        <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
+          <Grid item xs={4}>
+            <Typography variant="body1">
+              O-08: Preference level of slots
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              onChange={onChangeO08Level}
+              variant="outlined"
+              value={O08_Level}
+              sx={{ maxWidth: 350, width: 1 }}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Stack direction="row">
+              <Checkbox
+                checked={O08_Activated}
+                onChange={onChangeO08Activated}
+              />
+              {O08_Activated && (
                 <Typography variant="body2" sx={{ color: 'red' }}>
                   Activated Objective
                 </Typography>

@@ -26,6 +26,20 @@ export const getLecturersTableColumns = () => {
       sticky: true,
     },
     {
+      id: 'Quota',
+      label: 'Quota',
+      minWidth: 100,
+      align: 'center',
+      sticky: true,
+    },
+    {
+      id: 'Min Quota',
+      label: 'Min Quota',
+      minWidth: 100,
+      align: 'center',
+      sticky: true,
+    },
+    {
       id: 'Action',
       label: 'Action',
       minWidth: 50,

@@ -63,33 +63,43 @@ const listItem: ListItem[] = [
     ),
   },
   {
-    title: 'Settings',
-    path: SETTING_PATH_DEFAULT,
+    title: 'Lecturers',
+    path: 'settings/lecturers',
     icon: (
-      <Image src={images.iconSettings} alt="" sx={{ width: 25, height: 25 }} />
+      <Image src={images.iconLecturer} alt="" sx={{ width: 25, height: 25 }} />
     ),
-    subItems: [
-      {
-        title: 'Lecturers',
-        path: 'settings/lecturers',
-      },
-      {
-        title: 'Subjects',
-        path: 'settings/subjects',
-      },
-      {
-        title: 'Building & Distance',
-        path: 'settings/distance',
-      },
-      {
-        title: 'TimeSlot',
-        path: 'settings/time-slot',
-      },
-      {
-        title: 'Preference Level',
-        path: 'settings/preference-level',
-      },
-    ],
+  },
+  {
+    title: 'Subjects',
+    path: 'settings/subjects',
+    icon: (
+      <Image src={images.iconSubject} alt="" sx={{ width: 25, height: 25 }} />
+    ),
+  },
+  {
+    title: 'Building & Distance',
+    path: 'settings/distance',
+    icon: (
+      <Image src={images.iconDistance} alt="" sx={{ width: 25, height: 25 }} />
+    ),
+  },
+  {
+    title: 'TimeSlot',
+    path: 'settings/time-slot',
+    icon: (
+      <Image src={images.iconTimetable} alt="" sx={{ width: 25, height: 25 }} />
+    ),
+  },
+  {
+    title: 'Preference Level Setting',
+    path: 'settings/preference-level',
+    icon: (
+      <Image
+        src={images.iconPreference}
+        alt=""
+        sx={{ width: 25, height: 25 }}
+      />
+    ),
   },
 ];
 

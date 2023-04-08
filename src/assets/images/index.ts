@@ -11,6 +11,10 @@ const images = {
   iconRegister: require('~/assets/images/sidebar/register.png'),
   iconSettings: require('~/assets/images/sidebar/settings.png'),
   iconTimetable: require('~/assets/images/sidebar/timetable.png'),
+  iconSubject: require('~/assets/images/sidebar/subject.png'),
+  iconLecturer: require('~/assets/images/sidebar/lecturer.png'),
+  iconPreference: require('~/assets/images/sidebar/preference.png'),
+  iconDistance: require('~/assets/images/sidebar/distance.png'),
 };
 
 export default images;

@@ -43,7 +43,7 @@ const SubjectTable = (props: Props) => {
 
   return (
     <Container maxWidth="lg">
-      <TableContainer sx={{ maxHeight: 550 }}>
+      <TableContainer sx={{ maxHeight: 600 }}>
         <TableCustom>
           <TableHead>
             <TableRow>

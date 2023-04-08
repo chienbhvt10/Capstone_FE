@@ -5,11 +5,13 @@ import { getSubjects } from '~/services/subject';
 import SubjectForm from './components/SubjectForm';
 import SubjectTable from './components/SubjectTable';
 import { Subject } from './util/type';
+import useRefresh from '~/hooks/useRefresh';
 
 const SubjectsSetting = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editingItem, setEditingItem] = useState<Subject | null>(null);
+  const [refresh, refetch] = useRefresh();
 
   useEffect(() => {
     getSubjects().then((res) => {
@@ -17,23 +19,25 @@ const SubjectsSetting = () => {
         setSubjects(res.data);
       }
     });
-  }, []);
+  }, [refresh]);
 
   return (
     <PageWrapper title="Subjects Setting">
       <Stack
-        direction="column"
+        direction="row"
         spacing={2}
         sx={{
           backgroundColor: 'background.paper',
-          p: 2,
+          p: 3,
           pb: 6,
           overflowX: 'hidden',
-          alignItems: 'center',
-          height: 'calc(100vh - 60px)',
+          alignItems: 'flex-start',
+          height: 'calc(100vh - 120px)',
         }}
       >
         <SubjectForm
+          refresh={refresh}
+          refetch={refetch}
           subjects={subjects}
           setSubjects={setSubjects}
           editMode={editMode}

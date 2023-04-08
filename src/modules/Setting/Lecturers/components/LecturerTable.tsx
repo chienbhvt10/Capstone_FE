@@ -46,7 +46,7 @@ const LecturerTable = (props: Props) => {
 
   return (
     <Container maxWidth="lg">
-      <TableContainer sx={{ maxHeight: 550 }}>
+      <TableContainer sx={{ maxHeight: 600 }}>
         <TableCustom>
           <TableHead>
             <TableRow>
@@ -93,6 +93,12 @@ const LecturerTable = (props: Props) => {
                   </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
                     <Typography variant="body1">{item.shortName}</Typography>
+                  </TableCellCustom>
+                  <TableCellCustom align="center" border={true} hover={true}>
+                    <Typography variant="body1">Quota</Typography>
+                  </TableCellCustom>
+                  <TableCellCustom align="center" border={true} hover={true}>
+                    <Typography variant="body1">Min Quota</Typography>
                   </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
                     <TableToolCustom

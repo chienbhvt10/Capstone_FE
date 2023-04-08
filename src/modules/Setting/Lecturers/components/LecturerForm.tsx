@@ -27,10 +27,18 @@ interface Props {
   editMode: boolean;
   editingItem: Lecturer | null;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: React.DispatchWithoutAction;
 }
 
 const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
-  const { setLecturers, lecturers, editMode, editingItem, setEditMode } = props;
+  const {
+    setLecturers,
+    lecturers,
+    editMode,
+    editingItem,
+    setEditMode,
+    refetch,
+  } = props;
 
   const {
     register,
@@ -62,18 +70,8 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
         name: value.name,
       })
         .then((res) => {
-          const newLecturers = lecturers.map((lecturer) => {
-            if (lecturer.id === editingItem?.id) {
-              return {
-                ...editingItem,
-                ...value,
-                id: editingItem?.id,
-              };
-            }
-            return lecturer;
-          });
+          refetch();
           setEditMode(false);
-          setLecturers(newLecturers);
           handleReset();
         })
         .catch((err) => {});
@@ -86,7 +84,7 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
       shortName: value.shortName,
     })
       .then((res) => {
-        setLecturers([...lecturers, res.data]);
+        refetch();
         handleReset();
       })
       .catch((err) => {});
@@ -106,26 +104,27 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
     <Stack
       direction="row"
       sx={{
-        maxWidth: 1200,
-        px: 4,
-        mt: 2,
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack
-          direction="row"
-          spacing={2}
-          sx={{ justifyContent: 'center', alignItems: 'flex-start' }}
+          direction="column"
+          spacing={0}
+          sx={{
+            p: 2,
+            border: editMode ? '1px solid #FD5555' : '1px solid #ccc',
+            borderRadius: 0.5,
+          }}
         >
-          <Stack direction="row">
+          <Stack direction="column" spacing={1}>
             <Typography variant="body2">
               Email{' '}
               <Typography component="span" sx={{ color: 'error.main' }}>
                 *
               </Typography>
             </Typography>
-            <Stack direction="column">
+            <Stack direction="column" spacing={1}>
               <TextField
                 {...register('email')}
                 variant="outlined"
@@ -138,7 +137,7 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
             </Stack>
           </Stack>
 
-          <Stack direction="row">
+          <Stack direction="column">
             <Typography variant="body2">
               Short Name{' '}
               <Typography component="span" sx={{ color: 'error.main' }}>
@@ -158,7 +157,7 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
             </Stack>
           </Stack>
 
-          <Stack direction="row">
+          <Stack direction="column">
             <Typography variant="body2">
               Name{' '}
               <Typography component="span" sx={{ color: 'error.main' }}>
@@ -177,17 +176,64 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
               </Typography>
             </Stack>
           </Stack>
-          <Button
-            type="submit"
-            startIcon={editMode ? <SaveIcon /> : <AddIcon />}
-            size="medium"
-            sx={{ width: 100 }}
-          >
-            Lecturer
-          </Button>
-          <Button size="medium" sx={{ width: 80 }} onClick={handleReset}>
-            Clear
-          </Button>
+          <Stack direction="column">
+            <Typography variant="body2">
+              Quota{' '}
+              <Typography component="span" sx={{ color: 'error.main' }}>
+                *
+              </Typography>
+            </Typography>
+            <Stack direction="column">
+              <TextField
+                {...register('name')}
+                variant="outlined"
+                name="name"
+                sx={{ width: 200 }}
+              />
+              <Typography variant="caption" sx={{ color: 'error.main' }}>
+                {errors.name?.message && `*${errors.name?.message}`}
+              </Typography>
+            </Stack>
+          </Stack>
+
+          <Stack direction="column">
+            <Typography variant="body2">
+              Min Quota{' '}
+              <Typography component="span" sx={{ color: 'error.main' }}>
+                *
+              </Typography>
+            </Typography>
+            <Stack direction="column">
+              <TextField
+                {...register('name')}
+                variant="outlined"
+                name="name"
+                sx={{ width: 200 }}
+              />
+              <Typography variant="caption" sx={{ color: 'error.main' }}>
+                {errors.name?.message && `*${errors.name?.message}`}
+              </Typography>
+            </Stack>
+          </Stack>
+          <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
+            <Button
+              type="submit"
+              startIcon={editMode ? <SaveIcon /> : <AddIcon />}
+              size="medium"
+              sx={{
+                width: 100,
+                backgroundColor: editMode ? '#FD5555' : '#3DA2FF',
+                '&:hover': {
+                  backgroundColor: editMode ? '#ff2727' : '#3DA2FF',
+                },
+              }}
+            >
+              Lecturer
+            </Button>
+            <Button size="medium" sx={{ width: 80 }} onClick={handleReset}>
+              Clear
+            </Button>
+          </Stack>
         </Stack>
       </form>
     </Stack>
