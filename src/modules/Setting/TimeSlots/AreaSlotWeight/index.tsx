@@ -149,7 +149,7 @@ const AreaSlotWeight = () => {
                     align="center"
                     stickyPosition="left"
                     sticky={true}
-                    minHeight={40}
+                    minHeight={30}
                     border={true}
                     hover={true}
                   >
@@ -159,7 +159,7 @@ const AreaSlotWeight = () => {
                     <TableCellCustom
                       key={index + 2}
                       align="center"
-                      minHeight={40}
+                      minHeight={30}
                       border={true}
                       hover={true}
                     >
