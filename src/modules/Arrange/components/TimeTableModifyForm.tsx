@@ -304,8 +304,7 @@ const TimeTableModifyForm = () => {
                   <MenuItem disabled value={0}>
                     <em style={{ fontSize: 14 }}>Select Room</em>
                   </MenuItem>
-                  {rooms &&
-                    rooms.length &&
+                  {rooms.length &&
                     rooms?.map((item) => (
                       <MenuItem key={item.id} value={item.id}>
                         {item.name}

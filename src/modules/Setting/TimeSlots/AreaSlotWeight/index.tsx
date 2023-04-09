@@ -67,10 +67,21 @@ const AreaSlotWeight = () => {
       slotWeight: value,
     })
       .then((res) => {
-        setNotification({
-          message: 'Update success',
-          severity: 'success',
-        });
+        if (res.isSuccess) {
+          const newAreaSlotWeight = areaSlotWeight?.map((a) => ({
+            ...a,
+            areaSlotWeightInfos: a.areaSlotWeightInfos.map((i) => {
+              if (i.slotWeightId === item.slotWeightId) {
+                return {
+                  ...i,
+                  slotWeight: value,
+                };
+              }
+              return i;
+            }),
+          }));
+          setAreaSlotWeight(newAreaSlotWeight);
+        }
       })
       .catch((err) =>
         setNotification({

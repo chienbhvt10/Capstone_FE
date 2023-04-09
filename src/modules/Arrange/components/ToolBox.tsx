@@ -26,10 +26,9 @@ const ToolBox = () => {
             <MenuItem disabled value={0}>
               <em style={{ fontSize: 14 }}>Select Execute Time</em>
             </MenuItem>
-            {executeInfos?.length &&
-              executeInfos?.length > 0 &&
+            {executeInfos?.length > 0 &&
               executeInfos?.map((item) => (
-                <MenuItem value={item.id}>
+                <MenuItem value={item.executeId}>
                   {item.executeTime
                     ? new Date(item.executeTime).toLocaleString('vi-VI')
                     : 'Unknown'}

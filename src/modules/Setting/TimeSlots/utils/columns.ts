@@ -112,7 +112,7 @@ export const getTableAreaSlotWeightColumns = (slots?: TimeSlot[]) => {
     slots?.map((item) => ({
       id: item.id + '',
       label: item.name,
-      minWidth: 40,
+      minWidth: 30,
       align: 'center',
       minHeight: null,
       sticky: true,

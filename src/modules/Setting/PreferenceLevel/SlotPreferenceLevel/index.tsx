@@ -62,19 +62,12 @@ const SlotPreferenceLevel = () => {
     updateSlotPreferenceLevel({
       preferenceId: item.preferenceId,
       preferenceLevel: value,
-    })
-      .then((res) =>
-        setNotification({
-          message: 'Update success',
-          severity: 'success',
-        })
-      )
-      .catch((err) =>
-        setNotification({
-          message: 'Update error',
-          severity: 'error',
-        })
-      );
+    }).catch((err) =>
+      setNotification({
+        message: 'Update error',
+        severity: 'error',
+      })
+    );
   };
 
   return (

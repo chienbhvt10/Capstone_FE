@@ -93,7 +93,7 @@ export interface Class {
 
 export interface ExecuteInfo {
   id: number;
-  executeId: number;
+  executeId: string;
   executeTime: string;
   semesterId: number;
 }

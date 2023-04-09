@@ -30,7 +30,12 @@ const TableCellSelect = <T extends Option>(props: Props<T>) => {
   };
 
   return (
-    <Select value={selectValue} onChange={onChangeSelect}>
+    <Select
+      value={selectValue}
+      onChange={onChangeSelect}
+      inputProps={{ sx: value && { color: '#5aafff' } }}
+      sx={{ border: value && '2px solid #5aafff', fontWeight: value && 'bold' }}
+    >
       <MenuItem disabled value="">
         <em>{selectTitle}</em>
       </MenuItem>
