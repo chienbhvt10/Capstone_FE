@@ -7,6 +7,8 @@ interface CreateLecturerParams {
   name: string;
   shortName: string;
   email: string;
+  quota: number;
+  minQuota: number;
 }
 
 interface UpdateLecturerParams {
@@ -14,6 +16,8 @@ interface UpdateLecturerParams {
   name: string;
   shortName: string;
   email: string;
+  quota: number;
+  minQuota: number;
 }
 
 export const createLecturer = async (params: CreateLecturerParams) => {

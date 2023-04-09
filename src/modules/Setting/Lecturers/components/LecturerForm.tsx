@@ -13,12 +13,16 @@ interface LecturerForm {
   name: string;
   shortName: string;
   email: string;
+  quota: number;
+  minQuota: number;
 }
 
 const schema = Validation.shape({
   email: Validation.string().required('Email is required'),
   shortName: Validation.string().required('ShortName is required'),
   name: Validation.string().required('Name is required'),
+  quota: Validation.number().required('Quota is required'),
+  minQuota: Validation.number().required('MinQuota is required'),
 });
 
 interface Props {
@@ -68,6 +72,8 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
         email: value.email,
         shortName: value.shortName,
         name: value.name,
+        minQuota: value.minQuota,
+        quota: value.quota,
       })
         .then((res) => {
           refetch();
@@ -82,6 +88,8 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
       email: value.email,
       name: value.name,
       shortName: value.shortName,
+      minQuota: value.minQuota,
+      quota: value.quota,
     })
       .then((res) => {
         refetch();
@@ -185,13 +193,13 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
             </Typography>
             <Stack direction="column">
               <TextField
-                {...register('name')}
+                {...register('quota')}
                 variant="outlined"
-                name="name"
+                name="quota"
                 sx={{ width: 200 }}
               />
               <Typography variant="caption" sx={{ color: 'error.main' }}>
-                {errors.name?.message && `*${errors.name?.message}`}
+                {errors.quota?.message && `*${errors.quota?.message}`}
               </Typography>
             </Stack>
           </Stack>
@@ -205,13 +213,13 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
             </Typography>
             <Stack direction="column">
               <TextField
-                {...register('name')}
+                {...register('minQuota')}
                 variant="outlined"
-                name="name"
+                name="minQuota"
                 sx={{ width: 200 }}
               />
               <Typography variant="caption" sx={{ color: 'error.main' }}>
-                {errors.name?.message && `*${errors.name?.message}`}
+                {errors.minQuota?.message && `*${errors.minQuota?.message}`}
               </Typography>
             </Stack>
           </Stack>
