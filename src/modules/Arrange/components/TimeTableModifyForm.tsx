@@ -67,7 +67,7 @@ const TimeTableModifyForm = () => {
   const onModifyTimeTable = async () => {
     try {
       if (!taskSelect) {
-        setNotification({ message: 'Select task before', severity: 'error' });
+        setNotification({ message: 'Select task first', severity: 'error' });
         return;
       }
       const res = await modifyTimetable({
@@ -77,7 +77,6 @@ const TimeTableModifyForm = () => {
         timeSlotId: taskSelect?.timeSlotId || null,
       });
 
-      console.log(res.data);
       if (res.isSuccess && res.data) {
         const taskNeedAssign = res.data.taskNeedAssign;
         const taskSameTimeSlot = res.data.taskSameTimeSlot;
@@ -112,7 +111,6 @@ const TimeTableModifyForm = () => {
             }
             if (task.lecturerId === taskSelect.lecturerId) {
               if (taskSameTimeSlot) {
-                console.log(taskSameTimeSlot);
                 const newTimeSlotInfos = task.timeSlotInfos.map((timeSlot) => {
                   if (timeSlot.timeSlotId === taskSameTimeSlot.timeSlotId) {
                     return {
