@@ -5,6 +5,13 @@ export const getLecturersTableColumns = () => {
 
   columns.push(
     {
+      id: 'No',
+      label: 'No',
+      minWidth: 50,
+      align: 'center',
+      sticky: true,
+    },
+    {
       id: 'Email',
       label: 'Email',
       minWidth: 100,

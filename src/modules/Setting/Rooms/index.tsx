@@ -1,17 +1,19 @@
-import AddIcon from '@mui/icons-material/Add';
 import { TabContext, TabPanel } from '@mui/lab';
-import { Button, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import PageWrapper from '~/components/PageWrapper';
-import RoomTable from './components/DistanceTable';
 import { useState } from 'react';
+import PageWrapper from '~/components/PageWrapper';
 import BuildingForm from './components/BuildingForm';
 import BuildingTable from './components/BuildingTable';
+import RoomTable from './components/DistanceTable';
+import { Building } from './util/type';
 
 const DistanceSetting = () => {
   const [tab, setTab] = useState('1');
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [editingItem, setEditingItem] = useState<Building | null>(null);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
@@ -39,18 +41,16 @@ const DistanceSetting = () => {
             </Tabs>
           </Box>
           <TabPanel value="1">
-            <Stack
-              direction="column"
-              spacing={2}
-              sx={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                maxWidth: 700,
-                margin: '0 auto',
-              }}
-            >
-              <BuildingForm />
-              <BuildingTable />
+            <Stack direction="row" spacing={2}>
+              <BuildingForm
+                editMode={editMode}
+                editingItem={editingItem}
+                setEditMode={setEditMode}
+              />
+              <BuildingTable
+                setEditMode={setEditMode}
+                setEditingItem={setEditingItem}
+              />
             </Stack>
           </TabPanel>
           <TabPanel value="2">

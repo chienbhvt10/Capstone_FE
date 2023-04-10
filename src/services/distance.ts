@@ -9,15 +9,23 @@ import {
   CreateBuildingParams,
   Room,
   UpdateDistanceParams,
+  interfaceUpdateBuildingParams,
 } from '~/modules/Setting/Rooms/util/type';
 
 export const createBuilding = async (params: CreateBuildingParams) => {
   const url = API_BUILDING;
   return HttpClient.post<typeof params, CommonResponse>(url, params);
 };
-export const deleteBuilding = async () => {};
-export const updateBuilding = async () => {};
-export const createDistance = async () => {};
+
+export const deleteBuilding = async (params: number) => {
+  const url = API_BUILDING + `/${params}`;
+  return HttpClient.delete<typeof params, CommonResponse>(url);
+};
+
+export const updateBuilding = async (params: interfaceUpdateBuildingParams) => {
+  const url = API_BUILDING;
+  return HttpClient.put<typeof params, CommonResponse>(url, params);
+};
 
 export const updateDistance = async (params: UpdateDistanceParams) => {
   return HttpClient.put<typeof params, CommonResponse>(API_DISTANCE, params);

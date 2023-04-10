@@ -8,7 +8,7 @@ import {
   TimeSlotResponse,
 } from '~/modules/Arrange/utils/type';
 import { Lecturer } from '~/modules/Lecturer/util/type';
-import { Room } from '~/modules/Setting/Rooms/util/type';
+import { Building, Room } from '~/modules/Setting/Rooms/util/type';
 import { Subject } from '~/modules/Setting/Subjects/util/type';
 import { TimeSlot } from '~/modules/Setting/TimeSlots/utils/type';
 import {
@@ -19,7 +19,7 @@ import {
 import { getClasses } from '~/services/class';
 import { getExecuteInfos } from '~/services/execute';
 import { getLecturers } from '~/services/lecturer';
-import { getRooms } from '~/services/distance';
+import { getAllBuilding, getRooms } from '~/services/distance';
 import { getSubjects } from '~/services/subject';
 import { getTimeSlots } from '~/services/timeslot';
 import wait from '~/utils/wait';
@@ -54,6 +54,15 @@ export interface ArrangeContextValue {
   setLoadingTimeTable: React.Dispatch<React.SetStateAction<boolean>>;
   loadingTimeTableModify: boolean;
   setLoadingTimeTableModify: React.Dispatch<React.SetStateAction<boolean>>;
+  refetchListExecuteInfo: React.DispatchWithoutAction;
+  refetchLecturer: React.DispatchWithoutAction;
+  refetchSubject: React.DispatchWithoutAction;
+  refetchRoom: React.DispatchWithoutAction;
+  refetchClass: React.DispatchWithoutAction;
+  refetchTimeSlot: React.DispatchWithoutAction;
+  refetchBuilding: React.DispatchWithoutAction;
+  buildings: Building[];
+  setBuildings: React.Dispatch<React.SetStateAction<Building[]>>;
 }
 
 export const ArrangeContext = createContext<ArrangeContextValue | null>(null);
@@ -65,6 +74,13 @@ if (process.env.NODE_ENV === 'development') {
 const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const { children } = props;
   const [refresh, refetch] = useRefresh();
+  const [refreshListExecuteInfo, refetchListExecuteInfo] = useRefresh();
+  const [refreshLecturer, refetchLecturer] = useRefresh();
+  const [refreshSubject, refetchSubject] = useRefresh();
+  const [refreshRoom, refetchRoom] = useRefresh();
+  const [refreshClass, refetchClass] = useRefresh();
+  const [refreshTimeSlot, refetchTimeSlot] = useRefresh();
+  const [refreshBuilding, refetchBuilding] = useRefresh();
 
   const [executeId, setExecuteId] = useState<number>(0);
   const [lecturersTaskAssignInfo, setLecturersTaskAssignInfo] = useState<
@@ -72,6 +88,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   >([]);
   const [tasksNotAssignedInfo, setTasksNotAssigned] =
     useState<TimeSlotResponse | null>(null);
+  const [buildings, setBuildings] = useState<Building[]>([]);
   const [taskSelect, setTaskSelect] = useState<TaskDetail | null>(null);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [lecturers, setLecturers] = useState<Lecturer[]>([]);
@@ -85,7 +102,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
 
   useEffect(() => {
     if (executeId) {
-      getExecutedArrangeInfo(executeId);
+      getExecutedArrangeInfo(executeId).then((res) => refetch());
     }
   }, [executeId]);
 
@@ -107,46 +124,67 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [refresh]);
 
   useEffect(() => {
-    getLecturers().then((res) => {
-      if (res.data) {
-        setLecturers(res.data);
-      }
-    });
-
-    getRooms().then((res) => {
-      if (res.data) {
-        setRooms(res.data);
-      }
-    });
-
-    getSubjects().then((res) => {
-      if (res.data) {
-        setSubjects(res.data);
-      }
-    });
-
-    getClasses().then((res) => {
-      if (res.data) {
-        setClasses(res.data);
-      }
-    });
-
-    getTimeSlots().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setTimeSlots(res.data || []);
-      }
-    });
-
     getExecuteInfos().then((res) => {
       if (res.data && res.data.length > 0) {
         setExecuteInfos(res.data || []);
       }
     });
-  }, []);
+  }, [refreshListExecuteInfo]);
+
+  useEffect(() => {
+    getLecturers().then((res) => {
+      if (res.data) {
+        setLecturers(res.data);
+      }
+    });
+  }, [refreshLecturer]);
+
+  useEffect(() => {
+    getSubjects().then((res) => {
+      if (res.data) {
+        setSubjects(res.data);
+      }
+    });
+  }, [refreshSubject]);
+
+  useEffect(() => {
+    getRooms().then((res) => {
+      if (res.data) {
+        setRooms(res.data);
+      }
+    });
+  }, [refreshRoom]);
+
+  useEffect(() => {
+    getClasses().then((res) => {
+      if (res.data) {
+        setClasses(res.data);
+      }
+    });
+  }, [refreshClass]);
+
+  useEffect(() => {
+    getTimeSlots().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setTimeSlots(res.data || []);
+      }
+    });
+  }, [refreshTimeSlot]);
+
+  useEffect(() => {
+    getAllBuilding().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setBuildings(res.data || []);
+      }
+    });
+  }, [refreshBuilding]);
 
   return (
     <ArrangeContext.Provider
       value={{
+        buildings,
+        refetchBuilding,
+        setBuildings,
         loadingTimeTableModify,
         loadingTimeTable,
         executeInfos,
@@ -159,9 +197,15 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         taskSelect,
         tasksNotAssignedInfo,
         lecturersTaskAssignInfo,
+        refetch,
+        refetchListExecuteInfo,
+        refetchClass,
+        refetchLecturer,
+        refetchRoom,
+        refetchSubject,
+        refetchTimeSlot,
         setLoadingTimeTable,
         setLoadingTimeTableModify,
-        refetch,
         setExecuteInfos,
         setClasses,
         setSubjects,

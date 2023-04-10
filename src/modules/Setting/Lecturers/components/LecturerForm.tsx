@@ -20,9 +20,9 @@ interface LecturerForm {
 const schema = Validation.shape({
   email: Validation.string().required('Email is required'),
   shortName: Validation.string().required('ShortName is required'),
-  name: Validation.string().required('Name is required'),
-  quota: Validation.number().required('Quota is required'),
-  minQuota: Validation.number().required('MinQuota is required'),
+  name: Validation.string(),
+  quota: Validation.number().default(0).required('Quota is required'),
+  minQuota: Validation.number().default(0).required('MinQuota is required'),
 });
 
 interface Props {
@@ -35,14 +35,7 @@ interface Props {
 }
 
 const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
-  const {
-    setLecturers,
-    lecturers,
-    editMode,
-    editingItem,
-    setEditMode,
-    refetch,
-  } = props;
+  const { editMode, editingItem, setEditMode, refetch } = props;
 
   const {
     register,
@@ -166,12 +159,7 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
           </Stack>
 
           <Stack direction="column">
-            <Typography variant="body2">
-              Name{' '}
-              <Typography component="span" sx={{ color: 'error.main' }}>
-                *
-              </Typography>
-            </Typography>
+            <Typography variant="body2">Name </Typography>
             <Stack direction="column">
               <TextField
                 {...register('name')}

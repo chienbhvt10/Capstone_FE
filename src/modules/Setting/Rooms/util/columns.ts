@@ -33,6 +33,12 @@ export const getBuildingColumns = () => {
 
   columns.push(
     {
+      id: 'No',
+      label: 'No',
+      minWidth: 50,
+      align: 'center',
+    },
+    {
       id: 'Name',
       label: 'Name',
       minWidth: 100,

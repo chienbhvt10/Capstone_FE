@@ -5,6 +5,13 @@ export const getSubjectTableColumns = () => {
 
   columns.push(
     {
+      id: 'No',
+      label: 'No',
+      minWidth: 50,
+      align: 'center',
+      sticky: true,
+    },
+    {
       id: 'SubjectCode',
       label: 'Subject Code',
       minWidth: 100,

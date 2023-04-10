@@ -3,36 +3,33 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
-import { getBuildingColumns } from '../util/columns';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
+import useArrange from '~/hooks/useArrange';
+import { deleteBuilding } from '~/services/distance';
+import { getBuildingColumns } from '../util/columns';
 import { Building } from '../util/type';
-import { getAllBuilding } from '~/services/distance';
-import useRefresh from '~/hooks/useRefresh';
 
-interface Props {}
+interface Props {
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditingItem: React.Dispatch<React.SetStateAction<Building | null>>;
+}
 
 const BuildingTable = (props: Props) => {
-  const columns = useMemo(() => getBuildingColumns(), []);
-  const [buildingData, setBuildingData] = useState<Building[]>([]);
-  const [refresh, refetch] = useRefresh();
+  const { setEditMode, setEditingItem } = props;
 
-  useEffect(() => {
-    getAllBuilding().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setBuildingData(res.data);
-      }
-    });
-  }, [refresh]);
+  const columns = useMemo(() => getBuildingColumns(), []);
+  const { buildings, refetchBuilding } = useArrange();
 
   const onEdit = (item: Building) => () => {
-    refetch();
+    setEditMode(true);
+    setEditingItem(item);
   };
 
-  const onDelete = (item: Building) => () => {
-    refetch();
+  const onDelete = (item: Building) => async () => {
+    await deleteBuilding(item.id).then((res) => refetchBuilding());
   };
 
   return (
@@ -56,23 +53,27 @@ const BuildingTable = (props: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {buildingData.map((item, index) => (
-            <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
-              <TableCellCustom align="center" border={true} hover={true}>
-                <Typography variant="body1">{item.name}</Typography>
-              </TableCellCustom>
-              <TableCellCustom align="center" border={true} hover={true}>
-                <Typography variant="body1">{item.shortName}</Typography>
-              </TableCellCustom>
-              <TableCellCustom align="center" border={true} hover={true}>
-                <TableToolCustom
-                  item={item}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                />
-              </TableCellCustom>
-            </TableRow>
-          ))}
+          {buildings?.length > 0 &&
+            buildings.map((item, index) => (
+              <TableRow role="checkbox" tabIndex={-1} key={Math.random()}>
+                <TableCellCustom align="center" border={true} hover={true}>
+                  <Typography variant="body1">{index}</Typography>
+                </TableCellCustom>
+                <TableCellCustom align="center" border={true} hover={true}>
+                  <Typography variant="body1">{item.name}</Typography>
+                </TableCellCustom>
+                <TableCellCustom align="center" border={true} hover={true}>
+                  <Typography variant="body1">{item.shortName}</Typography>
+                </TableCellCustom>
+                <TableCellCustom align="center" border={true} hover={true}>
+                  <TableToolCustom
+                    item={item}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                  />
+                </TableCellCustom>
+              </TableRow>
+            ))}
         </TableBody>
       </TableCustom>
     </TableContainer>

@@ -39,6 +39,12 @@ export interface CreateBuildingParams {
   shortName: string;
 }
 
+export interface interfaceUpdateBuildingParams {
+  id: number;
+  name: string;
+  shortName: string;
+}
+
 export interface UpdateDistanceParams {
   distanceId: number;
   distanceBetween: number;

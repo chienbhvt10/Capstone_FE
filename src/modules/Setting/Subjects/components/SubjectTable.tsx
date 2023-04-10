@@ -42,68 +42,69 @@ const SubjectTable = (props: Props) => {
   };
 
   return (
-    <Container maxWidth="lg">
-      <TableContainer sx={{ maxHeight: 600 }}>
-        <TableCustom>
-          <TableHead>
-            <TableRow>
-              {columns.map((item) => (
-                <TableCell
-                  key={item.id}
-                  align={item.align}
+    <TableContainer sx={{ maxHeight: 600 }}>
+      <TableCustom>
+        <TableHead>
+          <TableRow>
+            {columns.map((item) => (
+              <TableCell
+                key={item.id}
+                align={item.align}
+                sx={{
+                  left: item.stickyPosition === 'left' ? 0 : 'unset',
+                  right: item.stickyPosition === 'right' ? 0 : 'unset',
+                  zIndex: item.zIndex
+                    ? item.zIndex
+                    : item.sticky
+                    ? theme.zIndex.appBar + 10
+                    : theme.zIndex.appBar,
+                }}
+              >
+                <Box
                   sx={{
-                    left: item.stickyPosition === 'left' ? 0 : 'unset',
-                    right: item.stickyPosition === 'right' ? 0 : 'unset',
-                    zIndex: item.zIndex
-                      ? item.zIndex
-                      : item.sticky
-                      ? theme.zIndex.appBar + 10
-                      : theme.zIndex.appBar,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minWidth: item.minWidth,
+                    minHeight: item.minHeight,
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      minWidth: item.minWidth,
-                      minHeight: item.minHeight,
-                    }}
-                  >
-                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                      {item.label}
-                    </Typography>
-                  </Box>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {subjects?.length > 0 &&
-              subjects.map((item) => (
-                <TableRow role="checkbox" tabIndex={-1} key={item.id}>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.code}</Typography>
-                  </TableCellCustom>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.name}</Typography>
-                  </TableCellCustom>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body1">{item.department}</Typography>
-                  </TableCellCustom>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <TableToolCustom
-                      item={item}
-                      onEdit={onEdit}
-                      onDelete={onDelete}
-                    />
-                  </TableCellCustom>
-                </TableRow>
-              ))}
-          </TableBody>
-        </TableCustom>
-      </TableContainer>
-    </Container>
+                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                    {item.label}
+                  </Typography>
+                </Box>
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {subjects?.length > 0 &&
+            subjects.map((item, index) => (
+              <TableRow role="checkbox" tabIndex={-1} key={item.id}>
+                <TableCellCustom align="center" border={true} hover={true}>
+                  <Typography variant="body1">{index}</Typography>
+                </TableCellCustom>
+                <TableCellCustom align="center" border={true} hover={true}>
+                  <Typography variant="body1">{item.code}</Typography>
+                </TableCellCustom>
+                <TableCellCustom align="center" border={true} hover={true}>
+                  <Typography variant="body1">{item.name}</Typography>
+                </TableCellCustom>
+                <TableCellCustom align="center" border={true} hover={true}>
+                  <Typography variant="body1">{item.department}</Typography>
+                </TableCellCustom>
+                <TableCellCustom align="center" border={true} hover={true}>
+                  <TableToolCustom
+                    item={item}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                  />
+                </TableCellCustom>
+              </TableRow>
+            ))}
+        </TableBody>
+      </TableCustom>
+    </TableContainer>
   );
 };
 

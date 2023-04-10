@@ -4,4 +4,6 @@ export interface Lecturer {
   shortName: string;
   email: string;
   semesterId: number;
+  quota: number;
+  minQuota: number;
 }
