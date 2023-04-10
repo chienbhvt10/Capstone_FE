@@ -77,105 +77,8 @@ const TimeTableModifyForm = () => {
         timeSlotId: taskSelect?.timeSlotId || null,
       });
 
-      if (res.isSuccess && res.data) {
-        const taskNeedAssign = res.data.taskNeedAssign;
-        const taskSameTimeSlot = res.data.taskSameTimeSlot;
-        if (taskNeedAssign) {
-          const newLecturerTaskAssign = lecturersTaskAssignInfo.map((task) => {
-            console.log(task.lecturerId, taskSelect.lecturerId);
-            if (task.lecturerId === taskNeedAssign.lecturerId) {
-              const newTimeSlotInfos = task.timeSlotInfos.map((timeSlot) => {
-                if (timeSlot.timeSlotId === taskNeedAssign.timeSlotId) {
-                  return {
-                    ...timeSlot,
-                    classId: taskNeedAssign.classId,
-                    className: taskNeedAssign.className,
-                    subjectId: taskNeedAssign.subjectId,
-                    subjectCode: taskNeedAssign.subjectName,
-                    timeSlotId: taskNeedAssign.timeSlotId,
-                    timeSlotName: taskNeedAssign.timeSlotName,
-                    taskId: taskNeedAssign.taskId,
-                    roomId: taskNeedAssign.roomId,
-                    roomName: taskNeedAssign.roomName,
-                  };
-                }
-                return timeSlot;
-              });
-              return {
-                ...task,
-                lecturerId: taskNeedAssign.lecturerId,
-                lecturerName: taskNeedAssign.lecturerName,
-                timeSlotInfos: newTimeSlotInfos,
-                total: typeof task.total === 'number' ? task.total + 1 : 0,
-              };
-            }
-            if (task.lecturerId === taskSelect.lecturerId) {
-              if (taskSameTimeSlot) {
-                const newTimeSlotInfos = task.timeSlotInfos.map((timeSlot) => {
-                  if (timeSlot.timeSlotId === taskSameTimeSlot.timeSlotId) {
-                    return {
-                      ...timeSlot,
-                      classId: taskSameTimeSlot.classId,
-                      className: taskSameTimeSlot.className,
-                      subjectId: taskSameTimeSlot.subjectId,
-                      subjectCode: taskSameTimeSlot.subjectName,
-                      timeSlotId: taskSameTimeSlot.timeSlotId,
-                      timeSlotName: taskSameTimeSlot.timeSlotName,
-                      taskId: taskSameTimeSlot.taskId,
-                      roomId: taskSameTimeSlot.roomId,
-                      roomName: taskSameTimeSlot.roomName,
-                    };
-                  }
-                  return timeSlot;
-                });
-                return {
-                  ...task,
-                  lecturerId: taskSameTimeSlot.lecturerId,
-                  lecturerName: taskSameTimeSlot.lecturerName,
-                  timeSlotInfos: newTimeSlotInfos,
-                  total: task.total && task.total + 1,
-                };
-              } else {
-                const newTimeSlotInfos = task.timeSlotInfos.map((timeSlot) => {
-                  if (timeSlot.timeSlotId === taskSelect.timeSlotId) {
-                    return {
-                      ...timeSlot,
-                      classId: 0,
-                      className: '',
-                      subjectId: 0,
-                      subjectCode: '',
-                      taskId: 0,
-                      roomId: 0,
-                      roomName: '',
-                    };
-                  }
-                  return timeSlot;
-                });
-                return {
-                  ...task,
-                  timeSlotInfos: newTimeSlotInfos,
-                  total: task.total && task.total > 0 ? task.total - 1 : 0,
-                };
-              }
-            }
-
-            return task;
-          });
-
-          setTasksNotAssigned(
-            tasksNotAssignedInfo
-              ? {
-                  ...tasksNotAssignedInfo,
-                  total:
-                    typeof tasksNotAssignedInfo?.total === 'number'
-                      ? tasksNotAssignedInfo?.total - 1
-                      : 0,
-                }
-              : null
-          );
-
-          setLecturersTaskAssignInfo(newLecturerTaskAssign);
-        }
+      if (res.isSuccess) {
+        refetch();
       }
     } catch (error) {
       setNotification({ message: 'Modify timetable error', severity: 'error' });
@@ -196,6 +99,7 @@ const TimeTableModifyForm = () => {
   const onPreAssignTask = (taskId: number, lecturerId: number) => () => {
     lockAndUnLockTask({ taskId, lecturerId })
       .then((res) => {
+        refetch();
         setNotification({
           message: 'PreAssign task success',
           severity: 'success',

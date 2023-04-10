@@ -11,7 +11,11 @@ import { Lecturer } from '~/modules/Lecturer/util/type';
 import { Room } from '~/modules/Setting/Rooms/util/type';
 import { Subject } from '~/modules/Setting/Subjects/util/type';
 import { TimeSlot } from '~/modules/Setting/TimeSlots/utils/type';
-import { getExecutedArrangeInfo, getTaskNotAssign } from '~/services/arrange';
+import {
+  getExecutedArrangeInfo,
+  getTaskAssigned,
+  getTaskNotAssign,
+} from '~/services/arrange';
 import { getClasses } from '~/services/class';
 import { getExecuteInfos } from '~/services/execute';
 import { getLecturers } from '~/services/lecturer';
@@ -81,22 +85,26 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
 
   useEffect(() => {
     if (executeId) {
-      getExecutedArrangeInfo(executeId).then((res) => {
-        if (res.data && res.data.length > 0) {
-          setLecturersTaskAssignInfo(res.data);
-        }
-        getTaskNotAssign().then((res) => {
-          if (
-            res.data &&
-            res.data.timeSlotInfos &&
-            res.data.timeSlotInfos.length > 0
-          ) {
-            setTasksNotAssigned(res.data);
-          }
-        });
-      });
+      getExecutedArrangeInfo(executeId);
     }
-  }, [executeId, refresh]);
+  }, [executeId]);
+
+  useEffect(() => {
+    getTaskAssigned().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setLecturersTaskAssignInfo(res.data);
+      }
+      getTaskNotAssign().then((res) => {
+        if (
+          res.data &&
+          res.data.timeSlotInfos &&
+          res.data.timeSlotInfos.length > 0
+        ) {
+          setTasksNotAssigned(res.data);
+        }
+      });
+    });
+  }, [refresh]);
 
   useEffect(() => {
     getLecturers().then((res) => {

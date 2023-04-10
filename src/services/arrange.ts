@@ -11,6 +11,7 @@ import {
   API_UNLOCK_ALL_TASK,
   API_EXECUTE,
   API_SEARCH_TASK,
+  API_GET_TASK_ASSIGNED,
 } from '../constants/api-path';
 
 import {
@@ -26,7 +27,12 @@ import {
 
 export const getTaskNotAssign = async () => {
   const url = API_GET_TASK_NOT_ASSIGNED;
-  return HttpClient.get<number, CommonResponse<TimeSlotResponse>>(url);
+  return HttpClient.get<null, CommonResponse<TimeSlotResponse>>(url);
+};
+
+export const getTaskAssigned = async () => {
+  const url = API_GET_TASK_ASSIGNED;
+  return HttpClient.get<null, CommonResponse<LecturerAssign[]>>(url);
 };
 
 export const getATask = async (taskId: number) => {
@@ -40,7 +46,7 @@ export const executeArrange = async (params: SettingParams) => {
 
 export const getExecutedArrangeInfo = async (executeId: number) => {
   const url = API_GET_SCHEDULE + executeId;
-  return HttpClient.get<number, CommonResponse<LecturerAssign[]>>(url);
+  return HttpClient.get<number, CommonResponse>(url);
 };
 
 export const exportInImportFormat = async () => {
