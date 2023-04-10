@@ -15,6 +15,7 @@ import { createTimeSlot } from '~/services/timeslot';
 import Validation from '~/utils/Validation';
 import { FiltersRef } from '~/utils/form';
 import { CreateSegmentData } from '../../utils/type';
+import useArrange from '~/hooks/useArrange';
 
 interface CreateTimeSlotForm {
   name: string;
@@ -35,6 +36,7 @@ interface Props {
 
 const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
   const { open, onCloseCreateDialog, onGetValueSegment, refetch } = props;
+  const { refetchTimeSlot } = useArrange();
 
   const {
     register,
@@ -55,6 +57,7 @@ const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
       segments: segmentValue,
     }).then((res) => {
       refetch();
+      refetchTimeSlot();
       onCloseCreateDialog();
       handleReset();
     });

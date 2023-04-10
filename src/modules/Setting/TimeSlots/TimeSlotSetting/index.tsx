@@ -6,6 +6,7 @@ import TimeSlotTable from './components/TimeSlotTable';
 import TimeTableSelectSlot from './components/TimeTableSelectSlot';
 import CreateTimeSlotDialog from './components/CreateDialog';
 import useRefresh from '~/hooks/useRefresh';
+import useArrange from '~/hooks/useArrange';
 
 const TimeSlotSetting = () => {
   const [numberSlots, setNumberSlots] = useState<number>(4);
