@@ -33,26 +33,22 @@ const TimeTableModifyForm = () => {
   const {
     taskSelect,
     setTaskSelect,
-    setTasksNotAssigned,
-    tasksNotAssignedInfo,
     lecturers,
     rooms,
     refetch,
     loadingTimeTableModify,
-    lecturersTaskAssignInfo,
-    setLecturersTaskAssignInfo,
   } = useArrange();
   const [openDialog, setOpen] = useState<boolean>(false);
   const setNotification = useNotification();
   const [loadingUploadExcel, setLoadingUploadExcel] = useState<boolean>(false);
-  const [lecturerIdSelect, setLecturerIdSelect] = useState<number>(0);
-
-  useEffect(() => {
-    setLecturerIdSelect(taskSelect?.lecturerId || 0);
-  }, [taskSelect]);
 
   const onChangeLecturerSelect = (event: SelectChangeEvent<number>) => {
-    setLecturerIdSelect((event.target.value as number) || 0);
+    if (taskSelect) {
+      setTaskSelect({
+        ...taskSelect,
+        lecturerId: (event.target.value as number) || 0,
+      });
+    }
   };
 
   const onChangeRoomSelect = (event: SelectChangeEvent<number>) => {
@@ -71,7 +67,7 @@ const TimeTableModifyForm = () => {
         return;
       }
       const res = await modifyTimetable({
-        lecturerId: lecturerIdSelect || null,
+        lecturerId: taskSelect.lecturerId || null,
         taskId: taskSelect?.taskId || null,
         roomId: taskSelect?.roomId || null,
         timeSlotId: taskSelect?.timeSlotId || null,
@@ -79,6 +75,7 @@ const TimeTableModifyForm = () => {
 
       if (res.isSuccess) {
         refetch();
+        setTaskSelect(null);
       }
     } catch (error) {
       setNotification({ message: 'Modify timetable error', severity: 'error' });
@@ -273,7 +270,7 @@ const TimeTableModifyForm = () => {
                   Lecturer
                 </Typography>
                 <Select
-                  value={lecturerIdSelect}
+                  value={taskSelect?.lecturerId || 0}
                   onChange={onChangeLecturerSelect}
                 >
                   <MenuItem disabled value={0}>
