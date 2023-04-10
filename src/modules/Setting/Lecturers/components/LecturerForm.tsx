@@ -8,6 +8,7 @@ import { createLecturer, updateLecturer } from '~/services/lecturer';
 import Validation from '~/utils/Validation';
 import { FiltersRef } from '~/utils/form';
 import SaveIcon from '@mui/icons-material/Save';
+import useArrange from '~/hooks/useArrange';
 
 interface LecturerForm {
   name: string;
@@ -26,17 +27,14 @@ const schema = Validation.shape({
 });
 
 interface Props {
-  lecturers: Lecturer[];
-  setLecturers: React.Dispatch<React.SetStateAction<Lecturer[]>>;
   editMode: boolean;
   editingItem: Lecturer | null;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
-  refetch: React.DispatchWithoutAction;
 }
 
 const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
-  const { editMode, editingItem, setEditMode, refetch } = props;
-
+  const { editMode, editingItem, setEditMode } = props;
+  const { refetchLecturer } = useArrange();
   const {
     register,
     handleSubmit,
@@ -69,7 +67,7 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
         quota: value.quota,
       })
         .then((res) => {
-          refetch();
+          refetchLecturer();
           setEditMode(false);
           handleReset();
         })
@@ -85,7 +83,7 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
       quota: value.quota,
     })
       .then((res) => {
-        refetch();
+        refetchLecturer();
         handleReset();
       })
       .catch((err) => {});

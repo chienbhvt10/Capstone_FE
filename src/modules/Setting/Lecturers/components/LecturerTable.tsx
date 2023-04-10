@@ -14,18 +14,17 @@ import { getLecturersTableColumns } from '../util/columns';
 import { useTheme } from '@mui/material/styles';
 import TableCell from '@mui/material/TableCell';
 import Box from '@mui/material/Box';
+import useArrange from '~/hooks/useArrange';
 
 interface Props {
-  lecturers: Lecturer[];
-  setLecturers: React.Dispatch<React.SetStateAction<Lecturer[]>>;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   setEditingItem: React.Dispatch<React.SetStateAction<Lecturer | null>>;
 }
 
 const LecturerTable = (props: Props) => {
   const theme = useTheme();
-  const { lecturers, setLecturers, setEditMode, setEditingItem } = props;
-
+  const { setEditMode, setEditingItem } = props;
+  const { setLecturers, lecturers } = useArrange();
   const columns = useMemo(() => getLecturersTableColumns(), []);
 
   const onEdit = (item: Lecturer) => () => {
