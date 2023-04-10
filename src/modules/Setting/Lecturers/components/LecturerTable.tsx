@@ -24,7 +24,7 @@ interface Props {
 const LecturerTable = (props: Props) => {
   const theme = useTheme();
   const { setEditMode, setEditingItem } = props;
-  const { setLecturers, lecturers } = useArrange();
+  const { lecturers, refetchLecturer } = useArrange();
   const columns = useMemo(() => getLecturersTableColumns(), []);
 
   const onEdit = (item: Lecturer) => () => {
@@ -34,12 +34,7 @@ const LecturerTable = (props: Props) => {
 
   const onDelete = (item: Lecturer) => async () => {
     await deleteLecturer(item.id)
-      .then((res) => {
-        const newLecturer = lecturers.filter(
-          (lecturer) => item.id != lecturer.id
-        );
-        setLecturers(newLecturer);
-      })
+      .then((res) => refetchLecturer())
       .catch((err) => {});
   };
 

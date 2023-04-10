@@ -8,6 +8,7 @@ import Validation from '~/utils/Validation';
 import { FiltersRef } from '~/utils/form';
 import { Subject } from '../util/type';
 import SaveIcon from '@mui/icons-material/Save';
+import useArrange from '~/hooks/useArrange';
 
 interface SubjectForm {
   name: string;
@@ -22,18 +23,14 @@ const schema = Validation.shape({
 });
 
 interface Props {
-  subjects: Subject[];
-  setSubjects: React.Dispatch<React.SetStateAction<Subject[]>>;
   editMode: boolean;
   editingItem: Subject | null;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
-  refresh: any;
-  refetch: React.DispatchWithoutAction;
 }
 
 const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
-  const { subjects, setSubjects, editMode, editingItem, setEditMode, refetch } =
-    props;
+  const { editMode, editingItem, setEditMode } = props;
+  const { refetchSubject } = useArrange();
 
   const {
     register,
@@ -65,7 +62,7 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
         name: value.name,
       })
         .then((res) => {
-          refetch();
+          refetchSubject();
           setEditMode(false);
           handleReset();
         })
@@ -79,7 +76,7 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
       code: value.code,
     })
       .then((res) => {
-        refetch();
+        refetchSubject();
         handleReset();
       })
       .catch((err) => {});

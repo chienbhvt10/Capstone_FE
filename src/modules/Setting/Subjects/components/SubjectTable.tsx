@@ -14,17 +14,17 @@ import { Subject } from '../util/type';
 import { useTheme } from '@mui/material/styles';
 import TableCell from '@mui/material/TableCell';
 import Box from '@mui/material/Box';
+import useArrange from '~/hooks/useArrange';
 
 interface Props {
-  subjects: Subject[];
-  setSubjects: React.Dispatch<React.SetStateAction<Subject[]>>;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   setEditingItem: React.Dispatch<React.SetStateAction<Subject | null>>;
 }
 
 const SubjectTable = (props: Props) => {
   const theme = useTheme();
-  const { subjects, setSubjects, setEditMode, setEditingItem } = props;
+  const { setEditMode, setEditingItem } = props;
+  const { refetchSubject, subjects } = useArrange();
   const columns = useMemo(() => getSubjectTableColumns(), []);
 
   const onEdit = (item: Subject) => async () => {
@@ -33,12 +33,7 @@ const SubjectTable = (props: Props) => {
   };
 
   const onDelete = (item: Subject) => async () => {
-    await deleteSubject(item.id)
-      .then((res) => {
-        const newSubject = subjects.filter((subject) => item.id != subject.id);
-        setSubjects(newSubject);
-      })
-      .catch((err) => {});
+    await deleteSubject(item.id).then((res) => refetchSubject());
   };
 
   return (
