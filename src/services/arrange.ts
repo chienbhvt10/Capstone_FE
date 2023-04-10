@@ -21,6 +21,7 @@ import {
   TaskDetail,
   TimeSlotResponse,
   TimeTableModifyParam,
+  TimeTableModifyResponse,
 } from '../modules/Arrange/utils/type';
 
 export const getTaskNotAssign = async () => {
@@ -57,7 +58,7 @@ export const importTimeTable = async (params: FormData) => {
 };
 
 export const modifyTimetable = async (params: TimeTableModifyParam) => {
-  return HttpClient.put<typeof params, CommonResponse>(
+  return HttpClient.put<typeof params, CommonResponse<TimeTableModifyResponse>>(
     API_MODIFY_TIMETABLE,
     params
   );

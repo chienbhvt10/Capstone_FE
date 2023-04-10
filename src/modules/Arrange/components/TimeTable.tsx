@@ -76,7 +76,7 @@ const TimeTable = () => {
           <TableRow>
             {columns.map((item, index) => (
               <TableCell
-                key={item.id && item.id + index}
+                key={Math.random()}
                 align={item.align}
                 sx={{
                   left: item.stickyPosition === 'left' ? 0 : 'unset',
@@ -122,11 +122,7 @@ const TimeTable = () => {
               <TableBody>
                 {lecturersTaskAssignInfo?.length > 0 &&
                   lecturersTaskAssignInfo.map((item, index) => (
-                    <TableRow
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={item.lecturerId && index + item.lecturerId}
-                    >
+                    <TableRow role="checkbox" tabIndex={-1} key={Math.random()}>
                       <TableCell
                         align="center"
                         sx={{
@@ -158,16 +154,15 @@ const TimeTable = () => {
                           </Typography>
                         </Box>
                       </TableCell>
-                      {item?.timeSlotInfos &&
-                        item?.timeSlotInfos.length > 0 &&
+                      {item?.timeSlotInfos.length > 0 &&
                         item.timeSlotInfos.map((task, index) => (
-                          <Fragment key={index + task.taskId}>
+                          <Fragment key={Math.random()}>
                             <TableCell
                               align="center"
                               sx={{
                                 border: '1px solid #ccc',
                                 backgroundColor: task.preAssign
-                                  ? '#ffff6d'
+                                  ? '#dfecf9'
                                   : '#fff',
                                 '&:hover': {
                                   backgroundColor: '#DDF5FF',
@@ -292,10 +287,10 @@ const TimeTable = () => {
                       </Typography>
                     </Box>
                   </TableCell>
-                  {tasksNotAssignedInfo?.timeSlotInfos.length &&
+                  {tasksNotAssignedInfo?.timeSlotInfos &&
                     tasksNotAssignedInfo?.timeSlotInfos.length > 0 &&
-                    tasksNotAssignedInfo.timeSlotInfos.map((task, index) => (
-                      <Fragment key={index}>
+                    tasksNotAssignedInfo.timeSlotInfos.map((task) => (
+                      <Fragment key={Math.random()}>
                         <TableCell
                           align="center"
                           sx={{
@@ -304,10 +299,10 @@ const TimeTable = () => {
                           }}
                         >
                           {task?.length > 0 &&
-                            task.map((item, index) => (
+                            task.map((item) => (
                               <Box
                                 onClick={onClickGetTaskDetails(item.taskId)}
-                                key={item.timeSlotId + item.taskId + index}
+                                key={Math.random()}
                                 sx={{
                                   py: 0.5,
                                   minHeight: 70,

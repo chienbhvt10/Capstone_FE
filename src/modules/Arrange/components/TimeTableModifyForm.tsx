@@ -25,7 +25,7 @@ import {
   unLockAllTask,
 } from '../../../services/arrange';
 import SettingModelDialog from './SettingModelDialog';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import UploadExcelButton from '~/components/ButtonComponents/UploadExcelButton';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
@@ -33,22 +33,26 @@ const TimeTableModifyForm = () => {
   const {
     taskSelect,
     setTaskSelect,
+    setTasksNotAssigned,
+    tasksNotAssignedInfo,
     lecturers,
     rooms,
     refetch,
     loadingTimeTableModify,
+    lecturersTaskAssignInfo,
+    setLecturersTaskAssignInfo,
   } = useArrange();
   const [openDialog, setOpen] = useState<boolean>(false);
   const setNotification = useNotification();
   const [loadingUploadExcel, setLoadingUploadExcel] = useState<boolean>(false);
+  const [lecturerIdSelect, setLecturerIdSelect] = useState<number>(0);
+
+  useEffect(() => {
+    setLecturerIdSelect(taskSelect?.lecturerId || 0);
+  }, [taskSelect]);
 
   const onChangeLecturerSelect = (event: SelectChangeEvent<number>) => {
-    if (taskSelect) {
-      setTaskSelect({
-        ...taskSelect,
-        lecturerId: (event.target.value as number) || 0,
-      });
-    }
+    setLecturerIdSelect((event.target.value as number) || 0);
   };
 
   const onChangeRoomSelect = (event: SelectChangeEvent<number>) => {
@@ -67,21 +71,114 @@ const TimeTableModifyForm = () => {
         return;
       }
       const res = await modifyTimetable({
-        lecturerId: taskSelect?.lecturerId || null,
+        lecturerId: lecturerIdSelect || null,
         taskId: taskSelect?.taskId || null,
         roomId: taskSelect?.roomId || null,
         timeSlotId: taskSelect?.timeSlotId || null,
       });
 
-      if (res.isSuccess) {
-        setNotification({
-          message: 'Modify timetable success',
-          severity: 'success',
-        });
-        refetch();
-        return;
+      console.log(res.data);
+      if (res.isSuccess && res.data) {
+        const taskNeedAssign = res.data.taskNeedAssign;
+        const taskSameTimeSlot = res.data.taskSameTimeSlot;
+        if (taskNeedAssign) {
+          const newLecturerTaskAssign = lecturersTaskAssignInfo.map((task) => {
+            console.log(task.lecturerId, taskSelect.lecturerId);
+            if (task.lecturerId === taskNeedAssign.lecturerId) {
+              const newTimeSlotInfos = task.timeSlotInfos.map((timeSlot) => {
+                if (timeSlot.timeSlotId === taskNeedAssign.timeSlotId) {
+                  return {
+                    ...timeSlot,
+                    classId: taskNeedAssign.classId,
+                    className: taskNeedAssign.className,
+                    subjectId: taskNeedAssign.subjectId,
+                    subjectCode: taskNeedAssign.subjectName,
+                    timeSlotId: taskNeedAssign.timeSlotId,
+                    timeSlotName: taskNeedAssign.timeSlotName,
+                    taskId: taskNeedAssign.taskId,
+                    roomId: taskNeedAssign.roomId,
+                    roomName: taskNeedAssign.roomName,
+                  };
+                }
+                return timeSlot;
+              });
+              return {
+                ...task,
+                lecturerId: taskNeedAssign.lecturerId,
+                lecturerName: taskNeedAssign.lecturerName,
+                timeSlotInfos: newTimeSlotInfos,
+                total: typeof task.total === 'number' ? task.total + 1 : 0,
+              };
+            }
+            if (task.lecturerId === taskSelect.lecturerId) {
+              if (taskSameTimeSlot) {
+                console.log(taskSameTimeSlot);
+                const newTimeSlotInfos = task.timeSlotInfos.map((timeSlot) => {
+                  if (timeSlot.timeSlotId === taskSameTimeSlot.timeSlotId) {
+                    return {
+                      ...timeSlot,
+                      classId: taskSameTimeSlot.classId,
+                      className: taskSameTimeSlot.className,
+                      subjectId: taskSameTimeSlot.subjectId,
+                      subjectCode: taskSameTimeSlot.subjectName,
+                      timeSlotId: taskSameTimeSlot.timeSlotId,
+                      timeSlotName: taskSameTimeSlot.timeSlotName,
+                      taskId: taskSameTimeSlot.taskId,
+                      roomId: taskSameTimeSlot.roomId,
+                      roomName: taskSameTimeSlot.roomName,
+                    };
+                  }
+                  return timeSlot;
+                });
+                return {
+                  ...task,
+                  lecturerId: taskSameTimeSlot.lecturerId,
+                  lecturerName: taskSameTimeSlot.lecturerName,
+                  timeSlotInfos: newTimeSlotInfos,
+                  total: task.total && task.total + 1,
+                };
+              } else {
+                const newTimeSlotInfos = task.timeSlotInfos.map((timeSlot) => {
+                  if (timeSlot.timeSlotId === taskSelect.timeSlotId) {
+                    return {
+                      ...timeSlot,
+                      classId: 0,
+                      className: '',
+                      subjectId: 0,
+                      subjectCode: '',
+                      taskId: 0,
+                      roomId: 0,
+                      roomName: '',
+                    };
+                  }
+                  return timeSlot;
+                });
+                return {
+                  ...task,
+                  timeSlotInfos: newTimeSlotInfos,
+                  total: task.total && task.total > 0 ? task.total - 1 : 0,
+                };
+              }
+            }
+
+            return task;
+          });
+
+          setTasksNotAssigned(
+            tasksNotAssignedInfo
+              ? {
+                  ...tasksNotAssignedInfo,
+                  total:
+                    typeof tasksNotAssignedInfo?.total === 'number'
+                      ? tasksNotAssignedInfo?.total - 1
+                      : 0,
+                }
+              : null
+          );
+
+          setLecturersTaskAssignInfo(newLecturerTaskAssign);
+        }
       }
-      setNotification({ message: 'Modify timetable error', severity: 'error' });
     } catch (error) {
       setNotification({ message: 'Modify timetable error', severity: 'error' });
     }
@@ -101,7 +198,6 @@ const TimeTableModifyForm = () => {
   const onPreAssignTask = (taskId: number, lecturerId: number) => () => {
     lockAndUnLockTask({ taskId, lecturerId })
       .then((res) => {
-        refetch();
         setNotification({
           message: 'PreAssign task success',
           severity: 'success',
@@ -171,7 +267,7 @@ const TimeTableModifyForm = () => {
         border: '1px solid #ccc',
         p: 2,
         borderRadius: 1,
-        width: 250,
+        minWidth: 260,
       }}
     >
       <Stack direction="column" spacing={2}>
@@ -246,11 +342,11 @@ const TimeTableModifyForm = () => {
                 sx={{ justifyContent: 'center', alignItems: 'center' }}
               >
                 <Typography variant="body2" sx={{ width: 80 }}>
-                  Room
+                  Class
                 </Typography>
                 <TextField
                   variant="outlined"
-                  value={taskSelect?.roomName || ''}
+                  value={taskSelect?.className || ''}
                   disabled
                 />
               </Stack>
@@ -275,16 +371,15 @@ const TimeTableModifyForm = () => {
                   Lecturer
                 </Typography>
                 <Select
-                  value={taskSelect?.lecturerId || 0}
+                  value={lecturerIdSelect}
                   onChange={onChangeLecturerSelect}
                 >
                   <MenuItem disabled value={0}>
                     <em style={{ fontSize: 14 }}>Select Lecturer</em>
                   </MenuItem>
-                  {lecturers &&
-                    lecturers.length &&
+                  {lecturers.length &&
                     lecturers?.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
+                      <MenuItem key={Math.random()} value={item.id}>
                         {item.shortName}
                       </MenuItem>
                     ))}
@@ -306,7 +401,7 @@ const TimeTableModifyForm = () => {
                   </MenuItem>
                   {rooms.length &&
                     rooms?.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
+                      <MenuItem key={Math.random()} value={item.id}>
                         {item.name}
                       </MenuItem>
                     ))}

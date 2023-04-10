@@ -158,6 +158,7 @@ const SettingModelDialog = (props: Props) => {
     setO08_Activated(event.target.checked);
   };
 
+  // fetch again execute id when execute success
   const onArrange = () => {
     if (solver === 0 || strategy === 0 || maxSearchingTime === 0) {
       setNotification({

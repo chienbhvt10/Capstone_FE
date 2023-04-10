@@ -85,6 +85,11 @@ export interface TimeTableModifyParam {
   timeSlotId: number | null;
 }
 
+export interface TimeTableModifyResponse {
+  taskNeedAssign: TaskDetail;
+  taskSameTimeSlot: TaskDetail;
+}
+
 export interface Class {
   id: number;
   name: string;

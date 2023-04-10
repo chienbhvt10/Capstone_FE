@@ -6,10 +6,11 @@ import useArrange from '~/hooks/useArrange';
 import FilterForm from './FilterForm';
 
 const ToolBox = () => {
-  const { executeId, setExecuteId, executeInfos } = useArrange();
+  const { executeId, setExecuteId, executeInfos, setTaskSelect } = useArrange();
 
   const onChangeExecuteId = async (event: SelectChangeEvent<number>) => {
     setExecuteId(event.target.value as number);
+    setTaskSelect(null);
   };
 
   return (
