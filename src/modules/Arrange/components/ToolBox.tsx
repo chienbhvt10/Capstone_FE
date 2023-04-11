@@ -1,29 +1,71 @@
 import { Grid, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete/Autocomplete';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField/TextField';
 import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/system';
+import { SyntheticEvent, useState } from 'react';
 import useArrange from '~/hooks/useArrange';
 import FilterForm from './FilterForm';
+import { Semester } from '../utils/type';
+import ExcelAndArrangeAction from './ExcelAndArrangeAction';
 
 const ToolBox = () => {
-  const { executeId, setExecuteId, executeInfos, setTaskSelect, refetch } =
-    useArrange();
+  const {
+    executeId,
+    setExecuteId,
+    executeInfos,
+    setTaskSelect,
+    semestersSelector,
+    setSemestersSelector,
+    semesters,
+  } = useArrange();
 
   const onChangeExecuteId = async (event: SelectChangeEvent<number>) => {
     setExecuteId(event.target.value as number);
     setTaskSelect(null);
   };
+  const onChangeSemestersSelector = (
+    event: SyntheticEvent,
+    newValue: Semester | null
+  ) => {
+    setSemestersSelector(newValue);
+  };
 
   return (
-    <Grid container spacing={2}>
-      <Grid container item xs={6} lg={3.5}>
+    <Stack direction="row" spacing={1}>
+      <ExcelAndArrangeAction />
+      <Stack
+        direction="column"
+        spacing={1}
+        sx={{ border: '1px solid #ccc', p: 1, borderRadius: 1 }}
+      >
+        <Stack direction="column" sx={{ width: 1, maxWidth: 300 }}>
+          <Autocomplete
+            sx={{ width: 1 }}
+            size="small"
+            disableCloseOnSelect
+            filterSelectedOptions
+            getOptionLabel={(option) => option.semester + ' ' + option.year}
+            isOptionEqualToValue={(option, value) => {
+              return option.id === value.id;
+            }}
+            options={semesters}
+            value={semestersSelector}
+            onChange={onChangeSemestersSelector}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Select Semester"
+              />
+            )}
+          />
+        </Stack>
         <Stack
-          direction="row"
+          direction="column"
           sx={{ width: 1, alignItems: 'center', maxWidth: 300 }}
         >
-          <Typography variant="body2" sx={{ width: 200 }}>
-            Execute Time
-          </Typography>
           <Select value={executeId} onChange={onChangeExecuteId}>
             <MenuItem disabled value={0}>
               <em style={{ fontSize: 14 }}>Select Execute Time</em>
@@ -38,7 +80,9 @@ const ToolBox = () => {
               ))}
           </Select>
         </Stack>
-        <Stack direction="row" sx={{ width: 1, alignItems: 'center' }}>
+      </Stack>
+
+      {/* <Stack direction="row" sx={{ width: 1, alignItems: 'center' }}>
           <Box component="span" sx={{ border: '7px solid #60D4B8' }}></Box>
           <Typography component="span" variant="body2">
             Final
@@ -55,12 +99,9 @@ const ToolBox = () => {
           <Typography component="span" variant="body2">
             Draft
           </Typography>
-        </Stack>
-      </Grid>
-      <Grid container item xs={6} lg={8.5}>
-        <FilterForm />
-      </Grid>
-    </Grid>
+        </Stack> */}
+      <FilterForm />
+    </Stack>
   );
 };
 

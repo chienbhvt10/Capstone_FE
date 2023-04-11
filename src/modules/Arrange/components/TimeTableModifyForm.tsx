@@ -1,8 +1,6 @@
 import {
-  Backdrop,
   Box,
   CircularProgress,
-  LinearProgress,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -12,51 +10,32 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import images from '~/assets/images';
-import Image from '~/components/styledComponents/Image';
+import { Fragment } from 'react';
 import useArrange from '~/hooks/useArrange';
 import useNotification from '~/hooks/useNotification';
 import {
-  executeArrange,
-  exportInImportFormat,
-  importTimeTable,
   lockAndUnLockTask,
   modifyTimetable,
   unLockAllTask,
 } from '../../../services/arrange';
-import SettingModelDialog from './SettingModelDialog';
-import { Fragment, useEffect, useState } from 'react';
-import UploadExcelButton from '~/components/ButtonComponents/UploadExcelButton';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import HttpClient from '~/utils/HttpClient';
+import ExcelAndArrangeAction from './ExcelAndArrangeAction';
+import SwapTimeTableForm from './SwapTimeTableForm';
 
 const TimeTableModifyForm = () => {
   const {
     taskSelect,
     setTaskSelect,
     lecturers,
-    rooms,
-    refetch,
     loadingTimeTableModify,
+    refetch,
   } = useArrange();
-  const [openDialog, setOpen] = useState<boolean>(false);
   const setNotification = useNotification();
-  const [loadingUploadExcel, setLoadingUploadExcel] = useState<boolean>(false);
 
   const onChangeLecturerSelect = (event: SelectChangeEvent<number>) => {
     if (taskSelect) {
       setTaskSelect({
         ...taskSelect,
         lecturerId: (event.target.value as number) || 0,
-      });
-    }
-  };
-
-  const onChangeRoomSelect = (event: SelectChangeEvent<number>) => {
-    if (taskSelect) {
-      setTaskSelect({
-        ...taskSelect,
-        roomId: (event.target.value as number) || 0,
       });
     }
   };
@@ -87,10 +66,6 @@ const TimeTableModifyForm = () => {
     } catch (error) {
       setNotification({ message: 'Modify timetable error', severity: 'error' });
     }
-  };
-
-  const onExportInImportFormat = async () => {
-    await exportInImportFormat();
   };
 
   const onPreAssignTask = (taskId: number, lecturerId: number) => () => {
@@ -127,37 +102,6 @@ const TimeTableModifyForm = () => {
       );
   };
 
-  const onCloseDialog = () => {
-    setOpen(false);
-  };
-
-  const onOpen = () => {
-    setOpen(true);
-  };
-
-  const handleUploadExcel = async (file: File) => {
-    try {
-      setLoadingUploadExcel(true);
-      const formData = new FormData();
-
-      formData.append('file', file, file.name);
-
-      await importTimeTable(formData);
-      setNotification({
-        message: 'Upload file success',
-        severity: 'success',
-      });
-      refetch();
-    } catch (error) {
-      setNotification({
-        message: 'Upload file failed',
-        severity: 'error',
-      });
-    } finally {
-      setLoadingUploadExcel(false);
-    }
-  };
-
   return (
     <Stack
       direction="column"
@@ -170,43 +114,12 @@ const TimeTableModifyForm = () => {
       }}
     >
       <Stack direction="column" spacing={2}>
-        <Stack direction="column" spacing={1}>
-          <Typography variant="body1" align="center">
-            Action
-          </Typography>
-          <Divider variant="fullWidth" />
-          <Button
-            startIcon={
-              <Image
-                src={images.iconArrange}
-                sx={{ width: 25, height: 25 }}
-                alt=""
-              />
-            }
-            fullWidth
-            onClick={onOpen}
-          >
-            Arrange
-          </Button>
-          <UploadExcelButton
-            onSelect={handleUploadExcel}
-            title="Import Timetable"
-          />
-
-          <Button
-            onClick={onExportInImportFormat}
-            startIcon={<FileDownloadIcon />}
-            fullWidth
-          >
-            Export in import format
-          </Button>
-
-          <Button startIcon={<FileDownloadIcon />} fullWidth>
-            Export group by lecturer
-          </Button>
-        </Stack>
         <Stack direction="column" spacing={1} sx={{ position: 'relative' }}>
-          <Typography variant="body1" align="center">
+          <Typography
+            variant="body1"
+            align="center"
+            sx={{ fontWeight: 'bold' }}
+          >
             Timetable Modify
           </Typography>
           <Divider variant="fullWidth" />
@@ -249,19 +162,7 @@ const TimeTableModifyForm = () => {
                   disabled
                 />
               </Stack>
-              <Stack
-                direction="row"
-                sx={{ justifyContent: 'center', alignItems: 'center' }}
-              >
-                <Typography variant="body2" sx={{ width: 80 }}>
-                  TimeSlot
-                </Typography>
-                <TextField
-                  variant="outlined"
-                  value={taskSelect?.timeSlotName || ''}
-                  disabled
-                />
-              </Stack>
+
               <Stack
                 direction="row"
                 sx={{ justifyContent: 'center', alignItems: 'center' }}
@@ -284,32 +185,10 @@ const TimeTableModifyForm = () => {
                     ))}
                 </Select>
               </Stack>
-              <Stack
-                direction="row"
-                sx={{ justifyContent: 'center', alignItems: 'center' }}
-              >
-                <Typography variant="body2" sx={{ width: 80 }}>
-                  Room
-                </Typography>
-                <Select
-                  value={taskSelect?.roomId || 0}
-                  onChange={onChangeRoomSelect}
-                >
-                  <MenuItem disabled value={0}>
-                    <em style={{ fontSize: 14 }}>Select Room</em>
-                  </MenuItem>
-                  {rooms.length &&
-                    rooms?.map((item) => (
-                      <MenuItem key={Math.random()} value={item.id}>
-                        {item.name}
-                      </MenuItem>
-                    ))}
-                </Select>
-              </Stack>
             </Fragment>
           )}
-          <Button fullWidth onClick={onModifyTimeTable}>
-            Edit
+          <Button fullWidth onClick={onModifyTimeTable} size="medium">
+            Modify TimeTable
           </Button>
           <Button
             fullWidth
@@ -318,31 +197,16 @@ const TimeTableModifyForm = () => {
               taskSelect?.lecturerId || 0
             )}
             disabled={!taskSelect?.lecturerId || !!!taskSelect}
+            size="medium"
           >
             Un/PreAssign Task
           </Button>
-          <Button fullWidth onClick={onUnLockAll}>
+          <Button fullWidth onClick={onUnLockAll} size="medium">
             UnPreAssign All
           </Button>
         </Stack>
+        <SwapTimeTableForm />
       </Stack>
-      <SettingModelDialog
-        openDialog={openDialog}
-        onCloseDialog={onCloseDialog}
-      />
-      <Backdrop
-        sx={{
-          color: '#fff',
-          mt: '0 !important',
-          zIndex: 9999,
-        }}
-        open={loadingUploadExcel}
-      >
-        <Stack direction="column" spacing={2} sx={{ alignItems: 'center' }}>
-          <CircularProgress sx={{ color: 'white' }} />
-          <Typography variant="body1">Importing timetable ...</Typography>
-        </Stack>
-      </Backdrop>
     </Stack>
   );
 };

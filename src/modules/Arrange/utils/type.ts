@@ -123,3 +123,10 @@ export interface SearchTaskResponse {
   dataAssign: LecturerAssign[];
   dataNotAssign: TimeSlotResponse;
 }
+
+export interface Semester {
+  id: number;
+  isNow: boolean;
+  semester: string;
+  year: string;
+}

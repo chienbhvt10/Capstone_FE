@@ -4,6 +4,7 @@ import {
   Class,
   ExecuteInfo,
   LecturerAssign,
+  Semester,
   TaskDetail,
   TimeSlotResponse,
 } from '~/modules/Arrange/utils/type';
@@ -61,8 +62,13 @@ export interface ArrangeContextValue {
   refetchClass: React.DispatchWithoutAction;
   refetchTimeSlot: React.DispatchWithoutAction;
   refetchBuilding: React.DispatchWithoutAction;
+  refetchSemester: React.DispatchWithoutAction;
   buildings: Building[];
   setBuildings: React.Dispatch<React.SetStateAction<Building[]>>;
+  semestersSelector: Semester | null;
+  setSemestersSelector: React.Dispatch<React.SetStateAction<Semester | null>>;
+  semesters: Semester[];
+  setSemester: React.Dispatch<React.SetStateAction<Semester[]>>;
 }
 
 export const ArrangeContext = createContext<ArrangeContextValue | null>(null);
@@ -81,8 +87,10 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [refreshClass, refetchClass] = useRefresh();
   const [refreshTimeSlot, refetchTimeSlot] = useRefresh();
   const [refreshBuilding, refetchBuilding] = useRefresh();
+  const [refreshSemester, refetchSemester] = useRefresh();
 
   const [executeId, setExecuteId] = useState<number>(0);
+  const [semesters, setSemester] = useState<Semester[]>([]);
   const [lecturersTaskAssignInfo, setLecturersTaskAssignInfo] = useState<
     LecturerAssign[]
   >([]);
@@ -100,6 +108,9 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [loadingTimeTableModify, setLoadingTimeTableModify] =
     useState<boolean>(false);
 
+  const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
+    null
+  );
   useEffect(() => {
     if (executeId) {
       getExecutedArrangeInfo(executeId).then((res) => refetch());
@@ -179,9 +190,22 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
     });
   }, [refreshBuilding]);
 
+  useEffect(() => {
+    getAllBuilding().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setBuildings(res.data || []);
+      }
+    });
+  }, [refreshBuilding]);
+
   return (
     <ArrangeContext.Provider
       value={{
+        semesters,
+        setSemester,
+        refetchSemester,
+        semestersSelector,
+        setSemestersSelector,
         buildings,
         refetchBuilding,
         setBuildings,

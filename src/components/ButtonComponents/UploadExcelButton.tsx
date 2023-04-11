@@ -12,7 +12,7 @@ interface Props extends Omit<ButtonProps, 'onSelect'> {
 }
 
 const UploadExcelButton = (props: Props) => {
-  const { onSelect, title } = props;
+  const { onSelect, title, ...rest } = props;
 
   const setNotification = useNotification();
 
@@ -47,6 +47,7 @@ const UploadExcelButton = (props: Props) => {
       actionType="upload"
       // @ts-ignore
       component="label" // Fix type error later
+      {...rest}
     >
       {title}
       <UploadInput

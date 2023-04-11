@@ -12,18 +12,25 @@ import {
   API_EXECUTE,
   API_SEARCH_TASK,
   API_GET_TASK_ASSIGNED,
+  API_GET_SEMESTER,
 } from '../constants/api-path';
 
 import {
   LecturerAssign,
   SearchTaskParams,
   SearchTaskResponse,
+  Semester,
   SettingParams,
   TaskDetail,
   TimeSlotResponse,
   TimeTableModifyParam,
   TimeTableModifyResponse,
 } from '../modules/Arrange/utils/type';
+
+export const getSemester = async () => {
+  const url = API_GET_SEMESTER;
+  return HttpClient.get<null, CommonResponse<Semester[]>>(url);
+};
 
 export const getTaskNotAssign = async () => {
   const url = API_GET_TASK_NOT_ASSIGNED;

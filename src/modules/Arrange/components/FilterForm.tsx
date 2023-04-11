@@ -11,30 +11,6 @@ import { Subject } from '~/modules/Setting/Subjects/util/type';
 import { Class } from '../utils/type';
 import { searchTask } from '~/services/arrange';
 
-interface Option {
-  id: number;
-  label: string;
-}
-
-const options: Option[] = [
-  {
-    id: 1,
-    label: 'value1',
-  },
-  {
-    id: 2,
-    label: 'value2',
-  },
-  {
-    id: 3,
-    label: 'value3',
-  },
-  {
-    id: 4,
-    label: 'value4',
-  },
-];
-
 const FilterForm = () => {
   const {
     rooms,
@@ -45,21 +21,13 @@ const FilterForm = () => {
     setLecturersTaskAssignInfo,
     setTasksNotAssigned,
     refetch,
+    semestersSelector,
   } = useArrange();
-  const [semestersSelector, setSemestersSelector] = useState<Option | null>(
-    null
-  );
+
   const [lecturersSelector, setLecturersSelector] = useState<Lecturer[]>([]);
   const [classesSelector, setClassesSelector] = useState<Class[]>([]);
   const [roomsSelector, setRoomsSelector] = useState<Room[]>([]);
   const [subjectsSelector, setSubjectsSelector] = useState<Subject[]>([]);
-
-  const onChangeSemestersSelector = (
-    event: SyntheticEvent,
-    newValue: Option | null
-  ) => {
-    setSemestersSelector(newValue);
-  };
 
   const onChangeLecturersSelector = (
     event: SyntheticEvent,
@@ -119,14 +87,20 @@ const FilterForm = () => {
     setRoomsSelector([]);
     setClassesSelector([]);
     setLecturersSelector([]);
-    setSemestersSelector(null);
     refetch();
   };
 
   return (
     <Box
       id="scroll-filter-form"
-      sx={{ border: '1px solid #ccc', p: 1, borderRadius: 1, width: 1, mr: 2 }}
+      sx={{
+        border: '1px solid #ccc',
+        p: 1,
+        borderRadius: 1,
+        mr: 2,
+        maxWidth: 600,
+        width: 1,
+      }}
     >
       <Stack direction="column" spacing={1}>
         <Stack direction="row" spacing={2}>
@@ -172,26 +146,9 @@ const FilterForm = () => {
               />
             )}
           />
-          <Autocomplete
-            sx={{ maxWidth: 220, width: 1 }}
-            size="small"
-            disableCloseOnSelect
-            filterSelectedOptions
-            getOptionLabel={(option) => option.label}
-            isOptionEqualToValue={(option, value) => {
-              return option.id === value.id;
-            }}
-            options={options}
-            value={semestersSelector}
-            onChange={onChangeSemestersSelector}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                label="Select Semester"
-              />
-            )}
-          />
+          <Button onClick={onSearch} size="medium" sx={{ minWidth: 100 }}>
+            Search
+          </Button>
         </Stack>
         <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
           <Autocomplete
@@ -232,10 +189,7 @@ const FilterForm = () => {
               />
             )}
           />
-          <Button onClick={onSearch} size="medium">
-            Search
-          </Button>
-          <Button onClick={onClearSearch} size="medium">
+          <Button onClick={onClearSearch} size="medium" sx={{ minWidth: 100 }}>
             Clear
           </Button>
         </Stack>
