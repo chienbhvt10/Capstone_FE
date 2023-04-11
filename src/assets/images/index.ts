@@ -15,6 +15,7 @@ const images = {
   iconLecturer: require('~/assets/images/sidebar/lecturer.png'),
   iconPreference: require('~/assets/images/sidebar/preference.png'),
   iconDistance: require('~/assets/images/sidebar/distance.png'),
+  iconTime: require('~/assets/images/sidebar/time.png'),
 };
 
 export default images;

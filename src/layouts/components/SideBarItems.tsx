@@ -101,6 +101,11 @@ const listItem: ListItem[] = [
       />
     ),
   },
+  {
+    title: 'Semester',
+    path: 'semester',
+    icon: <Image src={images.iconTime} alt="" sx={{ width: 25, height: 25 }} />,
+  },
 ];
 
 const SideBarItems = (props: Props) => {

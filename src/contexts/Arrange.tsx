@@ -4,11 +4,12 @@ import {
   Class,
   ExecuteInfo,
   LecturerAssign,
-  Semester,
   TaskDetail,
   TimeSlotResponse,
 } from '~/modules/Arrange/utils/type';
 import { Lecturer } from '~/modules/Lecturer/util/type';
+import SemesterForm from '~/modules/Semester/components/SemesterForm';
+import { Semester } from '~/modules/Semester/util/type';
 import { Building, Room } from '~/modules/Setting/Rooms/util/type';
 import { Subject } from '~/modules/Setting/Subjects/util/type';
 import { TimeSlot } from '~/modules/Setting/TimeSlots/utils/type';
@@ -18,12 +19,11 @@ import {
   getTaskNotAssign,
 } from '~/services/arrange';
 import { getClasses } from '~/services/class';
+import { getAllBuilding, getRooms } from '~/services/distance';
 import { getExecuteInfos } from '~/services/execute';
 import { getLecturers } from '~/services/lecturer';
-import { getAllBuilding, getRooms } from '~/services/distance';
 import { getSubjects } from '~/services/subject';
 import { getTimeSlots } from '~/services/timeslot';
-import wait from '~/utils/wait';
 
 export interface ArrangeContextValue {
   lecturersTaskAssignInfo: LecturerAssign[];

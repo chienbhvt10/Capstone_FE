@@ -9,6 +9,7 @@ import manageRoutes from './ManageRoutes';
 import registerRoutes from './RegisterRoutes';
 import settingRoutes from './SettingRoutes';
 import timetableRoutes from './TimetableRoutes';
+import semesterRouters from './SemesterRouter';
 
 const routes: RouteObject[] = [
   authRoutes,
@@ -25,6 +26,7 @@ const routes: RouteObject[] = [
       settingRoutes,
       timetableRoutes,
       manageRoutes,
+      semesterRouters,
     ],
   },
   {

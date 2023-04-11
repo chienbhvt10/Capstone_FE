@@ -1,8 +1,7 @@
+import { Lecturer } from '~/modules/Lecturer/util/type';
 import HttpClient from '~/utils/HttpClient';
 import { CommonResponse } from '~/utils/TypeCommon';
 import { API_LECTURER } from '../constants/api-path';
-import { Lecturer } from '~/modules/Lecturer/util/type';
-import { parseNonNullablePickerDate } from '@mui/x-date-pickers/internals';
 
 interface GetLecturersParams {
   timeSlotId: number | null;

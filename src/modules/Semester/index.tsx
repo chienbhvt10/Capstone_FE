@@ -1,18 +1,16 @@
 import { Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PageWrapper from '~/components/PageWrapper';
-import { getSubjects } from '~/services/subject';
-import SubjectForm from './components/SubjectForm';
-import SubjectTable from './components/SubjectTable';
-import { Subject } from './util/type';
-import useRefresh from '~/hooks/useRefresh';
+import SemesterForm from './components/SemesterForm';
+import SemesterTable from './components/SemesterTable';
+import { Semester } from './util/type';
 
-const SubjectsSetting = () => {
+const SemesterSetting = () => {
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [editingItem, setEditingItem] = useState<Subject | null>(null);
+  const [editingItem, setEditingItem] = useState<Semester | null>(null);
 
   return (
-    <PageWrapper title="Subjects Setting">
+    <PageWrapper title="Semester Setting">
       <Stack
         direction="row"
         spacing={2}
@@ -25,12 +23,12 @@ const SubjectsSetting = () => {
           height: 'calc(100vh - 120px)',
         }}
       >
-        <SubjectForm
+        <SemesterForm
           editMode={editMode}
           editingItem={editingItem}
           setEditMode={setEditMode}
         />
-        <SubjectTable
+        <SemesterTable
           setEditMode={setEditMode}
           setEditingItem={setEditingItem}
         />
@@ -39,4 +37,4 @@ const SubjectsSetting = () => {
   );
 };
 
-export default SubjectsSetting;
+export default SemesterSetting;
