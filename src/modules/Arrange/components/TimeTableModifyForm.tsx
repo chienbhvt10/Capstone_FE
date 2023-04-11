@@ -18,7 +18,6 @@ import {
   modifyTimetable,
   unLockAllTask,
 } from '../../../services/arrange';
-import ExcelAndArrangeAction from './ExcelAndArrangeAction';
 import SwapTimeTableForm from './SwapTimeTableForm';
 
 const TimeTableModifyForm = () => {
