@@ -64,7 +64,7 @@ const SubjectTable = (props: Props) => {
                     minHeight: item.minHeight,
                   }}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                     {item.label}
                   </Typography>
                 </Box>
@@ -77,16 +77,16 @@ const SubjectTable = (props: Props) => {
             subjects.map((item, index) => (
               <TableRow role="checkbox" tabIndex={-1} key={item.id}>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body1">{index}</Typography>
+                  <Typography variant="body2">{index}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body1">{item.code}</Typography>
+                  <Typography variant="body2">{item.code}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body1">{item.name}</Typography>
+                  <Typography variant="body2">{item.name}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body1">{item.department}</Typography>
+                  <Typography variant="body2">{item.department}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
                   <TableToolCustom

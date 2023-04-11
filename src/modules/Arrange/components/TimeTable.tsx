@@ -96,7 +96,7 @@ const TimeTable = () => {
                     minHeight: item.minHeight,
                   }}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                     {item.label}
                   </Typography>
                 </Box>
@@ -143,7 +143,7 @@ const TimeTable = () => {
                         alignItems: 'center',
                       }}
                     >
-                      <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                         {item.lecturerName}
                       </Typography>
                     </Box>
@@ -237,7 +237,7 @@ const TimeTable = () => {
                         alignItems: 'center',
                       }}
                     >
-                      <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                         {item.total}
                       </Typography>
                     </Box>
@@ -273,7 +273,7 @@ const TimeTable = () => {
                     alignItems: 'center',
                   }}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                     NOT_ASSIGNED
                   </Typography>
                 </Box>
@@ -361,7 +361,7 @@ const TimeTable = () => {
                     alignItems: 'center',
                   }}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                     {tasksNotAssignedInfo && tasksNotAssignedInfo?.total}
                   </Typography>
                 </Box>

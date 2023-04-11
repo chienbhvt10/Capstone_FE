@@ -65,7 +65,7 @@ const SemesterTable = (props: Props) => {
                     minHeight: item.minHeight,
                   }}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                     {item.label}
                   </Typography>
                 </Box>
@@ -78,17 +78,24 @@ const SemesterTable = (props: Props) => {
             semesters.map((item, index) => (
               <TableRow role="checkbox" tabIndex={-1} key={item.id}>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body1">{index}</Typography>
+                  <Typography variant="body2">{index}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body1">{item.semester}</Typography>
+                  <Typography variant="body2">{item.semester}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body1">{item.year}</Typography>
+                  <Typography variant="body2">{item.year}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body1">
-                    {item.isNow ? 'CURRENT SEMESTER' : ''}
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontStyle: 'italic',
+                      fontWeight: 'bold',
+                      color: 'success.main',
+                    }}
+                  >
+                    {item.isNow ? 'CURRENT_SEMESTER' : ''}
                   </Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>

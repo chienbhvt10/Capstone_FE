@@ -22,6 +22,7 @@ import { getClasses } from '~/services/class';
 import { getAllBuilding, getRooms } from '~/services/distance';
 import { getExecuteInfos } from '~/services/execute';
 import { getLecturers } from '~/services/lecturer';
+import { getSemesters } from '~/services/semester';
 import { getSubjects } from '~/services/subject';
 import { getTimeSlots } from '~/services/timeslot';
 
@@ -68,7 +69,7 @@ export interface ArrangeContextValue {
   semestersSelector: Semester | null;
   setSemestersSelector: React.Dispatch<React.SetStateAction<Semester | null>>;
   semesters: Semester[];
-  setSemester: React.Dispatch<React.SetStateAction<Semester[]>>;
+  setSemesters: React.Dispatch<React.SetStateAction<Semester[]>>;
 }
 
 export const ArrangeContext = createContext<ArrangeContextValue | null>(null);
@@ -90,7 +91,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [refreshSemester, refetchSemester] = useRefresh();
 
   const [executeId, setExecuteId] = useState<number>(0);
-  const [semesters, setSemester] = useState<Semester[]>([]);
+  const [semesters, setSemesters] = useState<Semester[]>([]);
   const [lecturersTaskAssignInfo, setLecturersTaskAssignInfo] = useState<
     LecturerAssign[]
   >([]);
@@ -198,11 +199,19 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
     });
   }, [refreshBuilding]);
 
+  useEffect(() => {
+    getSemesters().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setSemesters(res.data || []);
+      }
+    });
+  }, [refreshSemester]);
+
   return (
     <ArrangeContext.Provider
       value={{
         semesters,
-        setSemester,
+        setSemesters,
         refetchSemester,
         semestersSelector,
         setSemestersSelector,

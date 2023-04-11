@@ -45,7 +45,7 @@ const BuildingTable = (props: Props) => {
                 sticky={item.sticky}
                 minWidth={100}
               >
-                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                   {item.label}
                 </Typography>
               </TableCellCustom>
@@ -57,13 +57,13 @@ const BuildingTable = (props: Props) => {
             buildings.map((item, index) => (
               <TableRow role="checkbox" tabIndex={-1} key={Math.random()}>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body1">{index}</Typography>
+                  <Typography variant="body2">{index}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body1">{item.name}</Typography>
+                  <Typography variant="body2">{item.name}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body1">{item.shortName}</Typography>
+                  <Typography variant="body2">{item.shortName}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
                   <TableToolCustom

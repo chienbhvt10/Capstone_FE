@@ -48,7 +48,7 @@ const RoomTable = () => {
                 sticky={item.sticky}
                 minWidth={100}
               >
-                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                   {item.label}
                 </Typography>
               </TableCellCustom>
@@ -67,7 +67,7 @@ const RoomTable = () => {
                 border={true}
                 hover={true}
               >
-                <Typography variant="body1">{item.buildingName}</Typography>
+                <Typography variant="body2">{item.buildingName}</Typography>
               </TableCellCustom>
               {item.buildingDistances.map((distance) => (
                 <EditableCell
