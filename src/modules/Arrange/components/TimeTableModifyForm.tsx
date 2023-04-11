@@ -28,6 +28,7 @@ import SettingModelDialog from './SettingModelDialog';
 import { Fragment, useEffect, useState } from 'react';
 import UploadExcelButton from '~/components/ButtonComponents/UploadExcelButton';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import HttpClient from '~/utils/HttpClient';
 
 const TimeTableModifyForm = () => {
   const {
@@ -67,6 +68,7 @@ const TimeTableModifyForm = () => {
         return;
       }
       const res = await modifyTimetable({
+        subjectId: taskSelect.subjectId || null,
         lecturerId: taskSelect.lecturerId || null,
         taskId: taskSelect?.taskId || null,
         roomId: taskSelect?.roomId || null,
@@ -76,6 +78,11 @@ const TimeTableModifyForm = () => {
       if (res.isSuccess) {
         refetch();
         setTaskSelect(null);
+      } else {
+        setNotification({
+          message: res.message,
+          severity: 'error',
+        });
       }
     } catch (error) {
       setNotification({ message: 'Modify timetable error', severity: 'error' });
@@ -83,14 +90,7 @@ const TimeTableModifyForm = () => {
   };
 
   const onExportInImportFormat = async () => {
-    const res = await exportInImportFormat();
-    const url = window.URL.createObjectURL(new Blob([res.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'Timetable.xlsx');
-    document.body.appendChild(link);
-    link.click();
-    link?.parentNode?.removeChild(link);
+    await exportInImportFormat();
   };
 
   const onPreAssignTask = (taskId: number, lecturerId: number) => () => {

@@ -79,6 +79,7 @@ export interface TaskDetail {
 }
 
 export interface TimeTableModifyParam {
+  subjectId: number | null;
   taskId: number | null;
   lecturerId: number | null;
   roomId: number | null;
