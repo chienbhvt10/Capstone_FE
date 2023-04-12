@@ -3,37 +3,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
-import useRefresh from '~/hooks/useRefresh';
-import { getAllBuilding, getDistances } from '~/services/distance';
+import useArrange from '~/hooks/useArrange';
 import { getDistanceColumns } from '../util/columns';
-import { Building, BuildingDistanceData } from '../util/type';
 import EditableCell from './EditableCell';
 
 const RoomTable = () => {
-  const [allBuilding, setAllBuilding] = useState<Building[]>([]);
-  const [distanceData, setDistanceData] = useState<BuildingDistanceData[]>([]);
-  const [refresh, refetch] = useRefresh();
+  const { buildings, distances, refetchBuilding } = useArrange();
 
-  const columns = useMemo(() => getDistanceColumns(allBuilding), [allBuilding]);
-
-  useEffect(() => {
-    getAllBuilding().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setAllBuilding(res.data);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    getDistances().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setDistanceData(res.data);
-      }
-    });
-  }, [refresh]);
+  const columns = useMemo(() => getDistanceColumns(buildings), [buildings]);
 
   return (
     <TableContainer sx={{ maxHeight: 550 }}>
@@ -47,6 +27,7 @@ const RoomTable = () => {
                 stickyPosition={item.stickyPosition}
                 sticky={item.sticky}
                 minWidth={100}
+                border={true}
               >
                 <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                   {item.label}
@@ -56,7 +37,7 @@ const RoomTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {distanceData.map((item, index) => (
+          {distances.map((item, index) => (
             <TableRow role="checkbox" tabIndex={-1} key={index + 1}>
               <TableCellCustom
                 key={index + 1}
@@ -74,7 +55,7 @@ const RoomTable = () => {
                   key={distance.id + item.buildingId}
                   distanceData={item}
                   distanceInfo={distance}
-                  refetch={refetch}
+                  refetch={refetchBuilding}
                 />
               ))}
             </TableRow>

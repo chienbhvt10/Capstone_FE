@@ -121,6 +121,7 @@ const TimeSlotTable = (props: Props) => {
                 minWidth={item.minWidth}
                 minHeight={item.minHeight}
                 sticky={item.sticky}
+                border={true}
               >
                 {item.label}
               </TableCellCustom>

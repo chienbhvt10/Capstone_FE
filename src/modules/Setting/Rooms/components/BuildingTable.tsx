@@ -44,6 +44,7 @@ const BuildingTable = (props: Props) => {
                 stickyPosition={item.stickyPosition}
                 sticky={item.sticky}
                 minWidth={100}
+                border={true}
               >
                 <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                   {item.label}

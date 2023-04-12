@@ -47,10 +47,6 @@ const TimeSlotSetting = () => {
                 id: 6,
                 selected: false,
               },
-              {
-                id: 7,
-                selected: false,
-              },
             ],
           },
         ];

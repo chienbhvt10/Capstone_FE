@@ -1,16 +1,27 @@
 import { createContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import {
+  ARRANGE_PATH,
+  SETTING_DISTANCE_PATH,
+  SETTING_LECTURER_PATH,
+  SETTING_PATH,
+  SETTING_SUBJECT_PATH,
+  SETTING_TIME_SLOT_PATH,
+} from '~/constants/path';
 import useRefresh from '~/hooks/useRefresh';
 import {
   Class,
-  ExecuteInfo,
   LecturerAssign,
   TaskDetail,
   TimeSlotResponse,
 } from '~/modules/Arrange/utils/type';
 import { Lecturer } from '~/modules/Lecturer/util/type';
-import SemesterForm from '~/modules/Semester/components/SemesterForm';
 import { Semester } from '~/modules/Semester/util/type';
-import { Building, Room } from '~/modules/Setting/Rooms/util/type';
+import {
+  Building,
+  BuildingDistanceData,
+  Room,
+} from '~/modules/Setting/Rooms/util/type';
 import { Subject } from '~/modules/Setting/Subjects/util/type';
 import { TimeSlot } from '~/modules/Setting/TimeSlots/utils/type';
 import {
@@ -19,8 +30,7 @@ import {
   getTaskNotAssign,
 } from '~/services/arrange';
 import { getClasses } from '~/services/class';
-import { getAllBuilding, getRooms } from '~/services/distance';
-import { getExecuteInfos } from '~/services/execute';
+import { getAllBuilding, getDistances, getRooms } from '~/services/distance';
 import { getLecturers } from '~/services/lecturer';
 import { getSemesters } from '~/services/semester';
 import { getSubjects } from '~/services/subject';
@@ -69,6 +79,8 @@ export interface ArrangeContextValue {
   setSemesters: React.Dispatch<React.SetStateAction<Semester[]>>;
   currentSemester: Semester | null;
   setCurrentSemester: React.Dispatch<React.SetStateAction<Semester | null>>;
+  setDistances: React.Dispatch<React.SetStateAction<BuildingDistanceData[]>>;
+  distances: BuildingDistanceData[];
 }
 
 export const ArrangeContext = createContext<ArrangeContextValue | null>(null);
@@ -87,17 +99,17 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [refreshTimeSlot, refetchTimeSlot] = useRefresh();
   const [refreshBuilding, refetchBuilding] = useRefresh();
   const [refreshSemester, refetchSemester] = useRefresh();
-
   const [executeId, setExecuteId] = useState<number>(0);
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [currentSemester, setCurrentSemester] = useState<Semester | null>(null);
-
   const [lecturersTaskAssignInfo, setLecturersTaskAssignInfo] = useState<
     LecturerAssign[]
   >([]);
   const [tasksNotAssignedInfo, setTasksNotAssigned] =
     useState<TimeSlotResponse | null>(null);
   const [buildings, setBuildings] = useState<Building[]>([]);
+  const [distances, setDistances] = useState<BuildingDistanceData[]>([]);
+
   const [taskSelect, setTaskSelect] = useState<TaskDetail | null>(null);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [lecturers, setLecturers] = useState<Lecturer[]>([]);
@@ -107,10 +119,12 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [loadingTimeTable, setLoadingTimeTable] = useState<boolean>(false);
   const [loadingTimeTableModify, setLoadingTimeTableModify] =
     useState<boolean>(false);
-
   const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
     null
   );
+
+  const location = useLocation();
+
   useEffect(() => {
     if (executeId) {
       getExecutedArrangeInfo(executeId).then((res) => refetch());
@@ -118,80 +132,103 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [executeId]);
 
   useEffect(() => {
-    getTaskAssigned().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setLecturersTaskAssignInfo(res.data);
-      }
-      getTaskNotAssign().then((res) => {
-        if (
-          res.data &&
-          res.data.timeSlotInfos &&
-          res.data.timeSlotInfos.length > 0
-        ) {
-          setTasksNotAssigned(res.data);
+    if (location.pathname === ARRANGE_PATH) {
+      getTaskAssigned().then((res) => {
+        if (res.data && res.data.length > 0) {
+          setLecturersTaskAssignInfo(res.data);
         }
+        getTaskNotAssign().then((res) => {
+          if (
+            res.data &&
+            res.data.timeSlotInfos &&
+            res.data.timeSlotInfos.length > 0
+          ) {
+            setTasksNotAssigned(res.data);
+          }
+        });
       });
-    });
+    }
   }, [refresh]);
 
   useEffect(() => {
-    getLecturers({
-      lecturerId: null,
-      subjectId: null,
-      timeSlotId: null,
-    }).then((res) => {
-      if (res.data) {
-        setLecturers(res.data);
-      }
-    });
+    if (
+      location.pathname === ARRANGE_PATH ||
+      location.pathname === SETTING_LECTURER_PATH
+    ) {
+      getLecturers({
+        lecturerId: null,
+        subjectId: null,
+        timeSlotId: null,
+      }).then((res) => {
+        if (res.data) {
+          setLecturers(res.data);
+        }
+      });
+    }
   }, [refreshLecturer]);
 
   useEffect(() => {
-    getSubjects().then((res) => {
-      if (res.data) {
-        setSubjects(res.data);
-      }
-    });
+    if (
+      location.pathname === ARRANGE_PATH ||
+      location.pathname === SETTING_SUBJECT_PATH
+    ) {
+      getSubjects().then((res) => {
+        if (res.data) {
+          setSubjects(res.data);
+        }
+      });
+    }
   }, [refreshSubject]);
 
   useEffect(() => {
-    getRooms().then((res) => {
-      if (res.data) {
-        setRooms(res.data);
-      }
-    });
+    if (location.pathname === ARRANGE_PATH) {
+      getRooms().then((res) => {
+        if (res.data) {
+          setRooms(res.data);
+        }
+      });
+    }
   }, [refreshRoom]);
 
   useEffect(() => {
-    getClasses().then((res) => {
-      if (res.data) {
-        setClasses(res.data);
-      }
-    });
+    if (location.pathname === ARRANGE_PATH) {
+      getClasses().then((res) => {
+        if (res.data) {
+          setClasses(res.data);
+        }
+      });
+    }
   }, [refreshClass]);
 
   useEffect(() => {
-    getTimeSlots().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setTimeSlots(res.data || []);
-      }
-    });
+    if (
+      location.pathname === ARRANGE_PATH ||
+      location.pathname === SETTING_TIME_SLOT_PATH
+    ) {
+      getTimeSlots().then((res) => {
+        if (res.data && res.data.length > 0) {
+          setTimeSlots(res.data || []);
+        }
+      });
+    }
   }, [refreshTimeSlot]);
 
   useEffect(() => {
-    getAllBuilding().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setBuildings(res.data || []);
-      }
-    });
-  }, [refreshBuilding]);
-
-  useEffect(() => {
-    getAllBuilding().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setBuildings(res.data || []);
-      }
-    });
+    if (
+      location.pathname === ARRANGE_PATH ||
+      location.pathname === SETTING_DISTANCE_PATH
+    ) {
+      getAllBuilding().then((res) => {
+        if (res.data && res.data.length > 0) {
+          setBuildings(res.data || []);
+        }
+      });
+      getDistances().then((res) => {
+        if (res.data && res.data.length > 0) {
+          setDistances(res.data || []);
+        }
+      });
+    }
   }, [refreshBuilding]);
 
   useEffect(() => {
@@ -207,6 +244,8 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   return (
     <ArrangeContext.Provider
       value={{
+        distances,
+        setDistances,
         currentSemester,
         setCurrentSemester,
         semesters,

@@ -1,21 +1,23 @@
-import { Container } from '@mui/material';
+import { Backdrop, CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { useMemo } from 'react';
+import { useTheme } from '@mui/material/styles';
+import { useMemo, useState } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
-import { deleteSubject } from '~/services/subject';
-import { getSemesterTableColumns } from '../util/columns';
-import { useTheme } from '@mui/material/styles';
-import TableCell from '@mui/material/TableCell';
-import Box from '@mui/material/Box';
 import useArrange from '~/hooks/useArrange';
+import { deleteSemester, updateSemester } from '~/services/semester';
+import { getSemesterTableColumns } from '../util/columns';
 import { Semester } from '../util/type';
-import { deleteSemester } from '~/services/semester';
+import wait from '~/utils/wait';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,7 +27,16 @@ interface Props {
 const SemesterTable = (props: Props) => {
   const theme = useTheme();
   const { setEditMode, setEditingItem } = props;
-  const { refetchSemester, semesters } = useArrange();
+  const {
+    refetchSemester,
+    semesters,
+    refetchLecturer,
+    refetchRoom,
+    refetchClass,
+    refetchSubject,
+    refetchTimeSlot,
+  } = useArrange();
+  const [loading, setLoading] = useState<boolean>(false);
   const columns = useMemo(() => getSemesterTableColumns(), []);
 
   const onEdit = (item: Semester) => async () => {
@@ -35,6 +46,26 @@ const SemesterTable = (props: Props) => {
 
   const onDelete = (item: Semester) => async () => {
     await deleteSemester(item.id).then((res) => refetchSemester());
+  };
+
+  const onChangeCurrentSemester = (item: Semester) => async () => {
+    if (!item.isNow) {
+      setLoading(true);
+      const res = await updateSemester({
+        ...item,
+        isNow: true,
+      });
+      if (res.isSuccess) {
+        refetchSemester();
+        refetchLecturer();
+        refetchRoom();
+        refetchClass();
+        refetchSubject();
+        refetchTimeSlot();
+      }
+      await wait(2000);
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,6 +78,8 @@ const SemesterTable = (props: Props) => {
                 key={item.id}
                 align={item.align}
                 sx={{
+                  border: '1px solid #ccc',
+                  borderSpacing: '2px',
                   left: item.stickyPosition === 'left' ? 0 : 'unset',
                   right: item.stickyPosition === 'right' ? 0 : 'unset',
                   zIndex: item.zIndex
@@ -56,19 +89,27 @@ const SemesterTable = (props: Props) => {
                     : theme.zIndex.appBar,
                 }}
               >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    minWidth: item.minWidth,
-                    minHeight: item.minHeight,
-                  }}
+                <Tooltip
+                  title={
+                    item.label === 'Current Semester' &&
+                    'Double click on cell to set current semester'
+                  }
+                  placement="top"
                 >
-                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                    {item.label}
-                  </Typography>
-                </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      minWidth: item.minWidth,
+                      minHeight: item.minHeight,
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                      {item.label}
+                    </Typography>
+                  </Box>
+                </Tooltip>
               </TableCell>
             ))}
           </TableRow>
@@ -86,7 +127,13 @@ const SemesterTable = (props: Props) => {
                 <TableCellCustom align="center" border={true} hover={true}>
                   <Typography variant="body2">{item.year}</Typography>
                 </TableCellCustom>
-                <TableCellCustom align="center" border={true} hover={true}>
+
+                <TableCellCustom
+                  align="center"
+                  border={true}
+                  hover={true}
+                  onDoubleClick={onChangeCurrentSemester(item)}
+                >
                   <Typography
                     variant="body2"
                     sx={{
@@ -98,17 +145,33 @@ const SemesterTable = (props: Props) => {
                     {item.isNow ? 'CURRENT_SEMESTER' : ''}
                   </Typography>
                 </TableCellCustom>
+
                 <TableCellCustom align="center" border={true} hover={true}>
                   <TableToolCustom
                     item={item}
                     onEdit={onEdit}
-                    onDelete={onDelete}
+                    displayDeleteButton={false}
                   />
                 </TableCellCustom>
               </TableRow>
             ))}
         </TableBody>
       </TableCustom>
+      <Backdrop
+        sx={{
+          color: '#fff',
+          mt: '0 !important',
+          zIndex: 9999,
+        }}
+        open={loading}
+      >
+        <Stack direction="column" spacing={2} sx={{ alignItems: 'center' }}>
+          <CircularProgress sx={{ color: 'white' }} />
+          <Typography variant="body1">
+            Change all data to this semester ...
+          </Typography>
+        </Stack>
+      </Backdrop>
     </TableContainer>
   );
 };

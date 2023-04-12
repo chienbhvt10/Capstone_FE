@@ -92,6 +92,8 @@ const SubjectPreferenceLevel = () => {
                   key={item.id}
                   align={item.align}
                   sx={{
+                    border: '1px solid #ccc',
+                    borderSpacing: '2px',
                     left: item.stickyPosition === 'left' ? 0 : 'unset',
                     right: item.stickyPosition === 'right' ? 0 : 'unset',
                     zIndex: item.zIndex
@@ -110,7 +112,7 @@ const SubjectPreferenceLevel = () => {
                       minHeight: item.minHeight,
                     }}
                   >
-                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                       {item.label}
                     </Typography>
                   </Box>
@@ -129,7 +131,7 @@ const SubjectPreferenceLevel = () => {
                     minHeight={60}
                     border={true}
                   >
-                    <Typography variant="body1">{item.lecturerName}</Typography>
+                    <Typography variant="body2">{item.lecturerName}</Typography>
                   </TableCellCustom>
                   {item.preferenceInfos?.length > 0 &&
                     item.preferenceInfos.map((subject, index) => (

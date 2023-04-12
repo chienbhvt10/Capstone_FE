@@ -51,6 +51,7 @@ const TimeTableSelectSlot = (props: Props) => {
                 align={item.align}
                 minWidth={item.minWidth}
                 minHeight={item.minHeight}
+                border={true}
               >
                 {item.label}
               </TableCellCustom>

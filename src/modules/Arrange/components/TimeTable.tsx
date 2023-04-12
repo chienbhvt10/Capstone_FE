@@ -78,6 +78,8 @@ const TimeTable = () => {
                 key={Math.random()}
                 align={item.align}
                 sx={{
+                  border: '1px solid #ccc',
+                  borderSpacing: '2px',
                   left: item.stickyPosition === 'left' ? 0 : 'unset',
                   right: item.stickyPosition === 'right' ? 0 : 'unset',
                   zIndex: item.zIndex

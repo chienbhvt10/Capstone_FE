@@ -161,13 +161,6 @@ export const slotColumns: readonly Column[] = [
     minHeight: 30,
     align: 'center',
   },
-  {
-    id: 'SUN',
-    label: 'SUN',
-    minWidth: 80,
-    minHeight: 30,
-    align: 'center',
-  },
 ];
 
 export const timeSlotColumns: readonly Column[] = [
@@ -235,14 +228,7 @@ export const timeSlotColumns: readonly Column[] = [
     align: 'center',
     sticky: true,
   },
-  {
-    id: 'SUN',
-    label: 'SUN',
-    minWidth: 80,
-    minHeight: 30,
-    align: 'center',
-    sticky: true,
-  },
+
   {
     id: 'Action',
     label: 'Action',
