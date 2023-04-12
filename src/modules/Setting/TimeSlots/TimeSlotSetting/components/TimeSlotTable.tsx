@@ -24,6 +24,7 @@ import { SegmentByDay, SlotSegment, TimeSlotSegment } from '../../utils/type';
 import EditableCell from './EditableCell';
 import EditableCellForSegment from './EditableCellForSegment';
 import useRefresh from '~/hooks/useRefresh';
+import useArrange from '~/hooks/useArrange';
 
 interface Props {
   refresh: any;
@@ -33,15 +34,20 @@ interface Props {
 
 const TimeSlotTable = (props: Props) => {
   const { numberSlots, refetch, refresh } = props;
+  const { currentSemester } = useArrange();
   const [timeSlots, setTimeSlots] = useState<TimeSlotSegment[]>([]);
 
   useEffect(() => {
-    getTimeSlotSegments().then((res) => {
-      if (res.data) {
-        setTimeSlots(res.data);
-      }
-    });
-  }, [refresh]);
+    if (currentSemester) {
+      getTimeSlotSegments({ semesterId: currentSemester?.id || 0 }).then(
+        (res) => {
+          if (res.data) {
+            setTimeSlots(res.data);
+          }
+        }
+      );
+    }
+  }, [refresh, currentSemester]);
 
   const onDelete = (timeSlot: TimeSlotSegment) => async () => {
     await deleteTimeSlot(timeSlot.timeSlotId).then((res) => {

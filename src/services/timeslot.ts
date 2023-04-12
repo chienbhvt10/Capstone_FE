@@ -22,9 +22,12 @@ import {
 
 //#region TimeSlot Api
 
-export const getTimeSlots = () => {
-  const url = API_GET_TIME_SLOT;
-  return HttpClient.get<null, CommonResponse<TimeSlot[]>>(url);
+export const getTimeSlots = (params: { semesterId: number }) => {
+  const url = API_GET_TIME_SLOT + '/get';
+  return HttpClient.post<typeof params, CommonResponse<TimeSlot[]>>(
+    url,
+    params
+  );
 };
 
 export const createTimeSlot = (params: CreateTimeSlotParams) => {
@@ -46,9 +49,12 @@ export const deleteTimeSlot = async (params: number) => {
 
 //#region TimeSlotSegment Api
 
-export const getTimeSlotSegments = () => {
-  const url = API_GET_TIME_SLOT_SEGMENT;
-  return HttpClient.get<null, CommonResponse<TimeSlotSegment[]>>(url);
+export const getTimeSlotSegments = (params: { semesterId: number }) => {
+  const url = API_GET_TIME_SLOT_SEGMENT + '/get';
+  return HttpClient.post<typeof params, CommonResponse<TimeSlotSegment[]>>(
+    url,
+    params
+  );
 };
 
 export const createTimeSlotSegment = (params: CreateTimeSlotSegmentParams) => {

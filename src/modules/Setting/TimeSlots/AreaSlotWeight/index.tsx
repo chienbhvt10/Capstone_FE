@@ -28,6 +28,7 @@ import { areaSlotWeightItem } from '../utils/data';
 
 const AreaSlotWeight = () => {
   const theme = useTheme();
+  const { currentSemester } = useArrange();
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
 
   const columns = useMemo(
@@ -36,12 +37,14 @@ const AreaSlotWeight = () => {
   );
 
   useEffect(() => {
-    getTimeSlots().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setTimeSlots(res.data || []);
-      }
-    });
-  }, []);
+    if (currentSemester) {
+      getTimeSlots({ semesterId: currentSemester?.id || 0 }).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setTimeSlots(res.data || []);
+        }
+      });
+    }
+  }, [currentSemester]);
 
   const setNotification = useNotification();
   const [loadingTable, setLoadingTable] = useState<boolean>(false);

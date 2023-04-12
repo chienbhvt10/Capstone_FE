@@ -25,6 +25,7 @@ import {
   SlotPreferenceLevelItems,
 } from '../utils/types';
 import { useTheme } from '@mui/material/styles';
+import useArrange from '~/hooks/useArrange';
 
 const SlotPreferenceLevel = () => {
   const theme = useTheme();
@@ -35,14 +36,17 @@ const SlotPreferenceLevel = () => {
   const [slotPreferenceLevels, setSlotPreferenceLevels] = useState<
     LecturerSlotsPreferenceLevel[]
   >([]);
+  const { currentSemester } = useArrange();
 
   useEffect(() => {
-    getTimeSlots().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setTimeSlots(res.data || []);
-      }
-    });
-  }, []);
+    if (currentSemester) {
+      getTimeSlots({ semesterId: currentSemester?.id || 0 }).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setTimeSlots(res.data || []);
+        }
+      });
+    }
+  }, [currentSemester]);
 
   useEffect(() => {
     setLoadingTable(true);

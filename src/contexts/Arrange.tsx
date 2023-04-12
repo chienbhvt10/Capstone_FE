@@ -121,21 +121,25 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [executeId]);
 
   useEffect(() => {
-    getTaskAssigned().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setLecturersTaskAssignInfo(res.data);
-      }
-      getTaskNotAssign().then((res) => {
-        if (
-          res.data &&
-          res.data.timeSlotInfos &&
-          res.data.timeSlotInfos.length > 0
-        ) {
-          setTasksNotAssigned(res.data);
+    if (currentSemester) {
+      getTaskAssigned({ semesterId: currentSemester?.id || 0 }).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setLecturersTaskAssignInfo(res.data);
         }
+        getTaskNotAssign({ semesterId: currentSemester?.id || 0 }).then(
+          (res) => {
+            if (
+              res.data &&
+              res.data.timeSlotInfos &&
+              res.data.timeSlotInfos.length > 0
+            ) {
+              setTasksNotAssigned(res.data);
+            }
+          }
+        );
       });
-    });
-  }, [refresh]);
+    }
+  }, [refresh, currentSemester]);
 
   useEffect(() => {
     getLecturers({
@@ -174,12 +178,14 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [refreshClass]);
 
   useEffect(() => {
-    getTimeSlots().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setTimeSlots(res.data || []);
-      }
-    });
-  }, [refreshTimeSlot]);
+    if (currentSemester) {
+      getTimeSlots({ semesterId: currentSemester?.id || 0 }).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setTimeSlots(res.data || []);
+        }
+      });
+    }
+  }, [refreshTimeSlot, currentSemester]);
 
   useEffect(() => {
     getAllBuilding().then((res) => {

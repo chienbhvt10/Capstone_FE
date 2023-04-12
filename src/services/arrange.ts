@@ -19,27 +19,33 @@ import {
   LecturerAssign,
   SearchTaskParams,
   SearchTaskResponse,
-  Semester,
   SettingParams,
   TaskDetail,
   TimeSlotResponse,
   TimeTableModifyParam,
   TimeTableModifyResponse,
 } from '../modules/Arrange/utils/type';
+import { Semester } from '~/modules/Semester/util/type';
 
 export const getSemester = async () => {
   const url = API_GET_SEMESTER;
   return HttpClient.get<null, CommonResponse<Semester[]>>(url);
 };
 
-export const getTaskNotAssign = async () => {
+export const getTaskNotAssign = async (params: { semesterId: number }) => {
   const url = API_GET_TASK_NOT_ASSIGNED;
-  return HttpClient.get<null, CommonResponse<TimeSlotResponse>>(url);
+  return HttpClient.post<typeof params, CommonResponse<TimeSlotResponse>>(
+    url,
+    params
+  );
 };
 
-export const getTaskAssigned = async () => {
+export const getTaskAssigned = async (params: { semesterId: number }) => {
   const url = API_GET_TASK_ASSIGNED;
-  return HttpClient.get<null, CommonResponse<LecturerAssign[]>>(url);
+  return HttpClient.post<typeof params, CommonResponse<LecturerAssign[]>>(
+    url,
+    params
+  );
 };
 
 export const getATask = async (taskId: number) => {

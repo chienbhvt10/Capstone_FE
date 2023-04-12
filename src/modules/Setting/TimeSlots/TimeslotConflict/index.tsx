@@ -21,6 +21,7 @@ import { SlotConflictData, SlotConflictInfos, TimeSlot } from '../utils/type';
 
 const TimeSlotConflict = () => {
   const theme = useTheme();
+  const { currentSemester } = useArrange();
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const setNotification = useNotification();
   const columns = useMemo(
@@ -29,12 +30,15 @@ const TimeSlotConflict = () => {
   );
 
   useEffect(() => {
-    getTimeSlots().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setTimeSlots(res.data || []);
-      }
-    });
-  }, []);
+    if (currentSemester) {
+      getTimeSlots({ semesterId: currentSemester?.id || 0 }).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setTimeSlots(res.data || []);
+        }
+      });
+    }
+  }, [currentSemester]);
+
   const [timeSlotConflict, setTimeSlotConflict] = useState<SlotConflictData[]>(
     []
   );
