@@ -18,8 +18,9 @@ const SwapTimeTableForm = (props: Props) => {
 
   useEffect(() => {
     getLecturers({
-      timeSlotId: taskSelect?.timeSlotId || 0,
-      subjectId: taskSelect?.subjectId || 0,
+      lecturerId: taskSelect?.lecturerId || null,
+      timeSlotId: taskSelect?.timeSlotId || null,
+      subjectId: taskSelect?.subjectId || null,
     }).then((res) => {
       if (res.data) {
         setLecturerFilter(res.data);

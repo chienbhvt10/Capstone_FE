@@ -24,3 +24,35 @@ export interface Subject {
   semesterId: number;
   department: string;
 }
+
+export interface Lecturer {
+  id: number;
+  name: string;
+  shortName: string;
+  email: string;
+  semesterId: number;
+  quota: number;
+  minQuota: number;
+}
+
+export interface GetLecturersParams {
+  lecturerId: number | null;
+  timeSlotId: number | null;
+  subjectId: number | null;
+}
+export interface CreateLecturerParams {
+  name: string;
+  shortName: string;
+  email: string;
+  quota: number;
+  minQuota: number;
+}
+
+export interface UpdateLecturerParams {
+  id: number;
+  name: string;
+  shortName: string;
+  email: string;
+  quota: number;
+  minQuota: number;
+}

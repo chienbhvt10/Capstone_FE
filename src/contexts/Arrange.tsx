@@ -50,13 +50,10 @@ export interface ArrangeContextValue {
   setSubjects: React.Dispatch<React.SetStateAction<Subject[]>>;
   classes: Class[];
   setClasses: React.Dispatch<React.SetStateAction<Class[]>>;
-  executeInfos: ExecuteInfo[];
-  setExecuteInfos: React.Dispatch<React.SetStateAction<ExecuteInfo[]>>;
   loadingTimeTable: boolean;
   setLoadingTimeTable: React.Dispatch<React.SetStateAction<boolean>>;
   loadingTimeTableModify: boolean;
   setLoadingTimeTableModify: React.Dispatch<React.SetStateAction<boolean>>;
-  refetchListExecuteInfo: React.DispatchWithoutAction;
   refetchLecturer: React.DispatchWithoutAction;
   refetchSubject: React.DispatchWithoutAction;
   refetchRoom: React.DispatchWithoutAction;
@@ -70,6 +67,8 @@ export interface ArrangeContextValue {
   setSemestersSelector: React.Dispatch<React.SetStateAction<Semester | null>>;
   semesters: Semester[];
   setSemesters: React.Dispatch<React.SetStateAction<Semester[]>>;
+  currentSemester: Semester | null;
+  setCurrentSemester: React.Dispatch<React.SetStateAction<Semester | null>>;
 }
 
 export const ArrangeContext = createContext<ArrangeContextValue | null>(null);
@@ -81,7 +80,6 @@ if (process.env.NODE_ENV === 'development') {
 const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const { children } = props;
   const [refresh, refetch] = useRefresh();
-  const [refreshListExecuteInfo, refetchListExecuteInfo] = useRefresh();
   const [refreshLecturer, refetchLecturer] = useRefresh();
   const [refreshSubject, refetchSubject] = useRefresh();
   const [refreshRoom, refetchRoom] = useRefresh();
@@ -92,6 +90,8 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
 
   const [executeId, setExecuteId] = useState<number>(0);
   const [semesters, setSemesters] = useState<Semester[]>([]);
+  const [currentSemester, setCurrentSemester] = useState<Semester | null>(null);
+
   const [lecturersTaskAssignInfo, setLecturersTaskAssignInfo] = useState<
     LecturerAssign[]
   >([]);
@@ -104,7 +104,6 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [classes, setClasses] = useState<Class[]>([]);
-  const [executeInfos, setExecuteInfos] = useState<ExecuteInfo[]>([]);
   const [loadingTimeTable, setLoadingTimeTable] = useState<boolean>(false);
   const [loadingTimeTableModify, setLoadingTimeTableModify] =
     useState<boolean>(false);
@@ -136,15 +135,11 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [refresh]);
 
   useEffect(() => {
-    getExecuteInfos().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setExecuteInfos(res.data || []);
-      }
-    });
-  }, [refreshListExecuteInfo]);
-
-  useEffect(() => {
-    getLecturers().then((res) => {
+    getLecturers({
+      lecturerId: null,
+      subjectId: null,
+      timeSlotId: null,
+    }).then((res) => {
       if (res.data) {
         setLecturers(res.data);
       }
@@ -203,6 +198,8 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
     getSemesters().then((res) => {
       if (res.data && res.data.length > 0) {
         setSemesters(res.data || []);
+        setCurrentSemester(res.data.filter((item) => item.isNow)[0]);
+        setSemestersSelector(res.data.filter((item) => item.isNow)[0]);
       }
     });
   }, [refreshSemester]);
@@ -210,6 +207,8 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   return (
     <ArrangeContext.Provider
       value={{
+        currentSemester,
+        setCurrentSemester,
         semesters,
         setSemesters,
         refetchSemester,
@@ -220,7 +219,6 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         setBuildings,
         loadingTimeTableModify,
         loadingTimeTable,
-        executeInfos,
         classes,
         rooms,
         subjects,
@@ -231,7 +229,6 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         tasksNotAssignedInfo,
         lecturersTaskAssignInfo,
         refetch,
-        refetchListExecuteInfo,
         refetchClass,
         refetchLecturer,
         refetchRoom,
@@ -239,7 +236,6 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         refetchTimeSlot,
         setLoadingTimeTable,
         setLoadingTimeTableModify,
-        setExecuteInfos,
         setClasses,
         setSubjects,
         setRooms,

@@ -170,6 +170,9 @@ const TimeTableModifyForm = () => {
                   Lecturer
                 </Typography>
                 <Select
+                  disabled={
+                    !!taskSelect?.lecturerId && taskSelect?.lecturerId > 0
+                  }
                   value={taskSelect?.lecturerId || 0}
                   onChange={onChangeLecturerSelect}
                 >

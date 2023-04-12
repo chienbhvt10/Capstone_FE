@@ -30,7 +30,7 @@ interface Props {
 
 const SemesterForm = forwardRef<FiltersRef, Props>((props, ref) => {
   const { editMode, editingItem, setEditMode } = props;
-  const { refetchSubject } = useArrange();
+  const { refetchSemester } = useArrange();
 
   const {
     register,
@@ -61,7 +61,7 @@ const SemesterForm = forwardRef<FiltersRef, Props>((props, ref) => {
         semester: value.semester,
       })
         .then((res) => {
-          refetchSubject();
+          refetchSemester();
           setEditMode(false);
           handleReset();
         })
@@ -74,7 +74,7 @@ const SemesterForm = forwardRef<FiltersRef, Props>((props, ref) => {
       semester: value.semester,
     })
       .then((res) => {
-        refetchSubject();
+        refetchSemester();
         handleReset();
       })
       .catch((err) => {});
@@ -118,7 +118,7 @@ const SemesterForm = forwardRef<FiltersRef, Props>((props, ref) => {
               <TextField
                 {...register('semester')}
                 variant="outlined"
-                name="code"
+                name="semester"
                 sx={{ width: 200 }}
               />
               <Typography variant="caption" sx={{ color: 'error.main' }}>
@@ -130,15 +130,15 @@ const SemesterForm = forwardRef<FiltersRef, Props>((props, ref) => {
           <Stack direction="column">
             <Typography variant="body2">
               Year{' '}
-              {/* <Typography component="span" sx={{ color: 'error.main' }}>
+              <Typography component="span" sx={{ color: 'error.main' }}>
                 *
-              </Typography> */}
+              </Typography>
             </Typography>
             <Stack direction="column">
               <TextField
                 {...register('year')}
                 variant="outlined"
-                name="name"
+                name="year"
                 sx={{ width: 200 }}
               />
               <Typography variant="caption" sx={{ color: 'error.main' }}>

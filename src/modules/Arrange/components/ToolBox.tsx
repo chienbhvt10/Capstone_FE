@@ -2,32 +2,46 @@ import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete/Autocomplete';
 import TextField from '@mui/material/TextField/TextField';
 import { Stack } from '@mui/system';
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import useArrange from '~/hooks/useArrange';
 import { Semester } from '~/modules/Semester/util/type';
 import ExcelAndArrangeAction from './ExcelAndArrangeAction';
 import FilterForm from './FilterForm';
+import { getExecuteInfos } from '~/services/execute';
+import useRefresh from '~/hooks/useRefresh';
+import { ExecuteInfo } from '../utils/type';
 
 const ToolBox = () => {
   const {
     executeId,
     setExecuteId,
-    executeInfos,
     setTaskSelect,
     semestersSelector,
     setSemestersSelector,
     semesters,
   } = useArrange();
+  const [executeInfos, setExecuteInfos] = useState<ExecuteInfo[]>([]);
+  const [refreshListExecuteInfo, refetchListExecuteInfo] = useRefresh();
+
+  useEffect(() => {
+    if (semestersSelector) {
+      getExecuteInfos(semestersSelector?.id || 0).then((res) => {
+        setExecuteInfos(res.data || []);
+      });
+    }
+  }, [semestersSelector, refreshListExecuteInfo]);
 
   const onChangeExecuteId = async (event: SelectChangeEvent<number>) => {
     setExecuteId(event.target.value as number);
     setTaskSelect(null);
   };
+
   const onChangeSemestersSelector = (
     event: SyntheticEvent,
     newValue: Semester | null
   ) => {
     setSemestersSelector(newValue);
+    refetchListExecuteInfo();
   };
 
   return (
@@ -36,15 +50,14 @@ const ToolBox = () => {
       <Stack
         direction="column"
         spacing={1}
-        sx={{ border: '1px solid #ccc', p: 1, borderRadius: 1 }}
+        sx={{ border: '1px solid #ccc', p: 1, borderRadius: 1, minWidth: 250 }}
       >
-        <Stack direction="column" sx={{ width: 1, maxWidth: 300 }}>
+        <Stack direction="column" sx={{ width: 1 }}>
           <Autocomplete
             sx={{ width: 1 }}
             size="small"
-            disableCloseOnSelect
             filterSelectedOptions
-            getOptionLabel={(option) => option.semester + ' ' + option.year}
+            getOptionLabel={(option) => `${option.semester} ${option.year}`}
             isOptionEqualToValue={(option, value) => {
               return option.id === value.id;
             }}
@@ -60,10 +73,7 @@ const ToolBox = () => {
             )}
           />
         </Stack>
-        <Stack
-          direction="column"
-          sx={{ width: 1, alignItems: 'center', maxWidth: 300 }}
-        >
+        <Stack direction="column" sx={{ width: 1, alignItems: 'center' }}>
           <Select value={executeId} onChange={onChangeExecuteId}>
             <MenuItem disabled value={0}>
               <em style={{ fontSize: 14 }}>Select Execute Time</em>

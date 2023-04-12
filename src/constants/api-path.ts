@@ -1,6 +1,7 @@
 export const API_GET_ROOMS = '/distance/room';
 export const API_GET_SEMESTER = '/semester';
 export const API_LECTURER = '/lecturer';
+export const API_LECTURER_SEARCH = '/lecturer/search';
 export const API_IMPORT_TIME_TABLE = '/arrange/import-time-table';
 export const API_SEARCH_TASK = '/arrange/search-tasks';
 export const API_EXPORT_IN_IMPORT_FORMAT = '/arrange/export-in-import-format';
