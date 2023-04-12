@@ -1,13 +1,4 @@
 import { createContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import {
-  ARRANGE_PATH,
-  SETTING_DISTANCE_PATH,
-  SETTING_LECTURER_PATH,
-  SETTING_PATH,
-  SETTING_SUBJECT_PATH,
-  SETTING_TIME_SLOT_PATH,
-} from '~/constants/path';
 import useRefresh from '~/hooks/useRefresh';
 import {
   Class,
@@ -123,8 +114,6 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
     null
   );
 
-  const location = useLocation();
-
   useEffect(() => {
     if (executeId) {
       getExecutedArrangeInfo(executeId).then((res) => refetch());
@@ -132,103 +121,77 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [executeId]);
 
   useEffect(() => {
-    if (location.pathname === ARRANGE_PATH) {
-      getTaskAssigned().then((res) => {
-        if (res.data && res.data.length > 0) {
-          setLecturersTaskAssignInfo(res.data);
+    getTaskAssigned().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setLecturersTaskAssignInfo(res.data);
+      }
+      getTaskNotAssign().then((res) => {
+        if (
+          res.data &&
+          res.data.timeSlotInfos &&
+          res.data.timeSlotInfos.length > 0
+        ) {
+          setTasksNotAssigned(res.data);
         }
-        getTaskNotAssign().then((res) => {
-          if (
-            res.data &&
-            res.data.timeSlotInfos &&
-            res.data.timeSlotInfos.length > 0
-          ) {
-            setTasksNotAssigned(res.data);
-          }
-        });
       });
-    }
+    });
   }, [refresh]);
 
   useEffect(() => {
-    if (
-      location.pathname === ARRANGE_PATH ||
-      location.pathname === SETTING_LECTURER_PATH
-    ) {
-      getLecturers({
-        lecturerId: null,
-        subjectId: null,
-        timeSlotId: null,
-      }).then((res) => {
-        if (res.data) {
-          setLecturers(res.data);
-        }
-      });
-    }
+    getLecturers({
+      lecturerId: null,
+      subjectId: null,
+      timeSlotId: null,
+    }).then((res) => {
+      if (res.data) {
+        setLecturers(res.data);
+      }
+    });
   }, [refreshLecturer]);
 
   useEffect(() => {
-    if (
-      location.pathname === ARRANGE_PATH ||
-      location.pathname === SETTING_SUBJECT_PATH
-    ) {
-      getSubjects().then((res) => {
-        if (res.data) {
-          setSubjects(res.data);
-        }
-      });
-    }
+    getSubjects().then((res) => {
+      if (res.data) {
+        setSubjects(res.data);
+      }
+    });
   }, [refreshSubject]);
 
   useEffect(() => {
-    if (location.pathname === ARRANGE_PATH) {
-      getRooms().then((res) => {
-        if (res.data) {
-          setRooms(res.data);
-        }
-      });
-    }
+    getRooms().then((res) => {
+      if (res.data) {
+        setRooms(res.data);
+      }
+    });
   }, [refreshRoom]);
 
   useEffect(() => {
-    if (location.pathname === ARRANGE_PATH) {
-      getClasses().then((res) => {
-        if (res.data) {
-          setClasses(res.data);
-        }
-      });
-    }
+    getClasses().then((res) => {
+      if (res.data) {
+        setClasses(res.data);
+      }
+    });
   }, [refreshClass]);
 
   useEffect(() => {
-    if (
-      location.pathname === ARRANGE_PATH ||
-      location.pathname === SETTING_TIME_SLOT_PATH
-    ) {
-      getTimeSlots().then((res) => {
-        if (res.data && res.data.length > 0) {
-          setTimeSlots(res.data || []);
-        }
-      });
-    }
+    getTimeSlots().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setTimeSlots(res.data || []);
+      }
+    });
   }, [refreshTimeSlot]);
 
   useEffect(() => {
-    if (
-      location.pathname === ARRANGE_PATH ||
-      location.pathname === SETTING_DISTANCE_PATH
-    ) {
-      getAllBuilding().then((res) => {
-        if (res.data && res.data.length > 0) {
-          setBuildings(res.data || []);
-        }
-      });
-      getDistances().then((res) => {
-        if (res.data && res.data.length > 0) {
-          setDistances(res.data || []);
-        }
-      });
-    }
+    getAllBuilding().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setBuildings(res.data || []);
+      }
+    });
+    getDistances().then((res) => {
+      if (res.data && res.data.length > 0) {
+        setDistances(res.data || []);
+      }
+    });
   }, [refreshBuilding]);
 
   useEffect(() => {
