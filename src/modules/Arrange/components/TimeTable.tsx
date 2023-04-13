@@ -68,6 +68,7 @@ const TimeTable = () => {
       sx={{
         maxHeight: 550 + maxLengthNotAssignSlot * 40,
         position: 'relative',
+        width: 0.98,
       }}
     >
       <TableCustom>
