@@ -1,18 +1,25 @@
 import { Button, Container, Stack } from '@mui/material';
-import { Fragment, useEffect, useState } from 'react';
+import Autocomplete from '@mui/material/Autocomplete/Autocomplete';
+import TextField from '@mui/material/TextField/TextField';
+import { Fragment, SyntheticEvent, useEffect, useState } from 'react';
+import useRefresh from '~/hooks/useRefresh';
 import { CreateSegmentData, Slot } from '../utils/type';
+import CreateTimeSlotDialog from './components/CreateDialog';
 import SlotPerDay from './components/SlotPerDay';
 import TimeSlotTable from './components/TimeSlotTable';
 import TimeTableSelectSlot from './components/TimeTableSelectSlot';
-import CreateTimeSlotDialog from './components/CreateDialog';
-import useRefresh from '~/hooks/useRefresh';
 import useArrange from '~/hooks/useArrange';
+import { Semester } from '~/modules/Semester/util/type';
 
 const TimeSlotSetting = () => {
+  const { semesters, currentSemester } = useArrange();
   const [numberSlots, setNumberSlots] = useState<number>(4);
   const [currentSlots, setCurrentSlots] = useState<Slot[]>([]);
   const [showCreateDialog, setShowCreateDialog] = useState<boolean>(false);
   const [refresh, refetch] = useRefresh();
+  const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
+    null
+  );
 
   useEffect(() => {
     if (numberSlots > 0) {
@@ -83,6 +90,14 @@ const TimeSlotSetting = () => {
     setShowCreateDialog(false);
   };
 
+  const onChangeSemestersSelector = (
+    event: SyntheticEvent,
+    newValue: Semester | null
+  ) => {
+    setSemestersSelector(newValue);
+    refetch();
+  };
+
   return (
     <Fragment>
       <Container maxWidth="lg">
@@ -103,6 +118,32 @@ const TimeSlotSetting = () => {
           <Button onClick={onShowCreateDialog} sx={{ mt: 2 }}>
             Create TimeSlot
           </Button>
+        </Stack>
+      </Container>
+      <Container maxWidth="lg">
+        <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+          <Autocomplete
+            sx={{ width: 1, maxWidth: 250 }}
+            size="small"
+            filterSelectedOptions
+            getOptionLabel={(option) => `${option.semester} ${option.year}`}
+            isOptionEqualToValue={(option, value) => {
+              return option.id === value.id;
+            }}
+            options={semesters}
+            value={semestersSelector}
+            onChange={onChangeSemestersSelector}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Select Semester"
+              />
+            )}
+          />
+          {semestersSelector?.id !== currentSemester?.id && (
+            <Button>Reuse for current semester</Button>
+          )}
         </Stack>
       </Container>
       <Container maxWidth="lg">

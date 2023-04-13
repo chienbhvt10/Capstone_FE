@@ -56,6 +56,7 @@ const SlotPreferenceLevel = () => {
           setTimeSlots(res.data || []);
         }
       });
+      setSemestersSelector(currentSemester);
     }
   }, [currentSemester]);
 
@@ -168,7 +169,7 @@ const SlotPreferenceLevel = () => {
                           minHeight: item.minHeight,
                         }}
                       >
-                        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                           {item.label}
                         </Typography>
                       </Box>
@@ -187,7 +188,7 @@ const SlotPreferenceLevel = () => {
                         minHeight={60}
                         border={true}
                       >
-                        <Typography variant="body1">
+                        <Typography variant="body2">
                           {item.lecturerName}
                         </Typography>
                       </TableCellCustom>
