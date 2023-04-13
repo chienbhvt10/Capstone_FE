@@ -22,8 +22,9 @@ import TableToolCustom from '~/components/TableComponents/TableToolCustom';
 import useArrange from '~/hooks/useArrange';
 import { Lecturer } from '~/modules/Lecturer/util/type';
 import { Semester } from '~/modules/Semester/util/type';
-import { deleteLecturer } from '~/services/lecturer';
+import { deleteLecturer, reuseLecturer } from '~/services/lecturer';
 import { getLecturersTableColumns } from '../util/columns';
+import useNotification from '~/hooks/useNotification';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,6 +33,7 @@ interface Props {
 
 const LecturerTable = (props: Props) => {
   const theme = useTheme();
+  const setNotifications = useNotification();
   const { setEditMode, setEditingItem } = props;
   const columns = useMemo(() => getLecturersTableColumns(), []);
   const { semesters, currentSemester, lecturers, refetchLecturer } =
@@ -54,6 +56,7 @@ const LecturerTable = (props: Props) => {
       .then((res) => refetchLecturer())
       .catch((err) => {});
   };
+
   const onChangeSemestersSelector = (
     event: SyntheticEvent,
     newValue: Semester | null
@@ -61,6 +64,20 @@ const LecturerTable = (props: Props) => {
     setSemestersSelector(newValue);
     refetchLecturer();
   };
+
+  const reUseForCurrentSemester = () => {
+    reuseLecturer({
+      fromSemesterId: semestersSelector?.id || 0,
+      toSemesterId: currentSemester?.id || 0,
+    }).then((res) => {
+      if (!res.isSuccess) {
+        setNotifications({ message: res.message, severity: 'error' });
+        return;
+      }
+      setNotifications({ message: res.message, severity: 'success' });
+    });
+  };
+
   return (
     <Stack direction="column" spacing={2} sx={{ width: 1 }}>
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -79,9 +96,12 @@ const LecturerTable = (props: Props) => {
             <TextField {...params} variant="outlined" label="Select Semester" />
           )}
         />
-        {semestersSelector?.id !== currentSemester?.id && (
-          <Button>Reuse for current semester</Button>
-        )}
+        {semestersSelector?.id !== currentSemester?.id &&
+          lecturers.length > 0 && (
+            <Button onClick={reUseForCurrentSemester}>
+              Reuse for current semester
+            </Button>
+          )}
       </Stack>
       <TableContainer sx={{ maxHeight: 600 }}>
         <TableCustom>

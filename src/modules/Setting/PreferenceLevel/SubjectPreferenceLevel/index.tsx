@@ -20,23 +20,24 @@ import useRefresh from '~/hooks/useRefresh';
 import { Semester } from '~/modules/Semester/util/type';
 import {
   getSubjectPreferenceLevels,
+  reuseSubjectPreference,
   updateSubjectPreferenceLevel,
 } from '~/services/preferenceLevel';
 import { getSubjects } from '~/services/subject';
 import wait from '~/utils/wait';
 import { Subject } from '../../Subjects/util/type';
-import { subjectPreferenceLevelItems } from '../utils/data';
 import { getTableSubjectColumns } from '../utils/subjectColumns';
 import {
   LecturerSubjectsPreferenceInfo,
   LecturerSubjectsPreferenceLevel,
   SubjectPreferenceLevelItems,
 } from '../utils/types';
+import { subjectPreferenceLevelItems } from '../utils/data';
 
 const SubjectPreferenceLevel = () => {
   const theme = useTheme();
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const setNotification = useNotification();
+  const setNotifications = useNotification();
   const { semesters, currentSemester } = useArrange();
   const columns = useMemo(() => getTableSubjectColumns(subjects), [subjects]);
   const [loadingTable, setLoadingTable] = useState<boolean>(false);
@@ -91,11 +92,24 @@ const SubjectPreferenceLevel = () => {
       preferenceId: item.preferenceId,
       preferenceLevel: value,
     }).catch((err) =>
-      setNotification({
+      setNotifications({
         message: 'Update error',
         severity: 'error',
       })
     );
+  };
+
+  const reUseForCurrentSemester = () => {
+    reuseSubjectPreference({
+      fromSemesterId: semestersSelector?.id || 0,
+      toSemesterId: currentSemester?.id || 0,
+    }).then((res) => {
+      if (!res.isSuccess) {
+        setNotifications({ message: res.message, severity: 'error' });
+        return;
+      }
+      setNotifications({ message: res.message, severity: 'success' });
+    });
   };
 
   return (
@@ -116,9 +130,12 @@ const SubjectPreferenceLevel = () => {
             <TextField {...params} variant="outlined" label="Select Semester" />
           )}
         />
-        {semestersSelector?.id !== currentSemester?.id && (
-          <Button>Reuse for current semester</Button>
-        )}
+        {semestersSelector?.id !== currentSemester?.id &&
+          subjectPreferenceLevels.length > 0 && (
+            <Button onClick={reUseForCurrentSemester}>
+              Reuse for current semester
+            </Button>
+          )}
       </Stack>
       <TableContainer sx={{ maxHeight: 550, position: 'relative' }}>
         {loadingTable ? (

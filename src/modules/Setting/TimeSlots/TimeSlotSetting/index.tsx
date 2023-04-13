@@ -9,23 +9,56 @@ import {
   useState,
 } from 'react';
 import useRefresh from '~/hooks/useRefresh';
-import { CreateSegmentData, Slot } from '../utils/type';
+import {
+  CreateSegmentData,
+  Slot,
+  TimeSlot,
+  TimeSlotSegment,
+} from '../utils/type';
 import CreateTimeSlotDialog from './components/CreateDialog';
 import SlotPerDay from './components/SlotPerDay';
 import TimeSlotTable from './components/TimeSlotTable';
 import TimeTableSelectSlot from './components/TimeTableSelectSlot';
 import useArrange from '~/hooks/useArrange';
 import { Semester } from '~/modules/Semester/util/type';
+import {
+  getTimeSlotSegments,
+  getTimeSlots,
+  reuseTimeSlot,
+} from '~/services/timeslot';
+import useNotification from '~/hooks/useNotification';
 
 const TimeSlotSetting = () => {
   const { semesters, currentSemester } = useArrange();
+  const setNotifications = useNotification();
   const [numberSlots, setNumberSlots] = useState<number>(4);
   const [currentSlots, setCurrentSlots] = useState<Slot[]>([]);
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>();
   const [showCreateDialog, setShowCreateDialog] = useState<boolean>(false);
   const [refresh, refetch] = useRefresh();
   const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
     null
   );
+  const [timeSlotsSegment, setTimeSlotsSegment] = useState<TimeSlotSegment[]>(
+    []
+  );
+
+  useEffect(() => {
+    if (semestersSelector) {
+      getTimeSlots({ semesterId: semestersSelector?.id || 0 }).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setTimeSlots(res.data || []);
+        }
+      });
+      getTimeSlotSegments({ semesterId: semestersSelector?.id || 0 }).then(
+        (res) => {
+          if (res.data) {
+            setTimeSlotsSegment(res.data);
+          }
+        }
+      );
+    }
+  }, [refresh, semestersSelector]);
 
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
@@ -108,6 +141,19 @@ const TimeSlotSetting = () => {
     refetch();
   };
 
+  const reUseForCurrentSemester = () => {
+    reuseTimeSlot({
+      fromSemesterId: semestersSelector?.id || 0,
+      toSemesterId: currentSemester?.id || 0,
+    }).then((res) => {
+      if (!res.isSuccess) {
+        setNotifications({ message: res.message, severity: 'error' });
+        return;
+      }
+      setNotifications({ message: res.message, severity: 'success' });
+    });
+  };
+
   return (
     <Fragment>
       <Container maxWidth="lg">
@@ -151,13 +197,18 @@ const TimeSlotSetting = () => {
               />
             )}
           />
-          {semestersSelector?.id !== currentSemester?.id && (
-            <Button>Reuse for current semester</Button>
-          )}
+          {semestersSelector?.id !== currentSemester?.id &&
+            timeSlotsSegment?.length > 0 && (
+              <Button onClick={reUseForCurrentSemester}>
+                Reuse for current semester
+              </Button>
+            )}
         </Stack>
       </Container>
       <Container maxWidth="lg">
         <TimeSlotTable
+          timeSlotsSegment={timeSlotsSegment}
+          setTimeSlotsSegment={setTimeSlotsSegment}
           refresh={refresh}
           refetch={refetch}
           numberSlots={numberSlots}

@@ -20,9 +20,10 @@ import TableCustom from '~/components/TableComponents/TableCustom';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
 import useArrange from '~/hooks/useArrange';
 import { Semester } from '~/modules/Semester/util/type';
-import { deleteSubject } from '~/services/subject';
+import { deleteSubject, reuseSubject } from '~/services/subject';
 import { getSubjectTableColumns } from '../util/columns';
 import { Subject } from '../util/type';
+import useNotification from '~/hooks/useNotification';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,6 +32,7 @@ interface Props {
 
 const SubjectTable = (props: Props) => {
   const theme = useTheme();
+  const setNotifications = useNotification();
   const { setEditMode, setEditingItem } = props;
   const { refetchSubject, subjects } = useArrange();
   const columns = useMemo(() => getSubjectTableColumns(), []);
@@ -60,6 +62,18 @@ const SubjectTable = (props: Props) => {
     refetchSubject();
   };
 
+  const reUseForCurrentSemester = () => {
+    reuseSubject({
+      fromSemesterId: semestersSelector?.id || 0,
+      toSemesterId: currentSemester?.id || 0,
+    }).then((res) => {
+      if (!res.isSuccess) {
+        setNotifications({ message: res.message, severity: 'error' });
+        return;
+      }
+      setNotifications({ message: res.message, severity: 'success' });
+    });
+  };
   return (
     <Stack direction="column" spacing={2} sx={{ width: 1 }}>
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -78,9 +92,12 @@ const SubjectTable = (props: Props) => {
             <TextField {...params} variant="outlined" label="Select Semester" />
           )}
         />
-        {semestersSelector?.id !== currentSemester?.id && (
-          <Button>Reuse for current semester</Button>
-        )}
+        {semestersSelector?.id !== currentSemester?.id &&
+          subjects.length > 0 && (
+            <Button onClick={reUseForCurrentSemester}>
+              Reuse for current semester
+            </Button>
+          )}
       </Stack>
       <TableContainer sx={{ maxHeight: 600 }}>
         <TableCustom>

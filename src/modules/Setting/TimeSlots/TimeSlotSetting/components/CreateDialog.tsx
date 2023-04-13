@@ -36,7 +36,6 @@ interface Props {
 
 const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
   const { open, onCloseCreateDialog, onGetValueSegment, refetch } = props;
-  const { refetchTimeSlot } = useArrange();
 
   const {
     register,
@@ -57,7 +56,6 @@ const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
       segments: segmentValue,
     }).then((res) => {
       refetch();
-      refetchTimeSlot();
       onCloseCreateDialog();
       handleReset();
     });

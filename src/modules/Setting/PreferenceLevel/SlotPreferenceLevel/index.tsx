@@ -20,6 +20,7 @@ import useRefresh from '~/hooks/useRefresh';
 import { Semester } from '~/modules/Semester/util/type';
 import {
   getSlotPreferenceLevels,
+  reuseSlotPreference,
   updateSlotPreferenceLevel,
 } from '~/services/preferenceLevel';
 import { getTimeSlots } from '~/services/timeslot';
@@ -35,8 +36,9 @@ import {
 
 const SlotPreferenceLevel = () => {
   const theme = useTheme();
+
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
-  const setNotification = useNotification();
+  const setNotifications = useNotification();
   const columns = useMemo(() => getTableSlotColumns(timeSlots), [timeSlots]);
   const [loadingTable, setLoadingTable] = useState<boolean>(false);
   const [slotPreferenceLevels, setSlotPreferenceLevels] = useState<
@@ -92,13 +94,24 @@ const SlotPreferenceLevel = () => {
       preferenceId: item.preferenceId,
       preferenceLevel: value,
     }).catch((err) =>
-      setNotification({
+      setNotifications({
         message: 'Update error',
         severity: 'error',
       })
     );
   };
-
+  const reUseForCurrentSemester = () => {
+    reuseSlotPreference({
+      fromSemesterId: semestersSelector?.id || 0,
+      toSemesterId: currentSemester?.id || 0,
+    }).then((res) => {
+      if (!res.isSuccess) {
+        setNotifications({ message: res.message, severity: 'error' });
+        return;
+      }
+      setNotifications({ message: res.message, severity: 'success' });
+    });
+  };
   return (
     <Fragment>
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -117,9 +130,12 @@ const SlotPreferenceLevel = () => {
             <TextField {...params} variant="outlined" label="Select Semester" />
           )}
         />
-        {semestersSelector?.id !== currentSemester?.id && (
-          <Button>Reuse for current semester</Button>
-        )}
+        {semestersSelector?.id !== currentSemester?.id &&
+          slotPreferenceLevels.length > 0 && (
+            <Button onClick={reUseForCurrentSemester}>
+              Reuse for current semester
+            </Button>
+          )}
       </Stack>
 
       <TableContainer sx={{ maxHeight: 550, position: 'relative' }}>

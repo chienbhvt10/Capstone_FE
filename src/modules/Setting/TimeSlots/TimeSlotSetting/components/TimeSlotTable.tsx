@@ -30,31 +30,19 @@ interface Props {
   refresh: any;
   numberSlots: number;
   refetch: React.DispatchWithoutAction;
+  timeSlotsSegment: TimeSlotSegment[];
+  setTimeSlotsSegment: React.Dispatch<React.SetStateAction<TimeSlotSegment[]>>;
 }
 
 const TimeSlotTable = (props: Props) => {
-  const { numberSlots, refetch, refresh } = props;
-  const { currentSemester } = useArrange();
-  const [timeSlots, setTimeSlots] = useState<TimeSlotSegment[]>([]);
-
-  useEffect(() => {
-    if (currentSemester) {
-      getTimeSlotSegments({ semesterId: currentSemester?.id || 0 }).then(
-        (res) => {
-          if (res.data) {
-            setTimeSlots(res.data);
-          }
-        }
-      );
-    }
-  }, [refresh, currentSemester]);
+  const { numberSlots, refetch, timeSlotsSegment, setTimeSlotsSegment } = props;
 
   const onDelete = (timeSlot: TimeSlotSegment) => async () => {
     await deleteTimeSlot(timeSlot.timeSlotId).then((res) => {
-      const newTimeSlot = timeSlots.filter(
+      const newTimeSlot = timeSlotsSegment.filter(
         (t) => t.timeSlotId !== timeSlot.timeSlotId
       );
-      setTimeSlots(newTimeSlot);
+      setTimeSlotsSegment(newTimeSlot);
     });
   };
 
@@ -93,7 +81,7 @@ const TimeSlotTable = (props: Props) => {
       amorPm: value || 0,
       name: timeSlot?.timeSlotName || '',
     }).then((res) => {
-      const newTimeSlot = timeSlots.map((timeSlot) => {
+      const newTimeSlot = timeSlotsSegment.map((timeSlot) => {
         if (timeSlot.timeSlotId === timeSlot.timeSlotId) {
           return {
             ...timeSlot,
@@ -102,7 +90,7 @@ const TimeSlotTable = (props: Props) => {
         }
         return timeSlot;
       });
-      setTimeSlots(newTimeSlot);
+      setTimeSlotsSegment(newTimeSlot);
     });
   };
 
@@ -135,7 +123,12 @@ const TimeSlotTable = (props: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {timeSlots.map((timeSlot) => (
+          {timeSlotsSegment.length === 0 && (
+            <Typography variant="body2" sx={{ color: 'error.main' }}>
+              Please insert more information
+            </Typography>
+          )}
+          {timeSlotsSegment.map((timeSlot) => (
             <TableRow
               role="checkbox"
               tabIndex={-1}
