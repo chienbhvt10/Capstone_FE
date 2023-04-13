@@ -10,7 +10,7 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import useArrange from '~/hooks/useArrange';
 import useNotification from '~/hooks/useNotification';
 import {
@@ -19,23 +19,36 @@ import {
   unLockAllTask,
 } from '../../../services/arrange';
 import SwapTimeTableForm from './SwapTimeTableForm';
+import { Lecturer } from '~/modules/Setting/Lecturers/util/type';
+import { getLecturers } from '~/services/lecturer';
 
 const TimeTableModifyForm = () => {
-  const {
-    taskSelect,
-    setTaskSelect,
-    lecturers,
-    loadingTimeTableModify,
-    refetch,
-  } = useArrange();
+  const { taskSelect, setTaskSelect, loadingTimeTableModify, refetch } =
+    useArrange();
   const setNotification = useNotification();
+  const [lecturerFilter, setLecturerFilter] = useState<Lecturer[]>([]);
+  const [selectedLecturerIdSwap, setSelectedLecturerIdSwap] =
+    useState<number>(0);
+
+  useEffect(() => {
+    getLecturers({
+      lecturerId: taskSelect?.lecturerId || null,
+      timeSlotId: taskSelect?.timeSlotId || null,
+      subjectId: taskSelect?.subjectId || null,
+    })
+      .then((res) => {
+        if (res.data) {
+          setLecturerFilter(res.data);
+        }
+      })
+      .finally(() => {
+        setSelectedLecturerIdSwap(taskSelect?.lecturerId || 0);
+      });
+  }, [taskSelect]);
 
   const onChangeLecturerSelect = (event: SelectChangeEvent<number>) => {
     if (taskSelect) {
-      setTaskSelect({
-        ...taskSelect,
-        lecturerId: (event.target.value as number) || 0,
-      });
+      setSelectedLecturerIdSwap((event.target.value as number) || 0);
     }
   };
 
@@ -171,16 +184,16 @@ const TimeTableModifyForm = () => {
                 </Typography>
                 <Select
                   disabled={
-                    !!taskSelect?.lecturerId && taskSelect?.lecturerId > 0
+                    !!selectedLecturerIdSwap && selectedLecturerIdSwap > 0
                   }
-                  value={taskSelect?.lecturerId || 0}
+                  value={selectedLecturerIdSwap}
                   onChange={onChangeLecturerSelect}
                 >
                   <MenuItem disabled value={0}>
                     <em style={{ fontSize: 14 }}>Select Lecturer</em>
                   </MenuItem>
-                  {lecturers.length &&
-                    lecturers?.map((item) => (
+                  {lecturerFilter?.length &&
+                    lecturerFilter?.map((item) => (
                       <MenuItem key={Math.random()} value={item.id}>
                         {item.shortName}
                       </MenuItem>

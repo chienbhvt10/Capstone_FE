@@ -59,6 +59,7 @@ const SwapTimeTableForm = (props: Props) => {
           Lecturer
         </Typography>
         <Select
+          disabled={!taskSelect?.lecturerId}
           value={selectedLecturerIdSwap}
           onChange={onChangeLecturerSelect}
         >
