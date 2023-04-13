@@ -1,20 +1,17 @@
 import HttpClient from '~/utils/HttpClient';
 import { CommonResponse } from '~/utils/TypeCommon';
-import { API_SUBJECT } from '../constants/api-path';
-import { Subject } from '~/modules/Setting/Subjects/util/type';
+import { API_REUSE_SUBJECT, API_SUBJECT } from '../constants/api-path';
+import {
+  CreateSubjectParams,
+  Subject,
+  UpdateSubjectParams,
+} from '~/modules/Setting/Subjects/util/type';
+import { ReuseParams } from '~/utils/types';
 
-interface CreateSubjectParams {
-  code: string;
-  name: string;
-  department: string;
-}
-
-interface UpdateSubjectParams {
-  id: number;
-  code: string;
-  name: string;
-  department: string;
-}
+export const reuseSubject = (params: ReuseParams) => {
+  const url = API_REUSE_SUBJECT;
+  return HttpClient.post<typeof params, CommonResponse>(url, params);
+};
 
 export const createSubject = async (params: CreateSubjectParams) => {
   const url = API_SUBJECT;

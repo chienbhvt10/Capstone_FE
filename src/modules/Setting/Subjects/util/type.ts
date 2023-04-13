@@ -24,3 +24,16 @@ export interface Subject {
   semesterId: number;
   department: string;
 }
+
+export interface CreateSubjectParams {
+  code: string;
+  name: string;
+  department: string;
+}
+
+export interface UpdateSubjectParams {
+  id: number;
+  code: string;
+  name: string;
+  department: string;
+}

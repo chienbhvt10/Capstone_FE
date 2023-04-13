@@ -1,20 +1,11 @@
 import HttpClient from '~/utils/HttpClient';
 import { CommonResponse } from '~/utils/TypeCommon';
 import { API_GET_SEMESTER } from '../constants/api-path';
-import { Semester } from '~/modules/Semester/util/type';
-
-interface CreateSemesterParams {
-  isNow?: boolean;
-  year: string;
-  semester: string;
-}
-
-interface UpdateSemesterParams {
-  id: number;
-  isNow?: boolean;
-  year: string;
-  semester: string;
-}
+import {
+  CreateSemesterParams,
+  Semester,
+  UpdateSemesterParams,
+} from '~/modules/Semester/util/type';
 
 export const createSemester = async (params: CreateSemesterParams) => {
   const url = API_GET_SEMESTER;

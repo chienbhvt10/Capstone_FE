@@ -1,12 +1,17 @@
 import HttpClient from '~/utils/HttpClient';
 import { CommonResponse } from '~/utils/TypeCommon';
-import { API_LECTURER, API_LECTURER_SEARCH } from '../constants/api-path';
+import {
+  API_LECTURER,
+  API_LECTURER_SEARCH,
+  API_REUSE_LECTURER,
+} from '../constants/api-path';
 import {
   CreateLecturerParams,
   GetLecturersParams,
   Lecturer,
   UpdateLecturerParams,
 } from '~/modules/Setting/Lecturers/util/type';
+import { ReuseParams } from '~/utils/types';
 
 export const getLecturers = async (params: GetLecturersParams) => {
   const url = API_LECTURER_SEARCH;
@@ -14,6 +19,11 @@ export const getLecturers = async (params: GetLecturersParams) => {
     url,
     params
   );
+};
+
+export const reuseLecturer = (params: ReuseParams) => {
+  const url = API_REUSE_LECTURER;
+  return HttpClient.post<typeof params, CommonResponse>(url, params);
 };
 
 export const getLecturer = async (params: number) => {

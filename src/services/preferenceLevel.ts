@@ -1,4 +1,6 @@
 import {
+  API_REUSE_SLOT_PREFERENCE,
+  API_REUSE_SUBJECT_PREFERENCE,
   API_SLOT_PREFERENCE_LEVELS,
   API_SUBJECT_PREFERENCE_LEVELS,
 } from '~/constants/api-path';
@@ -10,6 +12,17 @@ import {
 } from '~/modules/Setting/PreferenceLevel/utils/types';
 import HttpClient from '~/utils/HttpClient';
 import { CommonResponse } from '~/utils/TypeCommon';
+import { ReuseParams } from '~/utils/types';
+
+export const reuseSlotPreference = (params: ReuseParams) => {
+  const url = API_REUSE_SLOT_PREFERENCE + '/get';
+  return HttpClient.post<typeof params, CommonResponse>(url, params);
+};
+
+export const reuseSubjectPreference = (params: ReuseParams) => {
+  const url = API_REUSE_SUBJECT_PREFERENCE + '/get';
+  return HttpClient.post<typeof params, CommonResponse>(url, params);
+};
 
 export const updateSlotPreferenceLevel = async (
   params: UpdateSlotPreferenceLevel

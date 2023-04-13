@@ -17,8 +17,10 @@ import {
   API_AREA_TIME_SLOT_WEIGHT,
   API_GET_TIME_SLOT,
   API_GET_TIME_SLOT_SEGMENT,
+  API_REUSE_TIME_SLOT,
   API_TIME_SLOT_CONFLICT,
 } from '../constants/api-path';
+import { ReuseParams } from '~/utils/types';
 
 //#region TimeSlot Api
 
@@ -28,6 +30,11 @@ export const getTimeSlots = (params: { semesterId: number }) => {
     url,
     params
   );
+};
+
+export const reuseTimeSlot = (params: ReuseParams) => {
+  const url = API_REUSE_TIME_SLOT + '/get';
+  return HttpClient.post<typeof params, CommonResponse>(url, params);
 };
 
 export const createTimeSlot = (params: CreateTimeSlotParams) => {

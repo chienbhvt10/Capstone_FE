@@ -16,3 +16,16 @@ export interface Semester {
   semester: string;
   year: string;
 }
+
+export interface CreateSemesterParams {
+  isNow?: boolean;
+  year: string;
+  semester: string;
+}
+
+export interface UpdateSemesterParams {
+  id: number;
+  isNow?: boolean;
+  year: string;
+  semester: string;
+}
