@@ -1,7 +1,13 @@
 import { Button, Container, Stack } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete/Autocomplete';
 import TextField from '@mui/material/TextField/TextField';
-import { Fragment, SyntheticEvent, useEffect, useState } from 'react';
+import {
+  Fragment,
+  SyntheticEvent,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import useRefresh from '~/hooks/useRefresh';
 import { CreateSegmentData, Slot } from '../utils/type';
 import CreateTimeSlotDialog from './components/CreateDialog';
@@ -20,6 +26,10 @@ const TimeSlotSetting = () => {
   const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
     null
   );
+
+  useLayoutEffect(() => {
+    setSemestersSelector(currentSemester);
+  }, [currentSemester]);
 
   useEffect(() => {
     if (numberSlots > 0) {
