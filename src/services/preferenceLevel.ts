@@ -25,17 +25,22 @@ export const updateSubjectPreferenceLevel = async (
   return HttpClient.put<typeof params, CommonResponse>(url, params);
 };
 
-export const getSlotPreferenceLevels = async () => {
+export const getSlotPreferenceLevels = async (params: {
+  semesterId: number;
+}) => {
   const url = API_SLOT_PREFERENCE_LEVELS;
-  return HttpClient.get<null, CommonResponse<LecturerSlotsPreferenceLevel[]>>(
-    url
-  );
+  return HttpClient.post<
+    typeof params,
+    CommonResponse<LecturerSlotsPreferenceLevel[]>
+  >(url, params);
 };
 
-export const getSubjectPreferenceLevels = async () => {
+export const getSubjectPreferenceLevels = async (params: {
+  semesterId: number;
+}) => {
   const url = API_SUBJECT_PREFERENCE_LEVELS;
-  return HttpClient.get<
-    null,
+  return HttpClient.post<
+    typeof params,
     CommonResponse<LecturerSubjectsPreferenceLevel[]>
-  >(url);
+  >(url, params);
 };
