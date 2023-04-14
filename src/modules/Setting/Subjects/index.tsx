@@ -6,11 +6,28 @@ import SubjectForm from './components/SubjectForm';
 import SubjectTable from './components/SubjectTable';
 import { Subject } from './util/type';
 import useRefresh from '~/hooks/useRefresh';
+import { Semester } from '~/modules/Semester/util/type';
 
 const SubjectsSetting = () => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editingItem, setEditingItem] = useState<Subject | null>(null);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [refresh, refetch] = useRefresh();
+  const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
+    null
+  );
 
+  useEffect(() => {
+    if (semestersSelector) {
+      getSubjects({
+        semesterId: semestersSelector?.id || 0,
+      }).then((res) => {
+        if (res.data) {
+          setSubjects(res.data);
+        }
+      });
+    }
+  }, [semestersSelector, refresh]);
   return (
     <PageWrapper title="Subjects Setting">
       <Stack
@@ -29,10 +46,15 @@ const SubjectsSetting = () => {
           editMode={editMode}
           editingItem={editingItem}
           setEditMode={setEditMode}
+          refetch={refetch}
         />
         <SubjectTable
+          refetch={refetch}
+          semestersSelector={semestersSelector}
+          subjects={subjects}
           setEditMode={setEditMode}
           setEditingItem={setEditingItem}
+          setSemestersSelector={setSemestersSelector}
         />
       </Stack>
     </PageWrapper>

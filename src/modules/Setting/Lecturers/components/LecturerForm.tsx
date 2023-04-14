@@ -30,11 +30,11 @@ interface Props {
   editMode: boolean;
   editingItem: Lecturer | null;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: React.DispatchWithoutAction;
 }
 
 const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
-  const { editMode, editingItem, setEditMode } = props;
-  const { refetchLecturer } = useArrange();
+  const { editMode, editingItem, setEditMode, refetch } = props;
   const {
     register,
     handleSubmit,
@@ -67,7 +67,7 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
         quota: value.quota,
       })
         .then((res) => {
-          refetchLecturer();
+          refetch();
           setEditMode(false);
           handleReset();
         })
@@ -83,7 +83,7 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
       quota: value.quota,
     })
       .then((res) => {
-        refetchLecturer();
+        refetch();
         handleReset();
       })
       .catch((err) => {});

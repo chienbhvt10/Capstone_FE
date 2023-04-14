@@ -28,9 +28,9 @@ export const deleteSubject = async (params: number) => {
   return HttpClient.delete<typeof params, CommonResponse>(url);
 };
 
-export const getSubjects = async () => {
-  const url = API_SUBJECT;
-  return HttpClient.get<number, CommonResponse<Subject[]>>(url);
+export const getSubjects = async (params: { semesterId: number }) => {
+  const url = API_SUBJECT + '/get';
+  return HttpClient.post<typeof params, CommonResponse<Subject[]>>(url, params);
 };
 
 export const getSubject = async (params: number) => {

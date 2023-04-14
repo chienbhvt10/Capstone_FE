@@ -12,18 +12,20 @@ export const getTableSubjectColumns = (subjects?: Subject[]) => {
     stickyPosition: 'left',
     zIndex: 1111,
   });
+  if (subjects?.length && subjects?.length > 0) {
+    const columnsDefined: Column[] =
+      subjects?.map((item) => ({
+        id: item.id + '',
+        label: item.code,
+        minWidth: 60,
+        align: 'center',
+        minHeight: null,
+        sticky: true,
+        stickyPosition: null,
+        format: null,
+      })) ?? [];
 
-  const columnsDefined: Column[] =
-    subjects?.map((item) => ({
-      id: item.id + '',
-      label: item.code,
-      minWidth: 60,
-      align: 'center',
-      minHeight: null,
-      sticky: true,
-      stickyPosition: null,
-      format: null,
-    })) ?? [];
-
-  return [...columns, ...columnsDefined];
+    return [...columns, ...columnsDefined];
+  }
+  return columns;
 };

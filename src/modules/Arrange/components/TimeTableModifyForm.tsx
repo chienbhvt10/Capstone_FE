@@ -23,8 +23,13 @@ import { Lecturer } from '~/modules/Setting/Lecturers/util/type';
 import { getLecturers } from '~/services/lecturer';
 
 const TimeTableModifyForm = () => {
-  const { taskSelect, setTaskSelect, loadingTimeTableModify, refetch } =
-    useArrange();
+  const {
+    taskSelect,
+    setTaskSelect,
+    loadingTimeTableModify,
+    refetch,
+    semestersSelector,
+  } = useArrange();
   const setNotification = useNotification();
   const [lecturerFilter, setLecturerFilter] = useState<Lecturer[]>([]);
   const [selectedLecturerIdSwap, setSelectedLecturerIdSwap] =
@@ -35,6 +40,7 @@ const TimeTableModifyForm = () => {
       lecturerId: taskSelect?.lecturerId || null,
       timeSlotId: taskSelect?.timeSlotId || null,
       subjectId: taskSelect?.subjectId || null,
+      semesterId: semestersSelector?.id || null,
     })
       .then((res) => {
         if (res.data) {
@@ -44,7 +50,7 @@ const TimeTableModifyForm = () => {
       .finally(() => {
         setSelectedLecturerIdSwap(taskSelect?.lecturerId || 0);
       });
-  }, [taskSelect]);
+  }, [taskSelect, semestersSelector]);
 
   const onChangeLecturerSelect = (event: SelectChangeEvent<number>) => {
     if (taskSelect) {

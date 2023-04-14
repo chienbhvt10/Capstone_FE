@@ -10,7 +10,14 @@ import TextField from '@mui/material/TextField/TextField';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { Stack } from '@mui/system';
-import { Fragment, SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import {
+  Fragment,
+  SyntheticEvent,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
@@ -36,8 +43,8 @@ import { subjectPreferenceLevelItems } from '../utils/data';
 
 const SubjectPreferenceLevel = () => {
   const theme = useTheme();
-  const [subjects, setSubjects] = useState<Subject[]>([]);
   const setNotifications = useNotification();
+  const [subjects, setSubjects] = useState<Subject[]>([]);
   const { semesters, currentSemester } = useArrange();
   const columns = useMemo(() => getTableSubjectColumns(subjects), [subjects]);
   const [loadingTable, setLoadingTable] = useState<boolean>(false);
@@ -50,20 +57,9 @@ const SubjectPreferenceLevel = () => {
   const [refresh, refetch] = useRefresh();
 
   useEffect(() => {
-    if (currentSemester) {
-      getSubjects().then((res) => {
-        if (res.data) {
-          setSubjects(res.data);
-        }
-      });
-      setSemestersSelector(currentSemester);
-    }
-  }, [currentSemester]);
-
-  useEffect(() => {
     if (semestersSelector) {
       setLoadingTable(true);
-      getSubjects().then((res) => {
+      getSubjects({ semesterId: semestersSelector.id || 0 }).then((res) => {
         if (res.data) {
           setSubjects(res.data);
         }
@@ -78,6 +74,10 @@ const SubjectPreferenceLevel = () => {
         });
     }
   }, [refresh, semestersSelector]);
+
+  useLayoutEffect(() => {
+    setSemestersSelector(currentSemester);
+  }, [currentSemester]);
 
   const onChangeSemestersSelector = (
     event: SyntheticEvent,

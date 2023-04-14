@@ -9,38 +9,39 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField/TextField';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import React, {
-  SyntheticEvent,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { SyntheticEvent, useLayoutEffect, useMemo } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
 import useArrange from '~/hooks/useArrange';
+import useNotification from '~/hooks/useNotification';
 import { Lecturer } from '~/modules/Lecturer/util/type';
 import { Semester } from '~/modules/Semester/util/type';
 import { deleteLecturer, reuseLecturer } from '~/services/lecturer';
 import { getLecturersTableColumns } from '../util/columns';
-import useNotification from '~/hooks/useNotification';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   setEditingItem: React.Dispatch<React.SetStateAction<Lecturer | null>>;
+  refetch: React.DispatchWithoutAction;
+  setSemestersSelector: React.Dispatch<React.SetStateAction<Semester | null>>;
+  semestersSelector: Semester | null;
+  lecturers: Lecturer[];
 }
 
 const LecturerTable = (props: Props) => {
   const theme = useTheme();
   const setNotifications = useNotification();
-  const { setEditMode, setEditingItem } = props;
+  const {
+    setEditMode,
+    setEditingItem,
+    refetch,
+    setSemestersSelector,
+    semestersSelector,
+    lecturers,
+  } = props;
   const columns = useMemo(() => getLecturersTableColumns(), []);
-  const { semesters, currentSemester, lecturers, refetchLecturer } =
-    useArrange();
-  const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
-    null
-  );
+  const { semesters, currentSemester } = useArrange();
 
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
@@ -53,7 +54,7 @@ const LecturerTable = (props: Props) => {
 
   const onDelete = (item: Lecturer) => async () => {
     await deleteLecturer(item.id)
-      .then((res) => refetchLecturer())
+      .then((res) => refetch())
       .catch((err) => {});
   };
 
@@ -62,7 +63,7 @@ const LecturerTable = (props: Props) => {
     newValue: Semester | null
   ) => {
     setSemestersSelector(newValue);
-    refetchLecturer();
+    refetch();
   };
 
   const reUseForCurrentSemester = () => {
@@ -141,6 +142,11 @@ const LecturerTable = (props: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
+            {lecturers.length === 0 && (
+              <Typography variant="body2" sx={{ color: 'error.main' }}>
+                Please insert more information
+              </Typography>
+            )}
             {lecturers?.length > 0 &&
               lecturers.map((item, index) => (
                 <TableRow role="checkbox" tabIndex={-1} key={item.id}>

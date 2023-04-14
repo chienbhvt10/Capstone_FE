@@ -26,11 +26,11 @@ interface Props {
   editMode: boolean;
   editingItem: Subject | null;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: React.DispatchWithoutAction;
 }
 
 const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
-  const { editMode, editingItem, setEditMode } = props;
-  const { refetchSubject } = useArrange();
+  const { editMode, editingItem, setEditMode, refetch } = props;
 
   const {
     register,
@@ -62,7 +62,7 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
         name: value.name,
       })
         .then((res) => {
-          refetchSubject();
+          refetch();
           setEditMode(false);
           handleReset();
         })
@@ -76,7 +76,7 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
       code: value.code,
     })
       .then((res) => {
-        refetchSubject();
+        refetch();
         handleReset();
       })
       .catch((err) => {});

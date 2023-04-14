@@ -10,7 +10,14 @@ import TextField from '@mui/material/TextField/TextField';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { Stack } from '@mui/system';
-import { Fragment, useEffect, useMemo, useState, SyntheticEvent } from 'react';
+import {
+  Fragment,
+  useEffect,
+  useMemo,
+  useState,
+  SyntheticEvent,
+  useLayoutEffect,
+} from 'react';
 import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
@@ -36,37 +43,24 @@ import {
 
 const SlotPreferenceLevel = () => {
   const theme = useTheme();
-
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
-  const setNotifications = useNotification();
+  const { semesters, currentSemester } = useArrange();
   const columns = useMemo(() => getTableSlotColumns(timeSlots), [timeSlots]);
+  const setNotifications = useNotification();
   const [loadingTable, setLoadingTable] = useState<boolean>(false);
   const [slotPreferenceLevels, setSlotPreferenceLevels] = useState<
     LecturerSlotsPreferenceLevel[]
   >([]);
   const [refresh, refetch] = useRefresh();
-  const { semesters, currentSemester } = useArrange();
-
   const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
     null
   );
 
   useEffect(() => {
-    if (currentSemester) {
-      getTimeSlots({ semesterId: currentSemester?.id || 0 }).then((res) => {
-        if (res.data && res.data.length > 0) {
-          setTimeSlots(res.data || []);
-        }
-      });
-      setSemestersSelector(currentSemester);
-    }
-  }, [currentSemester]);
-
-  useEffect(() => {
     if (semestersSelector) {
       setLoadingTable(true);
       getTimeSlots({ semesterId: semestersSelector?.id || 0 }).then((res) => {
-        if (res.data && res.data.length > 0) {
+        if (res.data) {
           setTimeSlots(res.data || []);
         }
       });
@@ -80,6 +74,10 @@ const SlotPreferenceLevel = () => {
         });
     }
   }, [semestersSelector, refresh]);
+
+  useLayoutEffect(() => {
+    setSemestersSelector(currentSemester);
+  }, [currentSemester]);
 
   const onChangeSemestersSelector = (
     event: SyntheticEvent,
@@ -100,6 +98,7 @@ const SlotPreferenceLevel = () => {
       })
     );
   };
+
   const reUseForCurrentSemester = () => {
     reuseSlotPreference({
       fromSemesterId: semestersSelector?.id || 0,
@@ -112,6 +111,7 @@ const SlotPreferenceLevel = () => {
       setNotifications({ message: res.message, severity: 'success' });
     });
   };
+
   return (
     <Fragment>
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>

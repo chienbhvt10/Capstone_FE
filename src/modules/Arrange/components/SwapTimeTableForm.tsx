@@ -11,7 +11,7 @@ import { getLecturers } from '~/services/lecturer';
 interface Props {}
 
 const SwapTimeTableForm = (props: Props) => {
-  const { taskSelect, setTaskSelect, rooms } = useArrange();
+  const { taskSelect, setTaskSelect, semestersSelector, rooms } = useArrange();
   const [lecturerFilter, setLecturerFilter] = useState<Lecturer[]>([]);
   const [selectedLecturerIdSwap, setSelectedLecturerIdSwap] =
     useState<number>(0);
@@ -21,12 +21,13 @@ const SwapTimeTableForm = (props: Props) => {
       lecturerId: taskSelect?.lecturerId || null,
       timeSlotId: taskSelect?.timeSlotId || null,
       subjectId: taskSelect?.subjectId || null,
+      semesterId: semestersSelector?.id || 0,
     }).then((res) => {
       if (res.data) {
         setLecturerFilter(res.data);
       }
     });
-  }, [taskSelect]);
+  }, [taskSelect, semestersSelector]);
 
   const onChangeLecturerSelect = (event: SelectChangeEvent<number>) => {
     if (taskSelect) {

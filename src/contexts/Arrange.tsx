@@ -142,23 +142,28 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [refresh, currentSemester]);
 
   useEffect(() => {
-    getLecturers({
-      lecturerId: null,
-      subjectId: null,
-      timeSlotId: null,
-    }).then((res) => {
-      if (res.data) {
-        setLecturers(res.data);
-      }
-    });
-  }, [refreshLecturer]);
+    if (currentSemester) {
+      getLecturers({
+        lecturerId: null,
+        subjectId: null,
+        timeSlotId: null,
+        semesterId: currentSemester?.id || 0,
+      }).then((res) => {
+        if (res.data) {
+          setLecturers(res.data);
+        }
+      });
+    }
+  }, [refreshLecturer, currentSemester]);
 
   useEffect(() => {
-    getSubjects().then((res) => {
-      if (res.data) {
-        setSubjects(res.data);
-      }
-    });
+    if (currentSemester) {
+      getSubjects({ semesterId: currentSemester?.id || 0 }).then((res) => {
+        if (res.data) {
+          setSubjects(res.data);
+        }
+      });
+    }
   }, [refreshSubject]);
 
   useEffect(() => {

@@ -13,18 +13,20 @@ export const getTableSlotColumns = (slots?: TimeSlot[]) => {
     stickyPosition: 'left',
     zIndex: 1111,
   });
+  if (slots?.length && slots?.length > 0) {
+    const columnsDefined: Column[] =
+      slots?.map((item) => ({
+        id: item.id + '',
+        label: item.name,
+        minWidth: 60,
+        align: 'center',
+        minHeight: null,
+        sticky: true,
+        stickyPosition: null,
+        format: null,
+      })) ?? [];
 
-  const columnsDefined: Column[] =
-    slots?.map((item) => ({
-      id: item.id + '',
-      label: item.name,
-      minWidth: 60,
-      align: 'center',
-      minHeight: null,
-      sticky: true,
-      stickyPosition: null,
-      format: null,
-    })) ?? [];
-
-  return [...columns, ...columnsDefined];
+    return [...columns, ...columnsDefined];
+  }
+  return columns;
 };

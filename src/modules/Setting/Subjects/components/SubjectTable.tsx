@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import React, {
   SyntheticEvent,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useState,
@@ -20,26 +21,39 @@ import TableCustom from '~/components/TableComponents/TableCustom';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
 import useArrange from '~/hooks/useArrange';
 import { Semester } from '~/modules/Semester/util/type';
-import { deleteSubject, reuseSubject } from '~/services/subject';
+import {
+  deleteSubject,
+  getSubject,
+  getSubjects,
+  reuseSubject,
+} from '~/services/subject';
 import { getSubjectTableColumns } from '../util/columns';
 import { Subject } from '../util/type';
 import useNotification from '~/hooks/useNotification';
+import useRefresh from '~/hooks/useRefresh';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   setEditingItem: React.Dispatch<React.SetStateAction<Subject | null>>;
+  setSemestersSelector: React.Dispatch<React.SetStateAction<Semester | null>>;
+  refetch: React.DispatchWithoutAction;
+  semestersSelector: Semester | null;
+  subjects: Subject[];
 }
 
 const SubjectTable = (props: Props) => {
   const theme = useTheme();
   const setNotifications = useNotification();
-  const { setEditMode, setEditingItem } = props;
-  const { refetchSubject, subjects } = useArrange();
+  const {
+    setEditMode,
+    setEditingItem,
+    refetch,
+    setSemestersSelector,
+    semestersSelector,
+    subjects,
+  } = props;
   const columns = useMemo(() => getSubjectTableColumns(), []);
   const { semesters, currentSemester } = useArrange();
-  const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
-    null
-  );
 
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
@@ -51,7 +65,7 @@ const SubjectTable = (props: Props) => {
   };
 
   const onDelete = (item: Subject) => async () => {
-    await deleteSubject(item.id).then((res) => refetchSubject());
+    await deleteSubject(item.id).then((res) => refetch());
   };
 
   const onChangeSemestersSelector = (
@@ -59,7 +73,7 @@ const SubjectTable = (props: Props) => {
     newValue: Semester | null
   ) => {
     setSemestersSelector(newValue);
-    refetchSubject();
+    refetch();
   };
 
   const reUseForCurrentSemester = () => {
@@ -74,6 +88,7 @@ const SubjectTable = (props: Props) => {
       setNotifications({ message: res.message, severity: 'success' });
     });
   };
+
   return (
     <Stack direction="column" spacing={2} sx={{ width: 1 }}>
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -137,6 +152,11 @@ const SubjectTable = (props: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
+            {subjects.length === 0 && (
+              <Typography variant="body2" sx={{ color: 'error.main' }}>
+                Please insert more information
+              </Typography>
+            )}
             {subjects?.length > 0 &&
               subjects.map((item, index) => (
                 <TableRow role="checkbox" tabIndex={-1} key={item.id}>

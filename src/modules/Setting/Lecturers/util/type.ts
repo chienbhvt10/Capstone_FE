@@ -39,6 +39,7 @@ export interface GetLecturersParams {
   lecturerId: number | null;
   timeSlotId: number | null;
   subjectId: number | null;
+  semesterId: number | null;
 }
 export interface CreateLecturerParams {
   name: string;
