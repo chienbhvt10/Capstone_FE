@@ -40,7 +40,7 @@ const TimeTableModifyForm = () => {
       lecturerId: taskSelect?.lecturerId || null,
       timeSlotId: taskSelect?.timeSlotId || null,
       subjectId: taskSelect?.subjectId || null,
-      semesterId: semestersSelector?.id || null,
+      semesterId: semestersSelector?.id || 0,
     })
       .then((res) => {
         if (res.data) {

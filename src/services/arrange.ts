@@ -48,9 +48,15 @@ export const getTaskAssigned = async (params: { semesterId: number }) => {
   );
 };
 
-export const getATask = async (taskId: number) => {
-  const url = API_GET_A_TASK + taskId;
-  return HttpClient.get<number, CommonResponse<TaskDetail>>(url);
+export const getATask = async (params: {
+  semesterId: number;
+  taskId: number;
+}) => {
+  const url = API_GET_A_TASK;
+  return HttpClient.post<typeof params, CommonResponse<TaskDetail>>(
+    url,
+    params
+  );
 };
 
 export const executeArrange = async (params: SettingParams) => {

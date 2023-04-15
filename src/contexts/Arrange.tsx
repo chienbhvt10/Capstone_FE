@@ -72,6 +72,8 @@ export interface ArrangeContextValue {
   setCurrentSemester: React.Dispatch<React.SetStateAction<Semester | null>>;
   setDistances: React.Dispatch<React.SetStateAction<BuildingDistanceData[]>>;
   distances: BuildingDistanceData[];
+  refreshListExecuteInfo: any;
+  refetchListExecuteInfo: React.DispatchWithoutAction;
 }
 
 export const ArrangeContext = createContext<ArrangeContextValue | null>(null);
@@ -113,6 +115,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
     null
   );
+  const [refreshListExecuteInfo, refetchListExecuteInfo] = useRefresh();
 
   useEffect(() => {
     if (executeId) {
@@ -121,25 +124,27 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [executeId]);
 
   useEffect(() => {
-    if (currentSemester) {
-      getTaskAssigned({ semesterId: currentSemester?.id || 0 }).then((res) => {
-        if (res.data && res.data.length > 0) {
-          setLecturersTaskAssignInfo(res.data);
-        }
-        getTaskNotAssign({ semesterId: currentSemester?.id || 0 }).then(
-          (res) => {
-            if (
-              res.data &&
-              res.data.timeSlotInfos &&
-              res.data.timeSlotInfos.length > 0
-            ) {
-              setTasksNotAssigned(res.data);
-            }
+    if (semestersSelector) {
+      getTaskAssigned({ semesterId: semestersSelector?.id || 0 }).then(
+        (res) => {
+          if (res.data && res.data.length > 0) {
+            setLecturersTaskAssignInfo(res.data);
           }
-        );
-      });
+          getTaskNotAssign({ semesterId: semestersSelector?.id || 0 }).then(
+            (res) => {
+              if (
+                res.data &&
+                res.data.timeSlotInfos &&
+                res.data.timeSlotInfos.length > 0
+              ) {
+                setTasksNotAssigned(res.data);
+              }
+            }
+          );
+        }
+      );
     }
-  }, [refresh, currentSemester]);
+  }, [refresh, semestersSelector]);
 
   useEffect(() => {
     if (currentSemester) {
@@ -164,7 +169,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         }
       });
     }
-  }, [refreshSubject]);
+  }, [refreshSubject, currentSemester]);
 
   useEffect(() => {
     getRooms().then((res) => {
@@ -218,6 +223,8 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   return (
     <ArrangeContext.Provider
       value={{
+        refetchListExecuteInfo,
+        refreshListExecuteInfo,
         distances,
         setDistances,
         currentSemester,

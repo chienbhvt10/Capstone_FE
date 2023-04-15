@@ -19,9 +19,10 @@ const ToolBox = () => {
     semestersSelector,
     setSemestersSelector,
     semesters,
+    refreshListExecuteInfo,
+    refetchListExecuteInfo,
   } = useArrange();
   const [executeInfos, setExecuteInfos] = useState<ExecuteInfo[]>([]);
-  const [refreshListExecuteInfo, refetchListExecuteInfo] = useRefresh();
 
   useEffect(() => {
     if (semestersSelector) {

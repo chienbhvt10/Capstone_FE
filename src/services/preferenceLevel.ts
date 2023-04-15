@@ -15,12 +15,12 @@ import { CommonResponse } from '~/utils/TypeCommon';
 import { ReuseParams } from '~/utils/types';
 
 export const reuseSlotPreference = (params: ReuseParams) => {
-  const url = API_REUSE_SLOT_PREFERENCE + '/get';
+  const url = API_REUSE_SLOT_PREFERENCE;
   return HttpClient.post<typeof params, CommonResponse>(url, params);
 };
 
 export const reuseSubjectPreference = (params: ReuseParams) => {
-  const url = API_REUSE_SUBJECT_PREFERENCE + '/get';
+  const url = API_REUSE_SUBJECT_PREFERENCE;
   return HttpClient.post<typeof params, CommonResponse>(url, params);
 };
 

@@ -25,7 +25,7 @@ interface Props {
 // sua lai thanh reacthookform
 const SettingModelDialog = (props: Props) => {
   const { openDialog, onCloseDialog: onClose } = props;
-  const { refetch, refetchListExecuteInfo, refetchClass, refetchRoom } =
+  const { refetch, refetchClass, refetchRoom, refetchListExecuteInfo } =
     useArrange();
   const [solver, setSolver] = useState<number>(0);
   const [strategy, setStrategy] = useState<number>(0);
@@ -195,14 +195,21 @@ const SettingModelDialog = (props: Props) => {
       strategy: strategy,
     })
       .then((res) => {
-        refetch();
-        refetchClass();
-        refetchRoom();
-        refetchListExecuteInfo();
-        setNotification({
-          message: 'Execute Arrange success',
-          severity: 'success',
-        });
+        if (res.isSuccess) {
+          refetch();
+          refetchClass();
+          refetchRoom();
+          refetchListExecuteInfo();
+          setNotification({
+            message: 'Execute Arrange success',
+            severity: 'success',
+          });
+        } else {
+          setNotification({
+            message: res.message,
+            severity: 'error',
+          });
+        }
       })
       .catch((err) =>
         setNotification({

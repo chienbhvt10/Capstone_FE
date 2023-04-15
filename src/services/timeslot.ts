@@ -33,7 +33,7 @@ export const getTimeSlots = (params: { semesterId: number }) => {
 };
 
 export const reuseTimeSlot = (params: ReuseParams) => {
-  const url = API_REUSE_TIME_SLOT + '/get';
+  const url = API_REUSE_TIME_SLOT;
   return HttpClient.post<typeof params, CommonResponse>(url, params);
 };
 

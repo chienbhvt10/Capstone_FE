@@ -12,7 +12,11 @@ import { Fragment, useEffect, useMemo, useState } from 'react';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import useArrange from '~/hooks/useArrange';
 import wait from '~/utils/wait';
-import { getATask } from '../../../services/arrange';
+import {
+  getATask,
+  getTaskAssigned,
+  getTaskNotAssign,
+} from '../../../services/arrange';
 import { getTableTimeSlotColumns } from '../utils/column';
 import { notAssignRows } from '../utils/row';
 
@@ -23,6 +27,7 @@ const TimeTable = () => {
     tasksNotAssignedInfo,
     timeSlots,
     loadingTimeTable,
+    semestersSelector,
     setTaskSelect,
     setLoadingTimeTableModify,
   } = useArrange();
@@ -52,7 +57,10 @@ const TimeTable = () => {
     if (taskId != 0) {
       try {
         setLoadingTimeTableModify(true);
-        const res = await getATask(taskId);
+        const res = await getATask({
+          taskId: taskId,
+          semesterId: semestersSelector?.id || 0,
+        });
         await wait(300);
         if (res.data) {
           setTaskSelect(res.data);

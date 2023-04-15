@@ -83,7 +83,7 @@ const ExcelAndArrangeAction = (props: Props) => {
           <UploadExcelButton
             sx={{ maxHeight: 40, height: 1 }}
             onSelect={handleUploadExcel}
-            title="Import Timetable"
+            title="Import timetable"
           />
         </Stack>
         <Stack direction="column" spacing={1}>
