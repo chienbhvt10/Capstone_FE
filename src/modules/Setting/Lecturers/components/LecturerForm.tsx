@@ -4,6 +4,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import useArrange from '~/hooks/useArrange';
+import useAuth from '~/hooks/useAuth';
 import { Lecturer } from '~/modules/Lecturer/util/type';
 import { createLecturer, updateLecturer } from '~/services/lecturer';
 import Validation from '~/utils/Validation';
@@ -34,6 +36,8 @@ interface Props {
 
 const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
   const { editMode, editingItem, setEditMode, refetch } = props;
+  const { currentSemester } = useArrange();
+  const { user } = useAuth();
   const {
     register,
     handleSubmit,
@@ -51,6 +55,8 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
         email: editingItem.email,
         shortName: editingItem.shortName,
         name: editingItem.name,
+        minQuota: editingItem.minQuota,
+        quota: editingItem.quota,
       });
     }
   }, [editingItem]);
@@ -80,10 +86,12 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
       shortName: value.shortName,
       minQuota: value.minQuota,
       quota: value.quota,
+      departmentHeadId: user?.id || 0,
+      semesterId: currentSemester?.id || 0,
     })
       .then((res) => {
-        refetch();
         handleReset();
+        refetch();
       })
       .catch((err) => {});
   };

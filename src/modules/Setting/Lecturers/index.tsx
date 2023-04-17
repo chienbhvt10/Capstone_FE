@@ -7,30 +7,34 @@ import LecturerTable from './components/LecturerTable';
 import useRefresh from '~/hooks/useRefresh';
 import { Semester } from '~/modules/Semester/util/type';
 import { getLecturers } from '~/services/lecturer';
+import useAuth from '~/hooks/useAuth';
 
 const LecturersSetting = () => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editingItem, setEditingItem] = useState<Lecturer | null>(null);
   const [refresh, refetch] = useRefresh();
+  const { user } = useAuth();
   const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
     null
   );
   const [lecturers, setLecturers] = useState<Lecturer[]>([]);
 
   useEffect(() => {
-    if (semestersSelector) {
+    if (semestersSelector && user) {
       getLecturers({
         lecturerId: null,
         subjectId: null,
         timeSlotId: null,
         semesterId: semestersSelector?.id || 0,
+        departmentHeadId: user?.id || 0,
       }).then((res) => {
         if (res.data) {
           setLecturers(res.data);
         }
       });
     }
-  }, [semestersSelector, refresh]);
+  }, [semestersSelector, refresh, user]);
+
   return (
     <PageWrapper title="Lecturers Setting">
       <Stack

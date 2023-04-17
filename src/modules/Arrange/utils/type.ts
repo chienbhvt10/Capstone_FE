@@ -104,6 +104,7 @@ export interface ExecuteInfo {
   semesterId: number;
 }
 export interface SettingParams {
+  departmentHeadId: number;
   maxSearchingTime: number;
   solver: number;
   strategy: number;

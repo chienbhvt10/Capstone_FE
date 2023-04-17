@@ -15,6 +15,7 @@ import images from '~/assets/images';
 import Image from '~/components/styledComponents/Image';
 import { SOLVER, STRATEGY } from '~/constants';
 import useArrange from '~/hooks/useArrange';
+import useAuth from '~/hooks/useAuth';
 import useNotification from '~/hooks/useNotification';
 import { executeArrange } from '~/services/arrange';
 
@@ -27,6 +28,7 @@ const SettingModelDialog = (props: Props) => {
   const { openDialog, onCloseDialog: onClose } = props;
   const { refetch, refetchClass, refetchRoom, refetchListExecuteInfo } =
     useArrange();
+  const { user } = useAuth();
   const [solver, setSolver] = useState<number>(0);
   const [strategy, setStrategy] = useState<number>(0);
   const [maxSearchingTime, setMaxSearchingTime] = useState<number>(0);
@@ -170,6 +172,7 @@ const SettingModelDialog = (props: Props) => {
     }
     setLoadingExecuted(true);
     executeArrange({
+      departmentHeadId: user?.id || 0,
       maxSearchingTime: maxSearchingTime,
       objectiveOption: [
         O01_Activated ? 1 : 0,
@@ -204,6 +207,7 @@ const SettingModelDialog = (props: Props) => {
             message: 'Execute Arrange success',
             severity: 'success',
           });
+          onClose();
         } else {
           setNotification({
             message: res.message,

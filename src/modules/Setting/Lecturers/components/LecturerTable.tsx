@@ -49,6 +49,7 @@ const LecturerTable = (props: Props) => {
 
   const onEdit = (item: Lecturer) => () => {
     setEditMode(true);
+    console.log(item);
     setEditingItem(item);
   };
 
@@ -151,7 +152,7 @@ const LecturerTable = (props: Props) => {
               lecturers.map((item, index) => (
                 <TableRow role="checkbox" tabIndex={-1} key={item.id}>
                   <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body2">{index}</Typography>
+                    <Typography variant="body2">{index + 1}</Typography>
                   </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
                     <Typography variant="body2">{item.email}</Typography>

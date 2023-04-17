@@ -60,7 +60,7 @@ const SubjectPreferenceLevel = () => {
 
   useEffect(() => {
     if (semestersSelector && user) {
-      setLoadingTable(true);
+      // setLoadingTable(true);
       getSubjects({
         semesterId: semestersSelector.id || null,
         departmentHeadId: user?.id || null,
@@ -77,8 +77,8 @@ const SubjectPreferenceLevel = () => {
           setSubjectPreferenceLevels(res.data || []);
         })
         .finally(async () => {
-          await wait(500);
-          setLoadingTable(false);
+          // await wait(500);
+          // setLoadingTable(false);
         });
     }
   }, [refresh, semestersSelector, user]);
@@ -99,12 +99,16 @@ const SubjectPreferenceLevel = () => {
     updateSubjectPreferenceLevel({
       preferenceId: item.preferenceId,
       preferenceLevel: value,
-    }).catch((err) =>
-      setNotifications({
-        message: 'Update error',
-        severity: 'error',
+    })
+      .then((res) => {
+        refetch();
       })
-    );
+      .catch((err) =>
+        setNotifications({
+          message: 'Update error',
+          severity: 'error',
+        })
+      );
   };
 
   const reUseForCurrentSemester = () => {

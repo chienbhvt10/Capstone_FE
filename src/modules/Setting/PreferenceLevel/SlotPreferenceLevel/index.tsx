@@ -60,7 +60,7 @@ const SlotPreferenceLevel = () => {
 
   useEffect(() => {
     if (semestersSelector && user) {
-      setLoadingTable(true);
+      // setLoadingTable(true);
       getTimeSlots({
         semesterId: currentSemester?.id || null,
         departmentHeadId: user?.id || null,
@@ -77,8 +77,8 @@ const SlotPreferenceLevel = () => {
           setSlotPreferenceLevels(res.data || []);
         })
         .finally(async () => {
-          await wait(500);
-          setLoadingTable(false);
+          // await wait(500);
+          // setLoadingTable(false);
         });
     }
   }, [semestersSelector, refresh, user]);
@@ -99,12 +99,16 @@ const SlotPreferenceLevel = () => {
     updateSlotPreferenceLevel({
       preferenceId: item.preferenceId,
       preferenceLevel: value,
-    }).catch((err) =>
-      setNotifications({
-        message: 'Update error',
-        severity: 'error',
+    })
+      .then((res) => {
+        refetch();
       })
-    );
+      .catch((err) =>
+        setNotifications({
+          message: 'Update error',
+          severity: 'error',
+        })
+      );
   };
 
   const reUseForCurrentSemester = () => {
