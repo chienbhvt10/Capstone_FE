@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import AddIcon from '@mui/icons-material/Add';
+import SaveIcon from '@mui/icons-material/Save';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -7,8 +8,6 @@ import { Lecturer } from '~/modules/Lecturer/util/type';
 import { createLecturer, updateLecturer } from '~/services/lecturer';
 import Validation from '~/utils/Validation';
 import { FiltersRef } from '~/utils/form';
-import SaveIcon from '@mui/icons-material/Save';
-import useArrange from '~/hooks/useArrange';
 
 interface LecturerForm {
   name: string;

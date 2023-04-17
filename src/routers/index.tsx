@@ -21,6 +21,8 @@ const routes: RouteObject[] = [
         index: true,
         element: <ArrangePage />,
       },
+
+      authRoutes,
       arrangeRoutes,
       registerRoutes,
       settingRoutes,

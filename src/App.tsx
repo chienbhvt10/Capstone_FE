@@ -8,6 +8,7 @@ import { NotificationProvider } from './contexts/Notification';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ArrangeProvider } from './contexts/Arrange';
+import { AuthProvider } from './contexts/Auth';
 
 const App = () => {
   return (
@@ -15,12 +16,14 @@ const App = () => {
       <HistoryRouter history={history}>
         <SettingsProvider>
           <NotificationProvider>
-            <ArrangeProvider>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <CssBaseline />
-                <Routers />
-              </LocalizationProvider>
-            </ArrangeProvider>
+            <AuthProvider>
+              <ArrangeProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <CssBaseline />
+                  <Routers />
+                </LocalizationProvider>
+              </ArrangeProvider>
+            </AuthProvider>
           </NotificationProvider>
         </SettingsProvider>
       </HistoryRouter>

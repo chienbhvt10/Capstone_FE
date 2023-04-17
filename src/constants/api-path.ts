@@ -31,3 +31,4 @@ export const API_TIME_SLOT_CONFLICT = '/time-slot/conflict';
 export const API_AREA_TIME_SLOT_WEIGHT = '/time-slot/slot-weight';
 export const API_BUILDING = '/distance/building';
 export const API_DISTANCE = '/distance';
+export const API_LOGIN = '/auth/login';

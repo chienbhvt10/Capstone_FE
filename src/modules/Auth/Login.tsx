@@ -1,21 +1,84 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import { Container } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
-import images from '~/assets/images';
-import Image from '~/components/styledComponents/Image';
 import PageWrapper from '~/components/PageWrapper';
 import { HOME_PATH } from '~/constants/path';
 import useNotification from '~/hooks/useNotification';
+import { login } from '~/services/auth';
+import LocalStorage from '~/utils/LocalStorage';
+import Validation from '~/utils/Validation';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { forwardRef, useImperativeHandle } from 'react';
+import { FiltersRef } from '~/utils/form';
+import useAuth from '~/hooks/useAuth';
 
-const Login = () => {
+interface LoginForm {
+  username: string;
+  password: string;
+}
+
+const schema = Validation.shape({
+  username: Validation.string().required('Username is required'),
+  password: Validation.string().required('Password is required'),
+});
+
+interface Props {}
+
+const Login = forwardRef<FiltersRef, Props>((props, ref) => {
   const navigate = useNavigate();
   const setNotification = useNotification();
+  const { refetch } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    mode: 'onChange',
+    resolver: yupResolver(schema),
+    defaultValues: schema.getDefault(),
+  });
 
-  const onLogin = () => {
-    navigate(HOME_PATH);
-    setNotification({ severity: 'success', message: 'Login successfully!' });
+  const onSubmit = (value: LoginForm) => {
+    login({
+      username: value.username,
+      password: value.password,
+    })
+      .then((res) => {
+        if (res.isSuccess && res.data) {
+          LocalStorage.set('currentUser', res.data);
+          navigate(HOME_PATH);
+          setNotification({
+            severity: 'success',
+            message: 'Login successfully!',
+          });
+          refetch();
+          return;
+        }
+        if (!res.isSuccess) {
+          setNotification({
+            severity: 'error',
+            message: res.message,
+          });
+        }
+      })
+      .catch((err) => {
+        setNotification({
+          severity: 'error',
+          message: 'Login fail',
+        });
+      });
   };
+
+  const handleReset = () => {
+    reset(schema.getDefault());
+  };
+  useImperativeHandle(ref, () => ({
+    reset: handleReset,
+    submit: handleSubmit(onSubmit),
+  }));
 
   return (
     <PageWrapper title="Manage Page">
@@ -25,41 +88,67 @@ const Login = () => {
             <Typography variant="h5" align="center" sx={{ pb: 2 }}>
               Welcome to TimeTable <br /> Schedule app
             </Typography>
-            <Stack direction="column" sx={{ pt: 3 }}>
-              <Typography variant="body2">Username</Typography>
-              <TextField placeholder="Enter username" size="medium" />
-            </Stack>
-            <Stack direction="column">
-              <Typography variant="body2">Password</Typography>
-              <TextField placeholder="Enter password" size="medium" />
-            </Stack>
-
-            <Stack direction="column" sx={{ pt: 3 }}>
-              <Button size="medium" fullWidth onClick={onLogin}>
-                Login
-              </Button>
-              <Button
-                size="medium"
-                fullWidth
-                variant="outlined"
-                startIcon={
-                  <Image
-                    src={images.iconGoogle}
-                    alt=""
-                    sx={{ width: 25, height: 25 }}
-                  />
-                }
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Stack
+                direction="column"
+                spacing={0}
+                sx={{
+                  p: 2,
+                  borderRadius: 0.5,
+                }}
               >
-                <Typography variant="body2" sx={{ ml: 1, letterSpacing: 1 }}>
-                  FPT.EDU.VN
-                </Typography>
-              </Button>
-            </Stack>
+                <Stack direction="column" spacing={1}>
+                  <Typography variant="body2">
+                    Username{' '}
+                    <Typography component="span" sx={{ color: 'error.main' }}>
+                      *
+                    </Typography>
+                  </Typography>
+                  <Stack direction="column" spacing={1}>
+                    <TextField
+                      {...register('username')}
+                      variant="outlined"
+                      name="username"
+                    />
+                    <Typography variant="caption" sx={{ color: 'error.main' }}>
+                      {errors.username?.message &&
+                        `*${errors.username?.message}`}
+                    </Typography>
+                  </Stack>
+                </Stack>
+
+                <Stack direction="column">
+                  <Typography variant="body2">
+                    Password{' '}
+                    <Typography component="span" sx={{ color: 'error.main' }}>
+                      *
+                    </Typography>
+                  </Typography>
+                  <Stack direction="column">
+                    <TextField
+                      {...register('password')}
+                      variant="outlined"
+                      name="password"
+                    />
+                    <Typography variant="caption" sx={{ color: 'error.main' }}>
+                      {errors.password?.message &&
+                        `*${errors.password?.message}`}
+                    </Typography>
+                  </Stack>
+                </Stack>
+
+                <Stack direction="column" sx={{ pt: 3 }}>
+                  <Button size="medium" type="submit" fullWidth>
+                    Login
+                  </Button>
+                </Stack>
+              </Stack>
+            </form>
           </Stack>
         </Paper>
       </Container>
     </PageWrapper>
   );
-};
+});
 
 export default Login;

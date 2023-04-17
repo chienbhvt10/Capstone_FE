@@ -8,7 +8,14 @@ export interface Column {
   stickyPosition?: 'right' | 'left';
   format?: (value: number) => string;
 }
+
 export interface ReuseParams {
   fromSemesterId: number;
   toSemesterId: number;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  departmentId: number;
 }

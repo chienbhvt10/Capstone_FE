@@ -10,6 +10,7 @@ import images from '~/assets/images';
 import Image from '~/components/styledComponents/Image';
 import { LOGIN_PATH } from '~/constants/path';
 import useNotification from '~/hooks/useNotification';
+import LocalStorage from '~/utils/LocalStorage';
 
 export const drawerWidth = 240;
 
@@ -28,6 +29,7 @@ const Header = (props: Props) => {
   const setNotification = useNotification();
 
   const onLogout = () => {
+    LocalStorage.remove('currentUser');
     navigate(LOGIN_PATH);
     setNotification({ severity: 'success', message: 'Logged out' });
   };
