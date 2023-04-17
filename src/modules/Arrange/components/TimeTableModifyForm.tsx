@@ -21,6 +21,7 @@ import {
 import SwapTimeTableForm from './SwapTimeTableForm';
 import { Lecturer } from '~/modules/Setting/Lecturers/util/type';
 import { getLecturers } from '~/services/lecturer';
+import useAuth from '~/hooks/useAuth';
 
 const TimeTableModifyForm = () => {
   const {
@@ -30,6 +31,7 @@ const TimeTableModifyForm = () => {
     refetch,
     semestersSelector,
   } = useArrange();
+  const { user } = useAuth();
   const setNotification = useNotification();
   const [lecturerFilter, setLecturerFilter] = useState<Lecturer[]>([]);
   const [selectedLecturerIdSwap, setSelectedLecturerIdSwap] =
@@ -41,6 +43,7 @@ const TimeTableModifyForm = () => {
       timeSlotId: taskSelect?.timeSlotId || null,
       subjectId: taskSelect?.subjectId || null,
       semesterId: semestersSelector?.id || 0,
+      departmentHeadId: user?.id || 0,
     })
       .then((res) => {
         if (res.data) {

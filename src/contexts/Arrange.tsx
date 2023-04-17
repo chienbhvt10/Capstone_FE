@@ -157,7 +157,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         subjectId: null,
         timeSlotId: null,
         semesterId: currentSemester?.id || 0,
-        departmentHeadId: user?.id || null,
+        departmentHeadId: user?.id || 0,
       }).then((res) => {
         if (res.data) {
           setLecturers(res.data);

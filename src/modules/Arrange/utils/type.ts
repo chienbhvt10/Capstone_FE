@@ -126,7 +126,7 @@ export interface SearchTaskResponse {
   dataNotAssign: TimeSlotResponse;
 }
 export interface GetATaskParams {
-  semesterId: number;
+  semesterId: number | null;
   taskId: number;
-  departmentHeadId: number;
+  departmentHeadId: number | null;
 }

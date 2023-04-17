@@ -19,6 +19,7 @@ import {
 } from '../../../services/arrange';
 import { getTableTimeSlotColumns } from '../utils/column';
 import { notAssignRows } from '../utils/row';
+import useAuth from '~/hooks/useAuth';
 
 const TimeTable = () => {
   const theme = useTheme();
@@ -31,7 +32,7 @@ const TimeTable = () => {
     setTaskSelect,
     setLoadingTimeTableModify,
   } = useArrange();
-
+  const { user } = useAuth();
   const columns = useMemo(
     () => getTableTimeSlotColumns(timeSlots),
     [timeSlots]
@@ -59,7 +60,8 @@ const TimeTable = () => {
         setLoadingTimeTableModify(true);
         const res = await getATask({
           taskId: taskId,
-          semesterId: semestersSelector?.id || 0,
+          semesterId: semestersSelector?.id || null,
+          departmentHeadId: user?.id || null,
         });
         await wait(300);
         if (res.data) {

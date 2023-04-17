@@ -5,12 +5,14 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import useArrange from '~/hooks/useArrange';
+import useAuth from '~/hooks/useAuth';
 import { Lecturer } from '~/modules/Lecturer/util/type';
 import { getLecturers } from '~/services/lecturer';
 
 interface Props {}
 
 const SwapTimeTableForm = (props: Props) => {
+  const { user } = useAuth();
   const { taskSelect, setTaskSelect, semestersSelector, rooms } = useArrange();
   const [lecturerFilter, setLecturerFilter] = useState<Lecturer[]>([]);
   const [selectedLecturerIdSwap, setSelectedLecturerIdSwap] =
@@ -22,6 +24,7 @@ const SwapTimeTableForm = (props: Props) => {
       timeSlotId: taskSelect?.timeSlotId || null,
       subjectId: taskSelect?.subjectId || null,
       semesterId: semestersSelector?.id || 0,
+      departmentHeadId: user?.id || 0,
     }).then((res) => {
       if (res.data) {
         setLecturerFilter(res.data);
