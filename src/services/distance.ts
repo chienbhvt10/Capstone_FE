@@ -9,8 +9,9 @@ import {
   CreateBuildingParams,
   Room,
   UpdateDistanceParams,
-  interfaceUpdateBuildingParams,
+  UpdateBuildingParams,
 } from '~/modules/Setting/Rooms/util/type';
+import { GetAllParams } from '~/utils/types';
 
 export const createBuilding = async (params: CreateBuildingParams) => {
   const url = API_BUILDING;
@@ -22,7 +23,7 @@ export const deleteBuilding = async (params: number) => {
   return HttpClient.delete<typeof params, CommonResponse>(url);
 };
 
-export const updateBuilding = async (params: interfaceUpdateBuildingParams) => {
+export const updateBuilding = async (params: UpdateBuildingParams) => {
   const url = API_BUILDING;
   return HttpClient.put<typeof params, CommonResponse>(url, params);
 };
@@ -31,17 +32,23 @@ export const updateDistance = async (params: UpdateDistanceParams) => {
   return HttpClient.put<typeof params, CommonResponse>(API_DISTANCE, params);
 };
 
-export const getRooms = async () => {
+export const getRooms = async (params: GetAllParams) => {
   const url = API_GET_ROOMS;
-  return HttpClient.get<null, CommonResponse<Room[]>>(url);
+  return HttpClient.post<typeof params, CommonResponse<Room[]>>(url, params);
 };
 
-export const getDistances = async () => {
-  const url = API_DISTANCE;
-  return HttpClient.get<null, CommonResponse<BuildingDistanceData[]>>(url);
+export const getDistances = async (params: GetAllParams) => {
+  const url = API_DISTANCE + '/get';
+  return HttpClient.post<typeof params, CommonResponse<BuildingDistanceData[]>>(
+    url,
+    params
+  );
 };
 
-export const getAllBuilding = async () => {
+export const getAllBuilding = async (params: GetAllParams) => {
   const url = API_BUILDING;
-  return HttpClient.get<null, CommonResponse<Building[]>>(url);
+  return HttpClient.post<typeof params, CommonResponse<Building[]>>(
+    url,
+    params
+  );
 };

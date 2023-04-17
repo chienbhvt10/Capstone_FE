@@ -27,7 +27,7 @@ export const reuseLecturer = (params: ReuseParams) => {
 };
 
 export const getLecturer = async (params: number) => {
-  const url = API_LECTURER + `\\${params}`;
+  const url = API_LECTURER + `/${params}`;
   return HttpClient.get<typeof params, CommonResponse>(url);
 };
 
@@ -42,6 +42,6 @@ export const updateLecturer = async (params: UpdateLecturerParams) => {
 };
 
 export const deleteLecturer = async (params: number) => {
-  const url = API_LECTURER + `\\${params}`;
+  const url = API_LECTURER + `/${params}`;
   return HttpClient.delete<typeof params, CommonResponse>(url);
 };

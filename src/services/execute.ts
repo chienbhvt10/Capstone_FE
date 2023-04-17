@@ -5,10 +5,11 @@ import {
 import { ExecuteInfo } from '~/modules/Arrange/utils/type';
 import HttpClient from '~/utils/HttpClient';
 import { CommonResponse } from '~/utils/TypeCommon';
+import { GetAllParams } from '~/utils/types';
 
-export const getExecuteInfos = async (params: number) => {
-  const url = API_GET_ALL_EXECUTE_INFO + `/${params}`;
-  return HttpClient.get<typeof params, CommonResponse<ExecuteInfo[]>>(url);
+export const getExecuteInfos = async (params: GetAllParams) => {
+  const url = API_GET_ALL_EXECUTE_INFO + `/get`;
+  return HttpClient.post<typeof params, CommonResponse<ExecuteInfo[]>>(url);
 };
 
 export const createExecuteInfos = async (params: ExecuteInfo) => {

@@ -18,35 +18,42 @@ import {
 import wait from '~/utils/wait';
 import { getTableSlotConflictColumns } from '../utils/columns';
 import { SlotConflictData, SlotConflictInfos, TimeSlot } from '../utils/type';
+import useAuth from '~/hooks/useAuth';
 
 const TimeSlotConflict = () => {
   const theme = useTheme();
   const { currentSemester } = useArrange();
+  const { user } = useAuth();
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const setNotification = useNotification();
   const columns = useMemo(
     () => getTableSlotConflictColumns(timeSlots),
     [timeSlots]
   );
-
-  useEffect(() => {
-    if (currentSemester) {
-      getTimeSlots({ semesterId: currentSemester?.id || 0 }).then((res) => {
-        if (res.data && res.data.length > 0) {
-          setTimeSlots(res.data || []);
-        }
-      });
-    }
-  }, [currentSemester]);
-
   const [timeSlotConflict, setTimeSlotConflict] = useState<SlotConflictData[]>(
     []
   );
   const [loadingTable, setLoadingTable] = useState<boolean>(false);
 
   useEffect(() => {
+    if (currentSemester) {
+      getTimeSlots({
+        semesterId: currentSemester?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setTimeSlots(res.data || []);
+        }
+      });
+    }
+  }, [currentSemester, user]);
+
+  useEffect(() => {
     setLoadingTable(true);
-    getTimeSlotConflicts()
+    getTimeSlotConflicts({
+      semesterId: currentSemester?.id || null,
+      departmentHeadId: user?.id || null,
+    })
       .then((res) => {
         if (res.data && res.data.length > 0) {
           setTimeSlotConflict(res.data);

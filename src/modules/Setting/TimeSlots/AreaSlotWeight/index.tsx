@@ -25,11 +25,16 @@ import {
   TimeSlot,
 } from '../utils/type';
 import { areaSlotWeightItem } from '../utils/data';
+import useAuth from '~/hooks/useAuth';
 
 const AreaSlotWeight = () => {
   const theme = useTheme();
   const { currentSemester } = useArrange();
+  const { user } = useAuth();
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+  const setNotification = useNotification();
+  const [loadingTable, setLoadingTable] = useState<boolean>(false);
+  const [areaSlotWeight, setAreaSlotWeight] = useState<AreaSlotWeightData[]>();
 
   const columns = useMemo(
     () => getTableAreaSlotWeightColumns(timeSlots),
@@ -38,7 +43,10 @@ const AreaSlotWeight = () => {
 
   useEffect(() => {
     if (currentSemester) {
-      getTimeSlots({ semesterId: currentSemester?.id || 0 }).then((res) => {
+      getTimeSlots({
+        semesterId: currentSemester?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
         if (res.data && res.data.length > 0) {
           setTimeSlots(res.data || []);
         }
@@ -46,13 +54,12 @@ const AreaSlotWeight = () => {
     }
   }, [currentSemester]);
 
-  const setNotification = useNotification();
-  const [loadingTable, setLoadingTable] = useState<boolean>(false);
-  const [areaSlotWeight, setAreaSlotWeight] = useState<AreaSlotWeightData[]>();
-
   useEffect(() => {
     setLoadingTable(true);
-    getAreaSlotWeights()
+    getAreaSlotWeights({
+      semesterId: currentSemester?.id || null,
+      departmentHeadId: user?.id || null,
+    })
       .then((res) => {
         if (res.data && res.data.length > 0) {
           setAreaSlotWeight(res.data);

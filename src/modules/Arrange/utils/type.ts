@@ -112,6 +112,7 @@ export interface SettingParams {
 }
 
 export interface SearchTaskParams {
+  departmentHeadId: number;
   semesterId: number;
   classIds: number[];
   lecturerIds: number[];
@@ -122,4 +123,9 @@ export interface SearchTaskParams {
 export interface SearchTaskResponse {
   dataAssign: LecturerAssign[];
   dataNotAssign: TimeSlotResponse;
+}
+export interface GetATaskParams {
+  semesterId: number;
+  taskId: number;
+  departmentHeadId: number;
 }

@@ -112,6 +112,8 @@ export interface CreateTimeSlotParams {
   daySession: number;
   name: string;
   segments: CreateSegmentData[];
+  semesterId: number;
+  departmentHeadId: number;
 }
 
 export interface CreateSegmentData {

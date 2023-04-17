@@ -14,8 +14,13 @@ export interface ReuseParams {
   toSemesterId: number;
 }
 
+export interface GetAllParams {
+  semesterId?: number | null;
+  departmentHeadId: number | null;
+}
+
 export interface User {
   id: number;
   username: string;
-  departmentId: number;
+  department: string;
 }

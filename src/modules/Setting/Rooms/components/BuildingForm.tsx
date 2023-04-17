@@ -9,6 +9,7 @@ import Validation from '~/utils/Validation';
 import { FiltersRef } from '~/utils/form';
 import { Building } from '../util/type';
 import useArrange from '~/hooks/useArrange';
+import useAuth from '~/hooks/useAuth';
 
 interface BuildingForm {
   name: string;
@@ -28,8 +29,8 @@ interface Props {
 
 const BuildingForm = forwardRef<FiltersRef, Props>((props, ref) => {
   const { editingItem, setEditMode, editMode } = props;
-
-  const { refetchBuilding } = useArrange();
+  const { user } = useAuth();
+  const { refetchBuilding, currentSemester } = useArrange();
 
   const {
     register,
@@ -68,8 +69,10 @@ const BuildingForm = forwardRef<FiltersRef, Props>((props, ref) => {
     }
 
     await createBuilding({
-      name: value.name,
+      name: value.name || null,
       shortName: value.shortName,
+      semesterId: currentSemester?.id || null,
+      departmentHeadId: user?.id || null,
     })
       .then((res) => {
         refetchBuilding();

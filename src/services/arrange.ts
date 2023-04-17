@@ -1,21 +1,22 @@
 import HttpClient from '~/utils/HttpClient';
 import { CommonResponse } from '~/utils/TypeCommon';
 import {
+  API_EXECUTE,
   API_EXPORT_IN_IMPORT_FORMAT,
   API_GET_A_TASK,
   API_GET_SCHEDULE,
+  API_GET_TASK_ASSIGNED,
   API_GET_TASK_NOT_ASSIGNED,
   API_IMPORT_TIME_TABLE,
   API_LOCK_UNLOCK_TASK,
   API_MODIFY_TIMETABLE,
-  API_UNLOCK_ALL_TASK,
-  API_EXECUTE,
   API_SEARCH_TASK,
-  API_GET_TASK_ASSIGNED,
-  API_GET_SEMESTER,
+  API_UNLOCK_ALL_TASK,
 } from '../constants/api-path';
 
+import { GetAllParams } from '~/utils/types';
 import {
+  GetATaskParams,
   LecturerAssign,
   SearchTaskParams,
   SearchTaskResponse,
@@ -25,14 +26,8 @@ import {
   TimeTableModifyParam,
   TimeTableModifyResponse,
 } from '../modules/Arrange/utils/type';
-import { Semester } from '~/modules/Semester/util/type';
 
-export const getSemester = async () => {
-  const url = API_GET_SEMESTER;
-  return HttpClient.get<null, CommonResponse<Semester[]>>(url);
-};
-
-export const getTaskNotAssign = async (params: { semesterId: number }) => {
+export const getTaskNotAssign = async (params: GetAllParams) => {
   const url = API_GET_TASK_NOT_ASSIGNED;
   return HttpClient.post<typeof params, CommonResponse<TimeSlotResponse>>(
     url,
@@ -40,7 +35,7 @@ export const getTaskNotAssign = async (params: { semesterId: number }) => {
   );
 };
 
-export const getTaskAssigned = async (params: { semesterId: number }) => {
+export const getTaskAssigned = async (params: GetAllParams) => {
   const url = API_GET_TASK_ASSIGNED;
   return HttpClient.post<typeof params, CommonResponse<LecturerAssign[]>>(
     url,
@@ -48,10 +43,7 @@ export const getTaskAssigned = async (params: { semesterId: number }) => {
   );
 };
 
-export const getATask = async (params: {
-  semesterId: number;
-  taskId: number;
-}) => {
+export const getATask = async (params: GetATaskParams) => {
   const url = API_GET_A_TASK;
   return HttpClient.post<typeof params, CommonResponse<TaskDetail>>(
     url,

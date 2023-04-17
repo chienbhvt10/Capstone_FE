@@ -6,6 +6,7 @@ import {
   Semester,
   UpdateSemesterParams,
 } from '~/modules/Semester/util/type';
+import { GetAllParams } from '~/utils/types';
 
 export const createSemester = async (params: CreateSemesterParams) => {
   const url = API_GET_SEMESTER;
@@ -18,16 +19,19 @@ export const updateSemester = async (params: UpdateSemesterParams) => {
 };
 
 export const deleteSemester = async (params: number) => {
-  const url = API_GET_SEMESTER + `\\${params}`;
+  const url = API_GET_SEMESTER + `/${params}`;
   return HttpClient.delete<typeof params, CommonResponse>(url);
 };
 
-export const getSemesters = async () => {
-  const url = API_GET_SEMESTER;
-  return HttpClient.get<number, CommonResponse<Semester[]>>(url);
+export const getSemesters = async (params: GetAllParams) => {
+  const url = API_GET_SEMESTER + '/get';
+  return HttpClient.post<typeof params, CommonResponse<Semester[]>>(
+    url,
+    params
+  );
 };
 
 export const getSemester = async (params: number) => {
-  const url = API_GET_SEMESTER + `\\${params}`;
+  const url = API_GET_SEMESTER + `/${params}`;
   return HttpClient.get<typeof params, CommonResponse>(url);
 };

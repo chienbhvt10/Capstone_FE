@@ -20,7 +20,7 @@ interface Props {}
 
 const ExcelAndArrangeAction = (props: Props) => {
   const setNotification = useNotification();
-  const { refetch } = useArrange();
+  const { refetch, currentSemester } = useArrange();
   const [openDialog, setOpen] = useState<boolean>(false);
   const [loadingUploadExcel, setLoadingUploadExcel] = useState<boolean>(false);
 
@@ -40,10 +40,18 @@ const ExcelAndArrangeAction = (props: Props) => {
     try {
       setLoadingUploadExcel(true);
       const formData = new FormData();
-
       formData.append('file', file, file.name);
+      formData.append('semesterId', String(currentSemester?.id || 0));
+      formData.append('departmentHeadId', '1');
 
-      await importTimeTable(formData);
+      const res = await importTimeTable(formData);
+      if (!res.isSuccess) {
+        setNotification({
+          message: res.message,
+          severity: 'error',
+        });
+        return;
+      }
       setNotification({
         message: 'Upload file success',
         severity: 'success',

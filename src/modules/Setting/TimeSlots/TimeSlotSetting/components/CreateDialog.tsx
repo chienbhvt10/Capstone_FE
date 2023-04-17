@@ -16,6 +16,7 @@ import Validation from '~/utils/Validation';
 import { FiltersRef } from '~/utils/form';
 import { CreateSegmentData } from '../../utils/type';
 import useArrange from '~/hooks/useArrange';
+import useAuth from '~/hooks/useAuth';
 
 interface CreateTimeSlotForm {
   name: string;
@@ -36,6 +37,8 @@ interface Props {
 
 const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
   const { open, onCloseCreateDialog, onGetValueSegment, refetch } = props;
+  const { currentSemester } = useArrange();
+  const { user } = useAuth();
 
   const {
     register,
@@ -54,6 +57,8 @@ const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
       daySession: value.daySession,
       name: value.name,
       segments: segmentValue,
+      departmentHeadId: user?.id || 0,
+      semesterId: currentSemester?.id || 0,
     }).then((res) => {
       refetch();
       onCloseCreateDialog();

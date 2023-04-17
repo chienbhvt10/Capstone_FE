@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+import useAuth from '~/hooks/useAuth';
 import useRefresh from '~/hooks/useRefresh';
 import {
   Class,
@@ -116,6 +117,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
     null
   );
   const [refreshListExecuteInfo, refetchListExecuteInfo] = useRefresh();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (executeId) {
@@ -125,24 +127,26 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
 
   useEffect(() => {
     if (semestersSelector) {
-      getTaskAssigned({ semesterId: semestersSelector?.id || 0 }).then(
-        (res) => {
-          if (res.data && res.data.length > 0) {
-            setLecturersTaskAssignInfo(res.data);
-          }
-          getTaskNotAssign({ semesterId: semestersSelector?.id || 0 }).then(
-            (res) => {
-              if (
-                res.data &&
-                res.data.timeSlotInfos &&
-                res.data.timeSlotInfos.length > 0
-              ) {
-                setTasksNotAssigned(res.data);
-              }
-            }
-          );
+      getTaskAssigned({
+        semesterId: semestersSelector?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setLecturersTaskAssignInfo(res.data);
         }
-      );
+        getTaskNotAssign({
+          semesterId: semestersSelector?.id || null,
+          departmentHeadId: user?.id || null,
+        }).then((res) => {
+          if (
+            res.data &&
+            res.data.timeSlotInfos &&
+            res.data.timeSlotInfos.length > 0
+          ) {
+            setTasksNotAssigned(res.data);
+          }
+        });
+      });
     }
   }, [refresh, semestersSelector]);
 
@@ -153,6 +157,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         subjectId: null,
         timeSlotId: null,
         semesterId: currentSemester?.id || 0,
+        departmentHeadId: user?.id || null,
       }).then((res) => {
         if (res.data) {
           setLecturers(res.data);
@@ -162,63 +167,89 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [refreshLecturer, currentSemester]);
 
   useEffect(() => {
-    if (currentSemester) {
-      getSubjects({ semesterId: currentSemester?.id || 0 }).then((res) => {
+    if (currentSemester && user) {
+      getSubjects({
+        semesterId: currentSemester?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
         if (res.data) {
           setSubjects(res.data);
         }
       });
     }
-  }, [refreshSubject, currentSemester]);
+  }, [refreshSubject, currentSemester, user]);
 
   useEffect(() => {
-    getRooms().then((res) => {
-      if (res.data) {
-        setRooms(res.data);
-      }
-    });
-  }, [refreshRoom]);
+    if (currentSemester && user) {
+      getRooms({
+        semesterId: currentSemester?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
+        if (res.data) {
+          setRooms(res.data);
+        }
+      });
+    }
+  }, [refreshRoom, currentSemester, user]);
 
   useEffect(() => {
-    getClasses().then((res) => {
-      if (res.data) {
-        setClasses(res.data);
-      }
-    });
-  }, [refreshClass]);
+    if (currentSemester && user) {
+      getClasses({
+        semesterId: currentSemester?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
+        if (res.data) {
+          setClasses(res.data);
+        }
+      });
+    }
+  }, [refreshClass, currentSemester, user]);
 
   useEffect(() => {
-    if (currentSemester) {
-      getTimeSlots({ semesterId: currentSemester?.id || 0 }).then((res) => {
+    if (currentSemester && user) {
+      getTimeSlots({
+        semesterId: currentSemester?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
         if (res.data && res.data.length > 0) {
           setTimeSlots(res.data || []);
         }
       });
     }
-  }, [refreshTimeSlot, currentSemester]);
+  }, [refreshTimeSlot, currentSemester, user]);
 
   useEffect(() => {
-    getAllBuilding().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setBuildings(res.data || []);
-      }
-    });
-    getDistances().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setDistances(res.data || []);
-      }
-    });
-  }, [refreshBuilding]);
+    if (currentSemester && user) {
+      getAllBuilding({
+        semesterId: currentSemester?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setBuildings(res.data || []);
+        }
+      });
+      getDistances({
+        semesterId: currentSemester?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setDistances(res.data || []);
+        }
+      });
+    }
+  }, [refreshBuilding, currentSemester, user]);
 
   useEffect(() => {
-    getSemesters().then((res) => {
-      if (res.data && res.data.length > 0) {
-        setSemesters(res.data || []);
-        setCurrentSemester(res.data.filter((item) => item.isNow)[0]);
-        setSemestersSelector(res.data.filter((item) => item.isNow)[0]);
-      }
-    });
-  }, [refreshSemester]);
+    if (user) {
+      getSemesters({ departmentHeadId: user?.id || null }).then((res) => {
+        if (res.data && res.data.length > 0) {
+          setSemesters(res.data || []);
+          setCurrentSemester(res.data.filter((item) => item.isNow)[0]);
+          setSemestersSelector(res.data.filter((item) => item.isNow)[0]);
+        }
+      });
+    }
+  }, [refreshSemester, user]);
 
   return (
     <ArrangeContext.Provider

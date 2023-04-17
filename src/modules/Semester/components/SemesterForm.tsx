@@ -10,6 +10,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import useArrange from '~/hooks/useArrange';
 import { Semester } from '../util/type';
 import { createSemester, updateSemester } from '~/services/semester';
+import useAuth from '~/hooks/useAuth';
 
 interface SemesterForm {
   semester: string;
@@ -31,6 +32,7 @@ interface Props {
 const SemesterForm = forwardRef<FiltersRef, Props>((props, ref) => {
   const { editMode, editingItem, setEditMode } = props;
   const { refetchSemester } = useArrange();
+  const { user } = useAuth();
 
   const {
     register,
@@ -72,6 +74,7 @@ const SemesterForm = forwardRef<FiltersRef, Props>((props, ref) => {
     await createSemester({
       year: value.year,
       semester: value.semester,
+      departmentHeadId: user?.id || 0,
     })
       .then((res) => {
         refetchSemester();

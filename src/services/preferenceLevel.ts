@@ -12,7 +12,7 @@ import {
 } from '~/modules/Setting/PreferenceLevel/utils/types';
 import HttpClient from '~/utils/HttpClient';
 import { CommonResponse } from '~/utils/TypeCommon';
-import { ReuseParams } from '~/utils/types';
+import { GetAllParams, ReuseParams } from '~/utils/types';
 
 export const reuseSlotPreference = (params: ReuseParams) => {
   const url = API_REUSE_SLOT_PREFERENCE;
@@ -38,9 +38,7 @@ export const updateSubjectPreferenceLevel = async (
   return HttpClient.put<typeof params, CommonResponse>(url, params);
 };
 
-export const getSlotPreferenceLevels = async (params: {
-  semesterId: number;
-}) => {
+export const getSlotPreferenceLevels = async (params: GetAllParams) => {
   const url = API_SLOT_PREFERENCE_LEVELS;
   return HttpClient.post<
     typeof params,
@@ -48,9 +46,7 @@ export const getSlotPreferenceLevels = async (params: {
   >(url, params);
 };
 
-export const getSubjectPreferenceLevels = async (params: {
-  semesterId: number;
-}) => {
+export const getSubjectPreferenceLevels = async (params: GetAllParams) => {
   const url = API_SUBJECT_PREFERENCE_LEVELS;
   return HttpClient.post<
     typeof params,

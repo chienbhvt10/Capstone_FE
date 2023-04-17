@@ -39,6 +39,7 @@ export interface GetLecturersParams {
   lecturerId: number | null;
   timeSlotId: number | null;
   subjectId: number | null;
+  departmentHeadId: number | null;
   semesterId: number | null;
 }
 export interface CreateLecturerParams {
@@ -47,6 +48,8 @@ export interface CreateLecturerParams {
   email: string;
   quota: number;
   minQuota: number;
+  departmentHeadId: number;
+  semesterId: number;
 }
 
 export interface UpdateLecturerParams {

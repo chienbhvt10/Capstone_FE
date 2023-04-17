@@ -40,9 +40,11 @@ import {
   SubjectPreferenceLevelItems,
 } from '../utils/types';
 import { subjectPreferenceLevelItems } from '../utils/data';
+import useAuth from '~/hooks/useAuth';
 
 const SubjectPreferenceLevel = () => {
   const theme = useTheme();
+  const { user } = useAuth();
   const setNotifications = useNotification();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const { semesters, currentSemester } = useArrange();
@@ -59,7 +61,10 @@ const SubjectPreferenceLevel = () => {
   useEffect(() => {
     if (semestersSelector) {
       setLoadingTable(true);
-      getSubjects({ semesterId: semestersSelector.id || 0 }).then((res) => {
+      getSubjects({
+        semesterId: semestersSelector.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
         if (res.data) {
           setSubjects(res.data);
         }

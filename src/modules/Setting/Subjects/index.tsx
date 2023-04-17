@@ -7,8 +7,10 @@ import SubjectTable from './components/SubjectTable';
 import { Subject } from './util/type';
 import useRefresh from '~/hooks/useRefresh';
 import { Semester } from '~/modules/Semester/util/type';
+import useAuth from '~/hooks/useAuth';
 
 const SubjectsSetting = () => {
+  const { user } = useAuth();
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editingItem, setEditingItem] = useState<Subject | null>(null);
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -20,7 +22,8 @@ const SubjectsSetting = () => {
   useEffect(() => {
     if (semestersSelector) {
       getSubjects({
-        semesterId: semestersSelector?.id || 0,
+        semesterId: semestersSelector?.id || null,
+        departmentHeadId: user?.id || null,
       }).then((res) => {
         if (res.data) {
           setSubjects(res.data);

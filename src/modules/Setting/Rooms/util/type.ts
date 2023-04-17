@@ -35,11 +35,13 @@ export interface Building {
   semesterId: number;
 }
 export interface CreateBuildingParams {
-  name: string;
+  name: string | null;
   shortName: string;
+  departmentHeadId: number | null;
+  semesterId: number | null;
 }
 
-export interface interfaceUpdateBuildingParams {
+export interface UpdateBuildingParams {
   id: number;
   name: string;
   shortName: string;

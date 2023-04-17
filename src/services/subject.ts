@@ -6,7 +6,7 @@ import {
   Subject,
   UpdateSubjectParams,
 } from '~/modules/Setting/Subjects/util/type';
-import { ReuseParams } from '~/utils/types';
+import { GetAllParams, ReuseParams } from '~/utils/types';
 
 export const reuseSubject = (params: ReuseParams) => {
   const url = API_REUSE_SUBJECT;
@@ -28,7 +28,7 @@ export const deleteSubject = async (params: number) => {
   return HttpClient.delete<typeof params, CommonResponse>(url);
 };
 
-export const getSubjects = async (params: { semesterId: number }) => {
+export const getSubjects = async (params: GetAllParams) => {
   const url = API_SUBJECT + '/get';
   return HttpClient.post<typeof params, CommonResponse<Subject[]>>(url, params);
 };

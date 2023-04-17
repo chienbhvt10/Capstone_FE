@@ -10,6 +10,7 @@ import FilterForm from './FilterForm';
 import { getExecuteInfos } from '~/services/execute';
 import useRefresh from '~/hooks/useRefresh';
 import { ExecuteInfo } from '../utils/type';
+import useAuth from '~/hooks/useAuth';
 
 const ToolBox = () => {
   const {
@@ -22,15 +23,19 @@ const ToolBox = () => {
     refreshListExecuteInfo,
     refetchListExecuteInfo,
   } = useArrange();
+  const { user } = useAuth();
   const [executeInfos, setExecuteInfos] = useState<ExecuteInfo[]>([]);
 
   useEffect(() => {
-    if (semestersSelector) {
-      getExecuteInfos(semestersSelector?.id || 0).then((res) => {
+    if (semestersSelector && user) {
+      getExecuteInfos({
+        semesterId: semestersSelector?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
         setExecuteInfos(res.data || []);
       });
     }
-  }, [semestersSelector, refreshListExecuteInfo]);
+  }, [semestersSelector, user, refreshListExecuteInfo]);
 
   const onChangeExecuteId = async (event: SelectChangeEvent<number>) => {
     setExecuteId(event.target.value as number);

@@ -20,11 +20,11 @@ import {
   API_REUSE_TIME_SLOT,
   API_TIME_SLOT_CONFLICT,
 } from '../constants/api-path';
-import { ReuseParams } from '~/utils/types';
+import { GetAllParams, ReuseParams } from '~/utils/types';
 
 //#region TimeSlot Api
 
-export const getTimeSlots = (params: { semesterId: number }) => {
+export const getTimeSlots = (params: GetAllParams) => {
   const url = API_GET_TIME_SLOT + '/get';
   return HttpClient.post<typeof params, CommonResponse<TimeSlot[]>>(
     url,
@@ -56,7 +56,7 @@ export const deleteTimeSlot = async (params: number) => {
 
 //#region TimeSlotSegment Api
 
-export const getTimeSlotSegments = (params: { semesterId: number }) => {
+export const getTimeSlotSegments = (params: GetAllParams) => {
   const url = API_GET_TIME_SLOT_SEGMENT + '/get';
   return HttpClient.post<typeof params, CommonResponse<TimeSlotSegment[]>>(
     url,
@@ -91,9 +91,12 @@ export const deleteTimeSlotSegment = async (params: number) => {
 
 //#region TimeSlot conflict Api
 
-export const getTimeSlotConflicts = async () => {
+export const getTimeSlotConflicts = async (params: GetAllParams) => {
   const url = API_TIME_SLOT_CONFLICT;
-  return HttpClient.get<null, CommonResponse<SlotConflictData[]>>(url);
+  return HttpClient.post<typeof params, CommonResponse<SlotConflictData[]>>(
+    url,
+    params
+  );
 };
 
 export const updateTimeSlotConflict = async (
@@ -111,8 +114,11 @@ export const updateAreaSlotWeight = async (params: UpdateAreaSlotWeight) => {
   return HttpClient.put<typeof params, CommonResponse>(url, params);
 };
 
-export const getAreaSlotWeights = async () => {
+export const getAreaSlotWeights = async (params: GetAllParams) => {
   const url = API_AREA_TIME_SLOT_WEIGHT;
-  return HttpClient.get<null, CommonResponse<AreaSlotWeightData[]>>(url);
+  return HttpClient.post<typeof params, CommonResponse<AreaSlotWeightData[]>>(
+    url,
+    params
+  );
 };
 //#endregion

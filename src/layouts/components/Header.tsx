@@ -1,4 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
+import { Typography } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
@@ -9,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import images from '~/assets/images';
 import Image from '~/components/styledComponents/Image';
 import { LOGIN_PATH } from '~/constants/path';
+import useAuth from '~/hooks/useAuth';
 import useNotification from '~/hooks/useNotification';
 import LocalStorage from '~/utils/LocalStorage';
 
@@ -25,6 +27,7 @@ interface Props extends AppBarProps {
 const Header = (props: Props) => {
   const { handleDrawerOpen, open } = props;
   const { pathname } = useLocation();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const setNotification = useNotification();
 
@@ -62,14 +65,28 @@ const Header = (props: Props) => {
           <Image sx={{ width: 80, height: 'auto' }} src={images.logo} />
         </Stack>
         {pathname !== LOGIN_PATH && (
-          <Tooltip title="Logout">
-            <IconButton onClick={onLogout}>
-              <Image
-                sx={{ width: 20, height: 'auto' }}
-                src={images.iconLogout}
-              />
-            </IconButton>
-          </Tooltip>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ justifyContent: 'center', alignItems: 'center' }}
+          >
+            <Typography
+              variant="body1"
+              sx={{ color: 'black', fontStyle: 'italic' }}
+            >
+              {user?.username}:{' '}
+              <span style={{ color: '#3DA2FF' }}>{user?.department}</span>
+            </Typography>
+
+            <Tooltip title="Logout">
+              <IconButton onClick={onLogout}>
+                <Image
+                  sx={{ width: 20, height: 'auto' }}
+                  src={images.iconLogout}
+                />
+              </IconButton>
+            </Tooltip>
+          </Stack>
         )}
       </Toolbar>
     </AppBar>
