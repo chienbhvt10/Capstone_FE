@@ -1,30 +1,22 @@
-import ClearIcon from '@mui/icons-material/Clear';
 import { Table } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
 import { DAY_SESSION } from '~/constants';
 import {
-  createTimeSlotSegment,
   deleteTimeSlot,
-  deleteTimeSlotSegment,
-  getTimeSlotSegments,
   updateTimeSlot,
   updateTimeSlotSegment,
 } from '~/services/timeslot';
 import { timeSlotColumns } from '../../utils/columns';
 import { daySessionItem, getSlotSelectItem } from '../../utils/data';
-import { SegmentByDay, SlotSegment, TimeSlotSegment } from '../../utils/type';
+import { SlotSegment, TimeSlotSegment } from '../../utils/type';
 import EditableCell from './EditableCell';
 import EditableCellForSegment from './EditableCellForSegment';
-import useRefresh from '~/hooks/useRefresh';
-import useArrange from '~/hooks/useArrange';
 
 interface Props {
   refresh: any;

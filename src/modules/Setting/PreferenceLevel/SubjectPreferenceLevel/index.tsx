@@ -59,7 +59,7 @@ const SubjectPreferenceLevel = () => {
   const [refresh, refetch] = useRefresh();
 
   useEffect(() => {
-    if (semestersSelector) {
+    if (semestersSelector && user) {
       setLoadingTable(true);
       getSubjects({
         semesterId: semestersSelector.id || null,
@@ -69,7 +69,10 @@ const SubjectPreferenceLevel = () => {
           setSubjects(res.data);
         }
       });
-      getSubjectPreferenceLevels({ semesterId: semestersSelector?.id || 0 })
+      getSubjectPreferenceLevels({
+        semesterId: semestersSelector.id || null,
+        departmentHeadId: user?.id || null,
+      })
         .then((res) => {
           setSubjectPreferenceLevels(res.data || []);
         })
@@ -78,7 +81,7 @@ const SubjectPreferenceLevel = () => {
           setLoadingTable(false);
         });
     }
-  }, [refresh, semestersSelector]);
+  }, [refresh, semestersSelector, user]);
 
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
@@ -220,6 +223,10 @@ const SubjectPreferenceLevel = () => {
                             align="center"
                             minHeight={60}
                             border={true}
+                            sx={{
+                              backgroundColor:
+                                subject.preferenceLevel && '#97cdff',
+                            }}
                           >
                             <TableCellSelect<SubjectPreferenceLevelItems>
                               value={subject.preferenceLevel}

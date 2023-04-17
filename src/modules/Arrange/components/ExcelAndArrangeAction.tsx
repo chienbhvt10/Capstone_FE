@@ -1,5 +1,5 @@
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { Backdrop, CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress, Tooltip } from '@mui/material';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
@@ -15,12 +15,14 @@ import {
 import SettingModelDialog from './SettingModelDialog';
 import useNotification from '~/hooks/useNotification';
 import useArrange from '~/hooks/useArrange';
+import useAuth from '~/hooks/useAuth';
 
 interface Props {}
 
 const ExcelAndArrangeAction = (props: Props) => {
   const setNotification = useNotification();
   const { refetch, currentSemester } = useArrange();
+  const { user } = useAuth();
   const [openDialog, setOpen] = useState<boolean>(false);
   const [loadingUploadExcel, setLoadingUploadExcel] = useState<boolean>(false);
 
@@ -42,7 +44,7 @@ const ExcelAndArrangeAction = (props: Props) => {
       const formData = new FormData();
       formData.append('file', file, file.name);
       formData.append('semesterId', String(currentSemester?.id || 0));
-      formData.append('departmentHeadId', '1');
+      formData.append('departmentHeadId', String(user?.id || 0));
 
       const res = await importTimeTable(formData);
       if (!res.isSuccess) {

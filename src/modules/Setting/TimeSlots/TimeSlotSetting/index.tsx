@@ -27,9 +27,11 @@ import {
   reuseTimeSlot,
 } from '~/services/timeslot';
 import useNotification from '~/hooks/useNotification';
+import useAuth from '~/hooks/useAuth';
 
 const TimeSlotSetting = () => {
   const { semesters, currentSemester } = useArrange();
+  const { user } = useAuth();
   const setNotifications = useNotification();
   const [numberSlots, setNumberSlots] = useState<number>(4);
   const [currentSlots, setCurrentSlots] = useState<Slot[]>([]);
@@ -44,21 +46,25 @@ const TimeSlotSetting = () => {
   );
 
   useEffect(() => {
-    if (semestersSelector) {
-      getTimeSlots({ semesterId: semestersSelector?.id || 0 }).then((res) => {
+    if (semestersSelector && user) {
+      getTimeSlots({
+        semesterId: semestersSelector?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
         if (res.data && res.data.length > 0) {
           setTimeSlots(res.data || []);
         }
       });
-      getTimeSlotSegments({ semesterId: semestersSelector?.id || 0 }).then(
-        (res) => {
-          if (res.data) {
-            setTimeSlotsSegment(res.data);
-          }
+      getTimeSlotSegments({
+        semesterId: semestersSelector?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
+        if (res.data) {
+          setTimeSlotsSegment(res.data);
         }
-      );
+      });
     }
-  }, [refresh, semestersSelector]);
+  }, [refresh, semestersSelector, user]);
 
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
@@ -116,7 +122,7 @@ const TimeSlotSetting = () => {
       return newSlotDay;
     });
 
-    for (let day = 1; day <= 7; day++) {
+    for (let day = 1; day <= 6; day++) {
       if (!newArray.map((item) => item.day).includes(day)) {
         newArray = [...newArray, { day: day, segment: 0 }];
       }

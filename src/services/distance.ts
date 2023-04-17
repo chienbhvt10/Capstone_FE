@@ -46,7 +46,7 @@ export const getDistances = async (params: GetAllParams) => {
 };
 
 export const getAllBuilding = async (params: GetAllParams) => {
-  const url = API_BUILDING;
+  const url = API_BUILDING + '/get';
   return HttpClient.post<typeof params, CommonResponse<Building[]>>(
     url,
     params

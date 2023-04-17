@@ -10,6 +10,7 @@ import { Room } from '~/modules/Setting/Rooms/util/type';
 import { Subject } from '~/modules/Setting/Subjects/util/type';
 import { Class } from '../utils/type';
 import { searchTask } from '~/services/arrange';
+import useAuth from '~/hooks/useAuth';
 
 const FilterForm = () => {
   const {
@@ -23,7 +24,7 @@ const FilterForm = () => {
     refetch,
     semestersSelector,
   } = useArrange();
-
+  const { user } = useAuth();
   const [lecturersSelector, setLecturersSelector] = useState<Lecturer[]>([]);
   const [classesSelector, setClassesSelector] = useState<Class[]>([]);
   const [roomsSelector, setRoomsSelector] = useState<Room[]>([]);
@@ -63,6 +64,7 @@ const FilterForm = () => {
         roomId: roomsSelector.map((item) => item.id),
         subjectIds: subjectsSelector.map((item) => item.id),
         semesterId: semestersSelector?.id || 0,
+        departmentHeadId: user?.id || 0,
       });
 
       if (res.data?.dataAssign && res.data.dataAssign.length > 0) {

@@ -26,6 +26,7 @@ import {
 } from '../utils/type';
 import { areaSlotWeightItem } from '../utils/data';
 import useAuth from '~/hooks/useAuth';
+import useRefresh from '~/hooks/useRefresh';
 
 const AreaSlotWeight = () => {
   const theme = useTheme();
@@ -35,14 +36,14 @@ const AreaSlotWeight = () => {
   const setNotification = useNotification();
   const [loadingTable, setLoadingTable] = useState<boolean>(false);
   const [areaSlotWeight, setAreaSlotWeight] = useState<AreaSlotWeightData[]>();
-
+  const [refresh, refetch] = useRefresh();
   const columns = useMemo(
     () => getTableAreaSlotWeightColumns(timeSlots),
     [timeSlots]
   );
 
   useEffect(() => {
-    if (currentSemester) {
+    if (currentSemester && user) {
       getTimeSlots({
         semesterId: currentSemester?.id || null,
         departmentHeadId: user?.id || null,
@@ -52,24 +53,22 @@ const AreaSlotWeight = () => {
         }
       });
     }
-  }, [currentSemester]);
+  }, [currentSemester, user]);
 
   useEffect(() => {
-    setLoadingTable(true);
+    // setLoadingTable(true);
     getAreaSlotWeights({
       semesterId: currentSemester?.id || null,
       departmentHeadId: user?.id || null,
     })
       .then((res) => {
-        if (res.data && res.data.length > 0) {
-          setAreaSlotWeight(res.data);
-        }
+        setAreaSlotWeight(res.data || []);
       })
       .finally(async () => {
-        await wait(500);
-        setLoadingTable(false);
+        // await wait(500);
+        // setLoadingTable(false);
       });
-  }, []);
+  }, [refresh]);
 
   const onEdit = (item: AreaSlotWeightInfos, value: number) => {
     updateAreaSlotWeight({
@@ -78,19 +77,20 @@ const AreaSlotWeight = () => {
     })
       .then((res) => {
         if (res.isSuccess) {
-          const newAreaSlotWeight = areaSlotWeight?.map((a) => ({
-            ...a,
-            areaSlotWeightInfos: a.areaSlotWeightInfos.map((i) => {
-              if (i.slotWeightId === item.slotWeightId) {
-                return {
-                  ...i,
-                  slotWeight: value,
-                };
-              }
-              return i;
-            }),
-          }));
-          setAreaSlotWeight(newAreaSlotWeight);
+          // const newAreaSlotWeight = areaSlotWeight?.map((a) => ({
+          //   ...a,
+          //   areaSlotWeightInfos: a.areaSlotWeightInfos.map((i) => {
+          //     if (i.slotWeightId === item.slotWeightId) {
+          //       return {
+          //         ...i,
+          //         slotWeight: value,
+          //       };
+          //     }
+          //     return i;
+          //   }),
+          // }));
+          refetch();
+          // setAreaSlotWeight(newAreaSlotWeight);
         }
       })
       .catch((err) =>
@@ -174,6 +174,7 @@ const AreaSlotWeight = () => {
                       minHeight={30}
                       border={true}
                       hover={true}
+                      sx={{ backgroundColor: slot.slotWeight && '#97cdff' }}
                     >
                       <TableCellSelect<AreaSlotWeightSelectItem>
                         value={slot.slotWeight}

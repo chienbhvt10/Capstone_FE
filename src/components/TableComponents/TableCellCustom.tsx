@@ -35,6 +35,7 @@ const TableCellCustom = (props: Props) => {
   return (
     <TableCell
       align={align}
+      {...rest}
       sx={{
         background: backgroundEmphasize ? '#5aafff' : '#FFF',
         border: border ? '1px solid #ccc' : '0px solid #ccc',
@@ -50,7 +51,6 @@ const TableCellCustom = (props: Props) => {
           : {},
         ...rest.sx,
       }}
-      {...rest}
     >
       <Box
         {...BoxProps}

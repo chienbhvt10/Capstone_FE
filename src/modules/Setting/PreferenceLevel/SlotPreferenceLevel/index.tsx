@@ -40,11 +40,13 @@ import {
   LecturerSlotsPreferenceLevel,
   SlotPreferenceLevelItems,
 } from '../utils/types';
+import useAuth from '~/hooks/useAuth';
 
 const SlotPreferenceLevel = () => {
   const theme = useTheme();
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const { semesters, currentSemester } = useArrange();
+  const { user } = useAuth();
   const columns = useMemo(() => getTableSlotColumns(timeSlots), [timeSlots]);
   const setNotifications = useNotification();
   const [loadingTable, setLoadingTable] = useState<boolean>(false);
@@ -57,14 +59,20 @@ const SlotPreferenceLevel = () => {
   );
 
   useEffect(() => {
-    if (semestersSelector) {
+    if (semestersSelector && user) {
       setLoadingTable(true);
-      getTimeSlots({ semesterId: semestersSelector?.id || 0 }).then((res) => {
+      getTimeSlots({
+        semesterId: currentSemester?.id || null,
+        departmentHeadId: user?.id || null,
+      }).then((res) => {
         if (res.data) {
           setTimeSlots(res.data || []);
         }
       });
-      getSlotPreferenceLevels({ semesterId: semestersSelector?.id || 0 })
+      getSlotPreferenceLevels({
+        semesterId: currentSemester?.id || null,
+        departmentHeadId: user?.id || null,
+      })
         .then((res) => {
           setSlotPreferenceLevels(res.data || []);
         })
@@ -73,7 +81,7 @@ const SlotPreferenceLevel = () => {
           setLoadingTable(false);
         });
     }
-  }, [semestersSelector, refresh]);
+  }, [semestersSelector, refresh, user]);
 
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
@@ -215,6 +223,10 @@ const SlotPreferenceLevel = () => {
                             align="center"
                             minHeight={60}
                             border={true}
+                            sx={{
+                              backgroundColor:
+                                slot.preferenceLevel && '#97cdff',
+                            }}
                           >
                             <TableCellSelect<SlotPreferenceLevelItems>
                               value={slot.preferenceLevel}

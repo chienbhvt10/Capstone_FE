@@ -9,7 +9,10 @@ import { GetAllParams } from '~/utils/types';
 
 export const getExecuteInfos = async (params: GetAllParams) => {
   const url = API_GET_ALL_EXECUTE_INFO + `/get`;
-  return HttpClient.post<typeof params, CommonResponse<ExecuteInfo[]>>(url);
+  return HttpClient.post<typeof params, CommonResponse<ExecuteInfo[]>>(
+    url,
+    params
+  );
 };
 
 export const createExecuteInfos = async (params: ExecuteInfo) => {
