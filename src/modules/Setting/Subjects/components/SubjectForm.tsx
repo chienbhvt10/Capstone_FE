@@ -9,17 +9,16 @@ import { FiltersRef } from '~/utils/form';
 import { Subject } from '../util/type';
 import SaveIcon from '@mui/icons-material/Save';
 import useArrange from '~/hooks/useArrange';
+import useAuth from '~/hooks/useAuth';
 
 interface SubjectForm {
   name: string;
   code: string;
-  department: string;
 }
 
 const schema = Validation.shape({
   name: Validation.string(),
   code: Validation.string().required('Code is required'),
-  department: Validation.string().required('Department is required'),
 });
 
 interface Props {
@@ -31,7 +30,8 @@ interface Props {
 
 const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
   const { editMode, editingItem, setEditMode, refetch } = props;
-
+  const { user } = useAuth();
+  const { currentSemester } = useArrange();
   const {
     register,
     handleSubmit,
@@ -47,7 +47,6 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
     if (editingItem) {
       reset({
         code: editingItem.code,
-        department: editingItem.department,
         name: editingItem.name,
       });
     }
@@ -58,7 +57,6 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
       await updateSubject({
         id: editingItem?.id || -1,
         code: value.code,
-        department: value.department,
         name: value.name,
       })
         .then((res) => {
@@ -71,9 +69,10 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
     }
 
     await createSubject({
-      department: value.department,
       name: value.name,
       code: value.code,
+      departmentHeadId: user?.id || 0,
+      semesterId: currentSemester?.id || 0,
     })
       .then((res) => {
         refetch();
@@ -145,26 +144,6 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
               />
               <Typography variant="caption" sx={{ color: 'error.main' }}>
                 {errors.name?.message && `*${errors.name?.message}`}
-              </Typography>
-            </Stack>
-          </Stack>
-
-          <Stack direction="column">
-            <Typography variant="body2">
-              Department{' '}
-              <Typography component="span" sx={{ color: 'error.main' }}>
-                *
-              </Typography>
-            </Typography>
-            <Stack direction="column">
-              <TextField
-                {...register('department')}
-                variant="outlined"
-                name="department"
-                sx={{ width: 200 }}
-              />
-              <Typography variant="caption" sx={{ color: 'error.main' }}>
-                {errors.department?.message && `*${errors.department?.message}`}
               </Typography>
             </Stack>
           </Stack>

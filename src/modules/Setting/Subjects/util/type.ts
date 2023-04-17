@@ -28,12 +28,12 @@ export interface Subject {
 export interface CreateSubjectParams {
   code: string;
   name: string;
-  department: string;
+  semesterId: number;
+  departmentHeadId: number;
 }
 
 export interface UpdateSubjectParams {
   id: number;
   code: string;
   name: string;
-  department: string;
 }

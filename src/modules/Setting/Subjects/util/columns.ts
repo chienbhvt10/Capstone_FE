@@ -25,13 +25,7 @@ export const getSubjectTableColumns = () => {
       align: 'center',
       sticky: true,
     },
-    {
-      id: 'Department',
-      label: 'Department',
-      minWidth: 100,
-      align: 'center',
-      sticky: true,
-    },
+
     {
       id: 'Action',
       label: 'Action',

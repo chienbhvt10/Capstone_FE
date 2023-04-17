@@ -31,6 +31,7 @@ const SubjectsSetting = () => {
       });
     }
   }, [semestersSelector, refresh]);
+
   return (
     <PageWrapper title="Subjects Setting">
       <Stack

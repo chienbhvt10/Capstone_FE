@@ -161,7 +161,7 @@ const SubjectTable = (props: Props) => {
               subjects.map((item, index) => (
                 <TableRow role="checkbox" tabIndex={-1} key={item.id}>
                   <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body2">{index}</Typography>
+                    <Typography variant="body2">{index + 1}</Typography>
                   </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
                     <Typography variant="body2">{item.code}</Typography>
@@ -169,9 +169,7 @@ const SubjectTable = (props: Props) => {
                   <TableCellCustom align="center" border={true} hover={true}>
                     <Typography variant="body2">{item.name}</Typography>
                   </TableCellCustom>
-                  <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body2">{item.department}</Typography>
-                  </TableCellCustom>
+
                   <TableCellCustom align="center" border={true} hover={true}>
                     <TableToolCustom
                       item={item}
