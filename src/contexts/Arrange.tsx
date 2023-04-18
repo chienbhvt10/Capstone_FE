@@ -151,12 +151,12 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [refresh, semestersSelector]);
 
   useEffect(() => {
-    if (currentSemester) {
+    if (semestersSelector && user) {
       getLecturers({
         lecturerId: null,
         subjectId: null,
         timeSlotId: null,
-        semesterId: currentSemester?.id || 0,
+        semesterId: semestersSelector?.id || 0,
         departmentHeadId: user?.id || 0,
       }).then((res) => {
         if (res.data) {
@@ -164,12 +164,12 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         }
       });
     }
-  }, [refreshLecturer, currentSemester]);
+  }, [refreshLecturer, semestersSelector, user]);
 
   useEffect(() => {
-    if (currentSemester && user) {
+    if (semestersSelector && user) {
       getSubjects({
-        semesterId: currentSemester?.id || null,
+        semesterId: semestersSelector?.id || null,
         departmentHeadId: user?.id || null,
       }).then((res) => {
         if (res.data) {
@@ -177,7 +177,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         }
       });
     }
-  }, [refreshSubject, currentSemester, user]);
+  }, [refreshSubject, semestersSelector, user]);
 
   useEffect(() => {
     if (semestersSelector && user) {

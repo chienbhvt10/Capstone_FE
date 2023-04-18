@@ -36,7 +36,7 @@ const PreferenceLevelSetting = () => {
               <Tab label="Slot Preference Level" value="2" />
             </Tabs>
           </Box>
-          <TabPanel value="1">
+          <TabPanel value="1" sx={{ p: 0, m: 0 }}>
             <SubjectPreferenceLevel />
           </TabPanel>
           <TabPanel value="2">
