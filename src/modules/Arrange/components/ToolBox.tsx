@@ -56,7 +56,7 @@ const ToolBox = () => {
       <Stack
         direction="column"
         spacing={1}
-        sx={{ border: '1px solid #ccc', p: 1, borderRadius: 1, minWidth: 250 }}
+        sx={{ border: '1px solid #ccc', p: 1, borderRadius: 1, maxWidth: 200 }}
       >
         <Stack direction="column" sx={{ width: 1 }}>
           <Autocomplete

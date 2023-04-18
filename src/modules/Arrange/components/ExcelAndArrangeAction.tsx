@@ -91,14 +91,14 @@ const ExcelAndArrangeAction = (props: Props) => {
             Arrange
           </Button>
           <UploadExcelButton
-            sx={{ maxHeight: 40, height: 1 }}
+            sx={{ maxHeight: 40, height: 1, lineHeight: 1.25 }}
             onSelect={handleUploadExcel}
             title="Import timetable"
           />
         </Stack>
         <Stack direction="column" spacing={1}>
           <Button
-            sx={{ maxHeight: 40, height: 1 }}
+            sx={{ maxHeight: 40, height: 1, lineHeight: 1.25 }}
             onClick={onExportInImportFormat}
             startIcon={<FileDownloadIcon />}
             fullWidth
@@ -108,7 +108,7 @@ const ExcelAndArrangeAction = (props: Props) => {
           <Button
             startIcon={<FileDownloadIcon />}
             fullWidth
-            sx={{ maxHeight: 40, height: 1 }}
+            sx={{ maxHeight: 40, height: 1, lineHeight: 1.25 }}
           >
             Export group by lecturer
           </Button>

@@ -39,7 +39,7 @@ const PreferenceLevelSetting = () => {
           <TabPanel value="1" sx={{ p: 0, m: 0 }}>
             <SubjectPreferenceLevel />
           </TabPanel>
-          <TabPanel value="2">
+          <TabPanel value="2" sx={{ p: 0, m: 0 }}>
             <SlotPreferenceLevel />
           </TabPanel>
         </TabContext>

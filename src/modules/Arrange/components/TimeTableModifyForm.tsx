@@ -131,7 +131,7 @@ const TimeTableModifyForm = () => {
         border: '1px solid #ccc',
         p: 2,
         borderRadius: 1,
-        minWidth: 260,
+        maxWidth: 260,
       }}
     >
       <Stack direction="column" spacing={2}>

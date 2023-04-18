@@ -40,7 +40,7 @@ const DistanceSetting = () => {
               <Tab label="Distance" value="2" />
             </Tabs>
           </Box>
-          <TabPanel value="1">
+          <TabPanel value="1" sx={{ p: 0, m: 0 }}>
             <Stack direction="row" spacing={2}>
               <BuildingForm
                 editMode={editMode}
@@ -53,7 +53,7 @@ const DistanceSetting = () => {
               />
             </Stack>
           </TabPanel>
-          <TabPanel value="2">
+          <TabPanel value="2" sx={{ p: 0, m: 0 }}>
             <RoomTable />
           </TabPanel>
         </TabContext>
