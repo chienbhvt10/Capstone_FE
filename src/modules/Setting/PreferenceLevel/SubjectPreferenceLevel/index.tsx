@@ -115,6 +115,7 @@ const SubjectPreferenceLevel = () => {
     reuseSubjectPreference({
       fromSemesterId: semestersSelector?.id || 0,
       toSemesterId: currentSemester?.id || 0,
+      departmentHeadId: user?.id || 0,
     }).then((res) => {
       if (!res.isSuccess) {
         setNotifications({ message: res.message, severity: 'error' });

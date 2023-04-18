@@ -31,6 +31,7 @@ import { getSubjectTableColumns } from '../util/columns';
 import { Subject } from '../util/type';
 import useNotification from '~/hooks/useNotification';
 import useRefresh from '~/hooks/useRefresh';
+import useAuth from '~/hooks/useAuth';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,6 +44,7 @@ interface Props {
 
 const SubjectTable = (props: Props) => {
   const theme = useTheme();
+  const { user } = useAuth();
   const setNotifications = useNotification();
   const {
     setEditMode,
@@ -80,6 +82,7 @@ const SubjectTable = (props: Props) => {
     reuseSubject({
       fromSemesterId: semestersSelector?.id || 0,
       toSemesterId: currentSemester?.id || 0,
+      departmentHeadId: user?.id || 0,
     }).then((res) => {
       if (!res.isSuccess) {
         setNotifications({ message: res.message, severity: 'error' });

@@ -19,6 +19,7 @@ import { Lecturer } from '~/modules/Lecturer/util/type';
 import { Semester } from '~/modules/Semester/util/type';
 import { deleteLecturer, reuseLecturer } from '~/services/lecturer';
 import { getLecturersTableColumns } from '../util/columns';
+import useAuth from '~/hooks/useAuth';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -42,7 +43,7 @@ const LecturerTable = (props: Props) => {
   } = props;
   const columns = useMemo(() => getLecturersTableColumns(), []);
   const { semesters, currentSemester } = useArrange();
-
+  const { user } = useAuth();
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
   }, [currentSemester]);
@@ -71,6 +72,7 @@ const LecturerTable = (props: Props) => {
     reuseLecturer({
       fromSemesterId: semestersSelector?.id || 0,
       toSemesterId: currentSemester?.id || 0,
+      departmentHeadId: user?.id || 0,
     }).then((res) => {
       if (!res.isSuccess) {
         setNotifications({ message: res.message, severity: 'error' });

@@ -12,6 +12,7 @@ export interface Column {
 export interface ReuseParams {
   fromSemesterId: number;
   toSemesterId: number;
+  departmentHeadId: number;
 }
 
 export interface GetAllParams {
