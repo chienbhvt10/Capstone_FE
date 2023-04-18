@@ -6,6 +6,7 @@ import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import useArrange from '~/hooks/useArrange';
 import useAuth from '~/hooks/useAuth';
+import useNotification from '~/hooks/useNotification';
 import { Lecturer } from '~/modules/Lecturer/util/type';
 import { createLecturer, updateLecturer } from '~/services/lecturer';
 import Validation from '~/utils/Validation';
@@ -38,6 +39,7 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
   const { editMode, editingItem, setEditMode, refetch } = props;
   const { currentSemester } = useArrange();
   const { user } = useAuth();
+  const setNotification = useNotification();
   const {
     register,
     handleSubmit,
@@ -72,11 +74,21 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
         quota: value.quota,
       })
         .then((res) => {
-          refetch();
-          setEditMode(false);
-          handleReset();
+          if (res.isSuccess) {
+            refetch();
+            setEditMode(false);
+            handleReset();
+            setNotification({
+              message: 'Update successfully',
+              severity: 'success',
+            });
+            return;
+          }
+          setNotification({ message: res.message, severity: 'error' });
         })
-        .catch((err) => {});
+        .catch((err) => {
+          setNotification({ message: 'Update fail', severity: 'error' });
+        });
       return;
     }
 
@@ -90,10 +102,19 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
       semesterId: currentSemester?.id || 0,
     })
       .then((res) => {
-        handleReset();
-        refetch();
+        if (res.isSuccess) {
+          handleReset();
+          refetch();
+          setNotification({
+            message: 'Create successfully',
+            severity: 'success',
+          });
+        }
+        setNotification({ message: res.message, severity: 'error' });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setNotification({ message: 'Create fail', severity: 'error' });
+      });
   };
 
   const handleReset = () => {

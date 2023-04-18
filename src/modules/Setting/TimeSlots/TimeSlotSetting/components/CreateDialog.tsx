@@ -17,6 +17,7 @@ import { FiltersRef } from '~/utils/form';
 import { CreateSegmentData } from '../../utils/type';
 import useArrange from '~/hooks/useArrange';
 import useAuth from '~/hooks/useAuth';
+import useNotification from '~/hooks/useNotification';
 
 interface CreateTimeSlotForm {
   name: string;
@@ -39,7 +40,7 @@ const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
   const { open, onCloseCreateDialog, onGetValueSegment, refetch } = props;
   const { currentSemester } = useArrange();
   const { user } = useAuth();
-
+  const setNotification = useNotification();
   const {
     register,
     handleSubmit,
@@ -59,11 +60,23 @@ const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
       segments: segmentValue,
       departmentHeadId: user?.id || 0,
       semesterId: currentSemester?.id || 0,
-    }).then((res) => {
-      refetch();
-      onCloseCreateDialog();
-      handleReset();
-    });
+    })
+      .then((res) => {
+        if (res.isSuccess) {
+          refetch();
+          onCloseCreateDialog();
+          handleReset();
+          setNotification({
+            message: 'Create successfully',
+            severity: 'success',
+          });
+          return;
+        }
+        setNotification({ message: res.message, severity: 'error' });
+      })
+      .catch((err) => {
+        setNotification({ message: 'Create fail', severity: 'error' });
+      });
   };
 
   const handleReset = () => {

@@ -10,6 +10,7 @@ import { FiltersRef } from '~/utils/form';
 import { Building } from '../util/type';
 import useArrange from '~/hooks/useArrange';
 import useAuth from '~/hooks/useAuth';
+import useNotification from '~/hooks/useNotification';
 
 interface BuildingForm {
   name: string;
@@ -31,6 +32,7 @@ const BuildingForm = forwardRef<FiltersRef, Props>((props, ref) => {
   const { editingItem, setEditMode, editMode } = props;
   const { user } = useAuth();
   const { refetchBuilding, currentSemester } = useArrange();
+  const setNotification = useNotification();
 
   const {
     register,
@@ -60,11 +62,21 @@ const BuildingForm = forwardRef<FiltersRef, Props>((props, ref) => {
         name: value.name,
       })
         .then((res) => {
-          refetchBuilding();
-          setEditMode(false);
-          handleReset();
+          if (res.isSuccess) {
+            refetchBuilding();
+            setEditMode(false);
+            handleReset();
+            setNotification({
+              message: 'Update successfully',
+              severity: 'success',
+            });
+            return;
+          }
+          setNotification({ message: res.message, severity: 'error' });
         })
-        .catch((err) => {});
+        .catch((err) => {
+          setNotification({ message: 'Update fail', severity: 'error' });
+        });
       return;
     }
 
@@ -75,10 +87,20 @@ const BuildingForm = forwardRef<FiltersRef, Props>((props, ref) => {
       departmentHeadId: user?.id || null,
     })
       .then((res) => {
-        refetchBuilding();
-        handleReset();
+        if (res.isSuccess) {
+          refetchBuilding();
+          handleReset();
+          setNotification({
+            message: 'Create successfully',
+            severity: 'success',
+          });
+          return;
+        }
+        setNotification({ message: res.message, severity: 'error' });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setNotification({ message: 'Create fail', severity: 'error' });
+      });
   };
 
   const handleReset = () => {

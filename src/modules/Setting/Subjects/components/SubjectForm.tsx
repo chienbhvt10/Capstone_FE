@@ -10,6 +10,7 @@ import { Subject } from '../util/type';
 import SaveIcon from '@mui/icons-material/Save';
 import useArrange from '~/hooks/useArrange';
 import useAuth from '~/hooks/useAuth';
+import useNotification from '~/hooks/useNotification';
 
 interface SubjectForm {
   name: string;
@@ -31,6 +32,7 @@ interface Props {
 const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
   const { editMode, editingItem, setEditMode, refetch } = props;
   const { user } = useAuth();
+  const setNotification = useNotification();
   const { currentSemester } = useArrange();
   const {
     register,
@@ -60,11 +62,21 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
         name: value.name,
       })
         .then((res) => {
-          refetch();
-          setEditMode(false);
-          handleReset();
+          if (res.isSuccess) {
+            refetch();
+            setEditMode(false);
+            handleReset();
+            setNotification({
+              message: 'Update successfully',
+              severity: 'success',
+            });
+            return;
+          }
+          setNotification({ message: res.message, severity: 'error' });
         })
-        .catch((err) => {});
+        .catch((err) => {
+          setNotification({ message: 'Update fail', severity: 'error' });
+        });
       return;
     }
 
@@ -75,10 +87,20 @@ const SubjectForm = forwardRef<FiltersRef, Props>((props, ref) => {
       semesterId: currentSemester?.id || 0,
     })
       .then((res) => {
-        refetch();
-        handleReset();
+        if (res.isSuccess) {
+          refetch();
+          handleReset();
+          setNotification({
+            message: 'Create successfully',
+            severity: 'success',
+          });
+          return;
+        }
+        setNotification({ message: res.message, severity: 'error' });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setNotification({ message: 'Create fail', severity: 'error' });
+      });
   };
 
   const handleReset = () => {
