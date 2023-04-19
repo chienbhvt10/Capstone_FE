@@ -34,6 +34,7 @@ const Header = (props: Props) => {
   const onLogout = () => {
     LocalStorage.remove('currentUser');
     navigate(LOGIN_PATH);
+    window.location.reload();
     setNotification({ severity: 'success', message: 'Logged out' });
   };
 
