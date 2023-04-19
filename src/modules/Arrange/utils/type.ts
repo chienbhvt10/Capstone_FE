@@ -79,11 +79,23 @@ export interface TaskDetail {
 }
 
 export interface TimeTableModifyParam {
-  subjectId: number | null;
   taskId: number | null;
   lecturerId: number | null;
-  roomId: number | null;
-  timeSlotId: number | null;
+}
+
+export interface SwapLecturerParams {
+  lecturerId: number;
+  taskId: number;
+  timeSlotId: number;
+  semesterId: number;
+  departmentHeadId: number;
+}
+
+export interface SwapRoomParams {
+  roomId: number;
+  taskId: number;
+  semesterId: number;
+  departmentHeadId: number;
 }
 
 export interface TimeTableModifyResponse {

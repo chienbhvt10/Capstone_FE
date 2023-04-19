@@ -11,6 +11,8 @@ import {
   API_LOCK_UNLOCK_TASK,
   API_MODIFY_TIMETABLE,
   API_SEARCH_TASK,
+  API_SWAP_LECTURER,
+  API_SWAP_ROOM,
   API_UNLOCK_ALL_TASK,
 } from '../constants/api-path';
 
@@ -21,6 +23,8 @@ import {
   SearchTaskParams,
   SearchTaskResponse,
   SettingParams,
+  SwapLecturerParams,
+  SwapRoomParams,
   TaskDetail,
   TimeSlotResponse,
   TimeTableModifyParam,
@@ -75,10 +79,21 @@ export const importTimeTable = async (params: FormData) => {
 };
 
 export const modifyTimetable = async (params: TimeTableModifyParam) => {
-  return HttpClient.put<typeof params, CommonResponse<TimeTableModifyResponse>>(
+  return HttpClient.put<typeof params, CommonResponse>(
     API_MODIFY_TIMETABLE,
     params
   );
+};
+
+export const swapLecturer = async (params: SwapLecturerParams) => {
+  return HttpClient.put<typeof params, CommonResponse>(
+    API_SWAP_LECTURER,
+    params
+  );
+};
+
+export const swapRoom = async (params: SwapRoomParams) => {
+  return HttpClient.put<typeof params, CommonResponse>(API_SWAP_ROOM, params);
 };
 
 export const lockAndUnLockTask = async (params: {

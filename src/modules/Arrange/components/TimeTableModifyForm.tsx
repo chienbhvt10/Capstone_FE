@@ -1,6 +1,7 @@
 import {
   Box,
   CircularProgress,
+  LinearProgress,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -36,24 +37,30 @@ const TimeTableModifyForm = () => {
   const [lecturerFilter, setLecturerFilter] = useState<Lecturer[]>([]);
   const [selectedLecturerIdSwap, setSelectedLecturerIdSwap] =
     useState<number>(0);
+  const [loadingSelectLecturer, setLoadingSelectLecturer] =
+    useState<boolean>(false);
 
   useEffect(() => {
-    getLecturers({
-      lecturerId: taskSelect?.lecturerId || null,
-      timeSlotId: taskSelect?.timeSlotId || null,
-      subjectId: taskSelect?.subjectId || null,
-      semesterId: semestersSelector?.id || 0,
-      departmentHeadId: user?.id || 0,
-    })
-      .then((res) => {
-        if (res.data) {
-          setLecturerFilter(res.data);
-        }
+    if (semestersSelector && user) {
+      setLoadingSelectLecturer(true);
+      getLecturers({
+        lecturerId: taskSelect?.lecturerId || null,
+        timeSlotId: taskSelect?.timeSlotId || null,
+        subjectId: taskSelect?.subjectId || null,
+        semesterId: semestersSelector?.id || 0,
+        departmentHeadId: user?.id || 0,
       })
-      .finally(() => {
-        setSelectedLecturerIdSwap(taskSelect?.lecturerId || 0);
-      });
-  }, [taskSelect, semestersSelector]);
+        .then((res) => {
+          if (res.data) {
+            setLecturerFilter(res.data);
+          }
+        })
+        .finally(() => {
+          setSelectedLecturerIdSwap(taskSelect?.lecturerId || 0);
+          setLoadingSelectLecturer(false);
+        });
+    }
+  }, [taskSelect, semestersSelector, user]);
 
   const onChangeLecturerSelect = (event: SelectChangeEvent<number>) => {
     if (taskSelect) {
@@ -68,16 +75,17 @@ const TimeTableModifyForm = () => {
         return;
       }
       const res = await modifyTimetable({
-        subjectId: taskSelect.subjectId || null,
-        lecturerId: taskSelect.lecturerId || null,
+        lecturerId: selectedLecturerIdSwap || null,
         taskId: taskSelect?.taskId || null,
-        roomId: taskSelect?.roomId || null,
-        timeSlotId: taskSelect?.timeSlotId || null,
       });
 
       if (res.isSuccess) {
         refetch();
         setTaskSelect(null);
+        setNotification({
+          message: res.message,
+          severity: 'success',
+        });
       } else {
         setNotification({
           message: res.message,
@@ -147,7 +155,7 @@ const TimeTableModifyForm = () => {
           {loadingTimeTableModify ? (
             <Box
               sx={{
-                minHeight: 250,
+                minHeight: 180,
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -191,27 +199,36 @@ const TimeTableModifyForm = () => {
                 <Typography variant="body2" sx={{ width: 80 }}>
                   Lecturer
                 </Typography>
-                <Select
-                  disabled={
-                    !!selectedLecturerIdSwap && selectedLecturerIdSwap > 0
-                  }
-                  value={selectedLecturerIdSwap}
-                  onChange={onChangeLecturerSelect}
-                >
-                  <MenuItem disabled value={0}>
-                    <em style={{ fontSize: 14 }}>Select Lecturer</em>
-                  </MenuItem>
-                  {lecturerFilter?.length &&
-                    lecturerFilter?.map((item) => (
-                      <MenuItem key={Math.random()} value={item.id}>
-                        {item.shortName}
-                      </MenuItem>
-                    ))}
-                </Select>
+                {loadingSelectLecturer ? (
+                  <LinearProgress sx={{ width: 1 }} />
+                ) : (
+                  <Select
+                    disabled={
+                      !!selectedLecturerIdSwap && selectedLecturerIdSwap > 0
+                    }
+                    value={selectedLecturerIdSwap}
+                    onChange={onChangeLecturerSelect}
+                  >
+                    <MenuItem disabled value={0}>
+                      <em style={{ fontSize: 14 }}>Select Lecturer</em>
+                    </MenuItem>
+                    {lecturerFilter?.length &&
+                      lecturerFilter?.map((item) => (
+                        <MenuItem key={Math.random()} value={item.id}>
+                          {item.shortName}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                )}
               </Stack>
             </Fragment>
           )}
-          <Button fullWidth onClick={onModifyTimeTable} size="medium">
+          <Button
+            fullWidth
+            onClick={onModifyTimeTable}
+            size="medium"
+            disabled={!!taskSelect?.lecturerId}
+          >
             Modify TimeTable
           </Button>
           <Button
