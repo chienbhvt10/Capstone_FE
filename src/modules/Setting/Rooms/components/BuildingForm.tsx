@@ -26,12 +26,13 @@ interface Props {
   editMode: boolean;
   editingItem: Building | null;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: React.DispatchWithoutAction;
 }
 
 const BuildingForm = forwardRef<FiltersRef, Props>((props, ref) => {
-  const { editingItem, setEditMode, editMode } = props;
+  const { editingItem, setEditMode, editMode, refetch } = props;
   const { user } = useAuth();
-  const { refetchBuilding, currentSemester } = useArrange();
+  const { currentSemester } = useArrange();
   const setNotification = useNotification();
 
   const {
@@ -63,7 +64,7 @@ const BuildingForm = forwardRef<FiltersRef, Props>((props, ref) => {
       })
         .then((res) => {
           if (res.isSuccess) {
-            refetchBuilding();
+            refetch();
             setEditMode(false);
             handleReset();
             setNotification({
@@ -88,7 +89,7 @@ const BuildingForm = forwardRef<FiltersRef, Props>((props, ref) => {
     })
       .then((res) => {
         if (res.isSuccess) {
-          refetchBuilding();
+          refetch();
           handleReset();
           setNotification({
             message: 'Create successfully',
@@ -179,7 +180,7 @@ const BuildingForm = forwardRef<FiltersRef, Props>((props, ref) => {
                 },
               }}
             >
-              Lecturer
+              Building
             </Button>
             <Button size="medium" sx={{ width: 80 }} onClick={handleReset}>
               Clear

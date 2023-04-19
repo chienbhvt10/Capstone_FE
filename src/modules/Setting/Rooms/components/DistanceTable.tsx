@@ -9,9 +9,15 @@ import TableCustom from '~/components/TableComponents/TableCustom';
 import useArrange from '~/hooks/useArrange';
 import { getDistanceColumns } from '../util/columns';
 import EditableCell from './EditableCell';
+import { Building, BuildingDistanceData } from '../util/type';
 
-const RoomTable = () => {
-  const { buildings, distances, refetchBuilding } = useArrange();
+interface Props {
+  buildings: Building[];
+  distances: BuildingDistanceData[];
+  refetch: React.DispatchWithoutAction;
+}
+const DistanceTable = (props: Props) => {
+  const { buildings, distances, refetch } = props;
 
   const columns = useMemo(() => getDistanceColumns(buildings), [buildings]);
 
@@ -55,7 +61,7 @@ const RoomTable = () => {
                   key={distance.id + item.buildingId}
                   distanceData={item}
                   distanceInfo={distance}
-                  refetch={refetchBuilding}
+                  refetch={refetch}
                 />
               ))}
             </TableRow>
@@ -66,4 +72,4 @@ const RoomTable = () => {
   );
 };
 
-export default RoomTable;
+export default DistanceTable;

@@ -62,7 +62,7 @@ const SlotPreferenceLevel = () => {
     if (semestersSelector && user) {
       // setLoadingTable(true);
       getTimeSlots({
-        semesterId: currentSemester?.id || null,
+        semesterId: semestersSelector?.id || null,
         departmentHeadId: user?.id || null,
       }).then((res) => {
         if (res.data) {
@@ -70,7 +70,7 @@ const SlotPreferenceLevel = () => {
         }
       });
       getSlotPreferenceLevels({
-        semesterId: currentSemester?.id || null,
+        semesterId: semestersSelector?.id || null,
         departmentHeadId: user?.id || null,
       })
         .then((res) => {

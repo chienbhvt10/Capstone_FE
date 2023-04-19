@@ -11,7 +11,7 @@ import {
   UpdateDistanceParams,
   UpdateBuildingParams,
 } from '~/modules/Setting/Rooms/util/type';
-import { GetAllParams } from '~/utils/types';
+import { GetAllParams, ReuseParams } from '~/utils/types';
 
 export const createBuilding = async (params: CreateBuildingParams) => {
   const url = API_BUILDING;
@@ -51,4 +51,9 @@ export const getAllBuilding = async (params: GetAllParams) => {
     url,
     params
   );
+};
+
+export const reuseBuilding = (params: ReuseParams) => {
+  const url = API_BUILDING + '/reuse';
+  return HttpClient.post<typeof params, CommonResponse>(url, params);
 };

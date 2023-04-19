@@ -61,18 +61,13 @@ export interface ArrangeContextValue {
   refetchRoom: React.DispatchWithoutAction;
   refetchClass: React.DispatchWithoutAction;
   refetchTimeSlot: React.DispatchWithoutAction;
-  refetchBuilding: React.DispatchWithoutAction;
   refetchSemester: React.DispatchWithoutAction;
-  buildings: Building[];
-  setBuildings: React.Dispatch<React.SetStateAction<Building[]>>;
   semestersSelector: Semester | null;
   setSemestersSelector: React.Dispatch<React.SetStateAction<Semester | null>>;
   semesters: Semester[];
   setSemesters: React.Dispatch<React.SetStateAction<Semester[]>>;
   currentSemester: Semester | null;
   setCurrentSemester: React.Dispatch<React.SetStateAction<Semester | null>>;
-  setDistances: React.Dispatch<React.SetStateAction<BuildingDistanceData[]>>;
-  distances: BuildingDistanceData[];
   refreshListExecuteInfo: any;
   refetchListExecuteInfo: React.DispatchWithoutAction;
 }
@@ -91,7 +86,6 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const [refreshRoom, refetchRoom] = useRefresh();
   const [refreshClass, refetchClass] = useRefresh();
   const [refreshTimeSlot, refetchTimeSlot] = useRefresh();
-  const [refreshBuilding, refetchBuilding] = useRefresh();
   const [refreshSemester, refetchSemester] = useRefresh();
   const [executeId, setExecuteId] = useState<number>(0);
   const [semesters, setSemesters] = useState<Semester[]>([]);
@@ -101,8 +95,6 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   >([]);
   const [tasksNotAssignedInfo, setTasksNotAssigned] =
     useState<TimeSlotResponse | null>(null);
-  const [buildings, setBuildings] = useState<Building[]>([]);
-  const [distances, setDistances] = useState<BuildingDistanceData[]>([]);
 
   const [taskSelect, setTaskSelect] = useState<TaskDetail | null>(null);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
@@ -219,27 +211,6 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [refreshTimeSlot, currentSemester, user]);
 
   useEffect(() => {
-    if (currentSemester && user) {
-      getAllBuilding({
-        semesterId: currentSemester?.id || null,
-        departmentHeadId: user?.id || null,
-      }).then((res) => {
-        if (res.data && res.data.length > 0) {
-          setBuildings(res.data || []);
-        }
-      });
-      getDistances({
-        semesterId: currentSemester?.id || null,
-        departmentHeadId: user?.id || null,
-      }).then((res) => {
-        if (res.data && res.data.length > 0) {
-          setDistances(res.data || []);
-        }
-      });
-    }
-  }, [refreshBuilding, currentSemester, user]);
-
-  useEffect(() => {
     if (user) {
       getSemesters({ departmentHeadId: user?.id || null }).then((res) => {
         if (res.data && res.data.length > 0) {
@@ -256,8 +227,6 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
       value={{
         refetchListExecuteInfo,
         refreshListExecuteInfo,
-        distances,
-        setDistances,
         currentSemester,
         setCurrentSemester,
         semesters,
@@ -265,9 +234,6 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         refetchSemester,
         semestersSelector,
         setSemestersSelector,
-        buildings,
-        refetchBuilding,
-        setBuildings,
         loadingTimeTableModify,
         loadingTimeTable,
         classes,
