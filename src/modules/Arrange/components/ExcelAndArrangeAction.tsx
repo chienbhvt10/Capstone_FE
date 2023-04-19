@@ -16,6 +16,12 @@ import SettingModelDialog from './SettingModelDialog';
 import useNotification from '~/hooks/useNotification';
 import useArrange from '~/hooks/useArrange';
 import useAuth from '~/hooks/useAuth';
+import { downloadFileFromBlob } from '~/utils/downloadExcel';
+import axios, { AxiosResponse, AxiosResponseHeaders } from 'axios';
+import {
+  API_EXPORT_GROUP_BY_LECTURER,
+  API_EXPORT_IN_IMPORT_FORMAT,
+} from '~/constants/api-path';
 
 interface Props {}
 
@@ -35,7 +41,33 @@ const ExcelAndArrangeAction = (props: Props) => {
   };
 
   const onExportInImportFormat = async () => {
-    await exportInImportFormat();
+    const response: AxiosResponse = await axios.get(
+      `https://localhost:7279/api${API_EXPORT_IN_IMPORT_FORMAT}/${
+        user?.id || 0
+      }`,
+      {
+        responseType: 'blob',
+      }
+    );
+    if (response.status === 200) {
+      const { data, headers } = response;
+      downloadFileFromBlob(data, headers as AxiosResponseHeaders);
+    }
+  };
+
+  const onExportGroupByLecturer = async () => {
+    const response: AxiosResponse = await axios.get(
+      `https://localhost:7279/api${API_EXPORT_GROUP_BY_LECTURER}/${
+        user?.id || 0
+      }`,
+      {
+        responseType: 'blob',
+      }
+    );
+    if (response.status === 200) {
+      const { data, headers } = response;
+      downloadFileFromBlob(data, headers as AxiosResponseHeaders);
+    }
   };
 
   const handleUploadExcel = async (file: File) => {
@@ -106,9 +138,10 @@ const ExcelAndArrangeAction = (props: Props) => {
             Export in import format
           </Button>
           <Button
+            sx={{ maxHeight: 40, height: 1, lineHeight: 1.25 }}
+            onClick={onExportGroupByLecturer}
             startIcon={<FileDownloadIcon />}
             fullWidth
-            sx={{ maxHeight: 40, height: 1, lineHeight: 1.25 }}
           >
             Export group by lecturer
           </Button>
