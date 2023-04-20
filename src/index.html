@@ -2,13 +2,43 @@
 <html lang="en">
 
 <head>
+    <link rel="shortcut icon" type="image/x-icon" href="./assets/favicon.ico" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Schedule Timetable</title>
+    <!-- fix được lỗi refresh trang bị 404 -->
+    <base href="/">
 </head>
 
 <body>
+    <style>
+        /* width */
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #3DA2FF;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0084ff;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
     <div id="root"></div>
 </body>
 

@@ -13,8 +13,9 @@
     [
       "module-resolver",
       {
+        // config with path in tsconfig.json to get absolute path
         "alias": {
-          "/": "./src"
+          "~": "./src"
         }
       }
     ]

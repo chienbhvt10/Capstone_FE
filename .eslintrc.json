@@ -1,0 +1,6 @@
+{
+  "ignorePatterns": ["webpack.config.js", "tsconfig.json"],
+  "rules": {
+    //...
+  }
+}

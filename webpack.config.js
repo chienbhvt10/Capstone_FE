@@ -13,6 +13,7 @@ module.exports = {
   output: {
     filename: 'js/bundle.[name].js',
     path: path.resolve(__dirname, 'build'),
+    assetModuleFilename: 'images/[hash][ext][query]',
   },
   // Add loader
   module: {
@@ -21,28 +22,6 @@ module.exports = {
         test: /\.(js|ts)x?$/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-              [
-                '@babel/preset-react',
-                {
-                  runtime: 'automatic',
-                },
-              ],
-              '@babel/preset-typescript',
-            ],
-            plugins: [
-              [
-                'module-resolver',
-                {
-                  alias: {
-                    '~': './src',
-                  },
-                },
-              ],
-            ],
-          },
         },
         exclude: /node_modules/,
       },
@@ -55,6 +34,10 @@ module.exports = {
           'css-loader',
           'sass-loader',
         ],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset/resource',
       },
     ],
   },
@@ -100,5 +83,6 @@ module.exports = {
   // create server when start project development environment
   devServer: {
     port: 3000,
+    historyApiFallback: true,
   },
 };

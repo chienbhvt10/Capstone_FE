@@ -1,21 +1,30 @@
-import React from "react"
-import Header from "./components/Header"
-import { Box } from "@mui/material"
-import Footer from "./components/Footer"
+import { Box } from '@mui/material';
+import React from 'react';
+import ContentBounder from './components/ContentBounder';
+import Header from './components/Header';
+import SideBar from './components/SideBar';
+import { Outlet } from 'react-router-dom';
 
-interface Props {
-  children: React.ReactNode
-}
+const AdminLayout = () => {
+  const [open, setOpen] = React.useState(false);
 
-const AdminLayout = (props: Props) => {
-  const { children } = props
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Box>
-      <Header />
-      {children}
-      <Footer />
+      <Header handleDrawerOpen={handleDrawerOpen} open={open} />
+      <SideBar handleDrawerClose={handleDrawerClose} open={open} />
+      <ContentBounder open={open}>
+        <Outlet />
+      </ContentBounder>
     </Box>
-  )
-}
+  );
+};
 
-export default AdminLayout
+export default AdminLayout;
