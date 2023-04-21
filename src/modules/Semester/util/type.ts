@@ -29,4 +29,5 @@ export interface UpdateSemesterParams {
   isNow?: boolean;
   year: number;
   semester: string;
+  departmentHeadId: number;
 }

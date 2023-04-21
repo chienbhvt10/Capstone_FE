@@ -62,6 +62,7 @@ const SemesterForm = forwardRef<FiltersRef, Props>((props, ref) => {
         isNow: editingItem?.isNow,
         year: value.year,
         semester: value.semester,
+        departmentHeadId: user?.id || 0,
       })
         .then((res) => {
           refetchSemester();
