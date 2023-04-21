@@ -26,6 +26,7 @@ import useNotification from '~/hooks/useNotification';
 import useRefresh from '~/hooks/useRefresh';
 import { Semester } from '~/modules/Semester/util/type';
 import {
+  createDefaultSlotPreferenceLevels,
   getSlotPreferenceLevels,
   reuseSlotPreference,
   updateSlotPreferenceLevel,
@@ -125,6 +126,24 @@ const SlotPreferenceLevel = () => {
     });
   };
 
+  const onCreateDefaultForLecturers = () => {
+    createDefaultSlotPreferenceLevels({
+      departmentHeadId: user?.id || null,
+      semesterId: currentSemester?.id || null,
+    })
+      .then((res) => {
+        if (!res.isSuccess) {
+          setNotifications({ message: res.message, severity: 'error' });
+          return;
+        }
+        setNotifications({ message: res.message, severity: 'success' });
+        refetch();
+      })
+      .catch((err) => {
+        setNotifications({ message: 'Create fail', severity: 'error' });
+      });
+  };
+
   return (
     <Fragment>
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -151,7 +170,9 @@ const SlotPreferenceLevel = () => {
           )}
         {slotPreferenceLevels.length === 0 &&
           semestersSelector?.id === currentSemester?.id && (
-            <Button>Create default for all Lecturers</Button>
+            <Button onClick={onCreateDefaultForLecturers}>
+              Create default for all Lecturers
+            </Button>
           )}
       </Stack>
 
@@ -234,7 +255,9 @@ const SlotPreferenceLevel = () => {
                             border={true}
                             sx={{
                               backgroundColor:
-                                slot.preferenceLevel && '#97cdff',
+                                slot.preferenceLevel === 0
+                                  ? '#97cdff'
+                                  : 'background.paper',
                             }}
                           >
                             <TableCellSelect<SlotPreferenceLevelItems>
