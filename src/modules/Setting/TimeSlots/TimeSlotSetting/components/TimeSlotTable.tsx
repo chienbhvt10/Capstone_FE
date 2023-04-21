@@ -17,6 +17,7 @@ import { daySessionItem, getSlotSelectItem } from '../../utils/data';
 import { SlotSegment, TimeSlotSegment } from '../../utils/type';
 import EditableCell from './EditableCell';
 import EditableCellForSegment from './EditableCellForSegment';
+import useNotification from '~/hooks/useNotification';
 
 interface Props {
   refresh: any;
@@ -28,13 +29,20 @@ interface Props {
 
 const TimeSlotTable = (props: Props) => {
   const { numberSlots, refetch, timeSlotsSegment, setTimeSlotsSegment } = props;
+  const setNotification = useNotification();
 
   const onDelete = (timeSlot: TimeSlotSegment) => async () => {
     await deleteTimeSlot(timeSlot.timeSlotId).then((res) => {
-      const newTimeSlot = timeSlotsSegment.filter(
-        (t) => t.timeSlotId !== timeSlot.timeSlotId
-      );
-      setTimeSlotsSegment(newTimeSlot);
+      if (!res.isSuccess) {
+        setNotification({ message: res.message, severity: 'error' });
+        return;
+      }
+      setNotification({
+        message: 'Delete time slot success',
+        severity: 'success',
+      });
+
+      refetch();
     });
   };
 
@@ -45,6 +53,10 @@ const TimeSlotTable = (props: Props) => {
       segment: 0,
       slotId: slotSegment?.slotId || 0,
     }).then((res) => {
+      if (!res.isSuccess) {
+        setNotification({ message: res.message, severity: 'error' });
+        return;
+      }
       refetch();
     });
   };
@@ -59,6 +71,10 @@ const TimeSlotTable = (props: Props) => {
       segment: value || 0,
       slotId: slotSegment?.slotId || 0,
     }).then((res) => {
+      if (!res.isSuccess) {
+        setNotification({ message: res.message, severity: 'error' });
+        return;
+      }
       refetch();
     });
   };
@@ -73,16 +89,11 @@ const TimeSlotTable = (props: Props) => {
       amorPm: value || 0,
       name: timeSlot?.timeSlotName || '',
     }).then((res) => {
-      const newTimeSlot = timeSlotsSegment.map((timeSlot) => {
-        if (timeSlot.timeSlotId === timeSlot.timeSlotId) {
-          return {
-            ...timeSlot,
-            amorPm: value || 0,
-          };
-        }
-        return timeSlot;
-      });
-      setTimeSlotsSegment(newTimeSlot);
+      if (!res.isSuccess) {
+        setNotification({ message: res.message, severity: 'error' });
+        return;
+      }
+      refetch();
     });
   };
 

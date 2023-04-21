@@ -33,6 +33,13 @@ const DistanceSetting = () => {
   const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
     null
   );
+
+  useEffect(() => {
+    if (currentSemester) {
+      setSemestersSelector(currentSemester);
+    }
+  }, [currentSemester]);
+
   useEffect(() => {
     if (semestersSelector && user) {
       getAllBuilding({

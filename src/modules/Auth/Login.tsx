@@ -88,7 +88,7 @@ const Login = forwardRef<FiltersRef, Props>((props, ref) => {
             <Typography variant="h5" align="center" sx={{ pb: 2 }}>
               Welcome to TimeTable <br /> Schedule app
             </Typography>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
               <Stack
                 direction="column"
                 spacing={0}
@@ -129,6 +129,7 @@ const Login = forwardRef<FiltersRef, Props>((props, ref) => {
                       {...register('password')}
                       variant="outlined"
                       name="password"
+                      type="password"
                     />
                     <Typography variant="caption" sx={{ color: 'error.main' }}>
                       {errors.password?.message &&

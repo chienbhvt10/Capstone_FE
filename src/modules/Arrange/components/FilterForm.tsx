@@ -148,7 +148,11 @@ const FilterForm = () => {
               />
             )}
           />
-          <Button onClick={onSearch} size="medium" sx={{ minWidth: 100 }}>
+          <Button
+            onClick={onSearch}
+            size="medium"
+            sx={{ minWidth: 100, minHeight: 40 }}
+          >
             Search
           </Button>
         </Stack>

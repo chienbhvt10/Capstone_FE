@@ -213,7 +213,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   useEffect(() => {
     if (user) {
       getSemesters({ departmentHeadId: user?.id || null }).then((res) => {
-        if (res.data && res.data.length > 0) {
+        if (res.data) {
           setSemesters(res.data || []);
           setCurrentSemester(res.data.filter((item) => item.isNow)[0]);
           setSemestersSelector(res.data.filter((item) => item.isNow)[0]);

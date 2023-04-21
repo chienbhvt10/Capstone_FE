@@ -117,9 +117,9 @@ const SemesterTable = (props: Props) => {
         <TableBody>
           {semesters?.length > 0 &&
             semesters.map((item, index) => (
-              <TableRow role="checkbox" tabIndex={-1} key={item.id}>
+              <TableRow role="checkbox" tabIndex={-1} key={Math.random()}>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body2">{index}</Typography>
+                  <Typography variant="body2">{index + 1}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
                   <Typography variant="body2">{item.semester}</Typography>
