@@ -20,7 +20,7 @@ interface SemesterForm {
 
 const schema = Validation.shape({
   semester: Validation.string().required('Semester is required'),
-  year: Validation.number().required('Year is required'),
+  year: Validation.number().required('Year is required').default(0),
 });
 
 interface Props {

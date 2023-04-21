@@ -149,6 +149,10 @@ const SlotPreferenceLevel = () => {
               Reuse for current semester
             </Button>
           )}
+        {slotPreferenceLevels.length === 0 &&
+          semestersSelector?.id === currentSemester?.id && (
+            <Button>Create default for all Lecturers</Button>
+          )}
       </Stack>
 
       <TableContainer sx={{ maxHeight: 550, position: 'relative' }}>

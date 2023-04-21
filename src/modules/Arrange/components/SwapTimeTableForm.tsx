@@ -37,7 +37,7 @@ const SwapTimeTableForm = (props: Props) => {
     useState<boolean>(false);
 
   useEffect(() => {
-    if (semestersSelector && user) {
+    if (semestersSelector && user && taskSelect) {
       setLoadingSelectLecturer(true);
       getLecturers({
         lecturerId: taskSelect?.lecturerId || null,
@@ -72,7 +72,12 @@ const SwapTimeTableForm = (props: Props) => {
       });
     }
   };
+
   const onSwapLecturer = () => {
+    if (!taskSelect) {
+      setNotification({ message: 'Select task first', severity: 'error' });
+      return;
+    }
     swapLecturer({
       lecturerId: selectedLecturerIdSwap || 0,
       taskId: taskSelect?.taskId || 0,
@@ -94,6 +99,10 @@ const SwapTimeTableForm = (props: Props) => {
   };
 
   const onSwapRoom = () => {
+    if (!taskSelect) {
+      setNotification({ message: 'Select task first', severity: 'error' });
+      return;
+    }
     swapRoom({
       roomId: selectedLecturerIdSwap || 0,
       taskId: taskSelect?.taskId || 0,
@@ -157,7 +166,11 @@ const SwapTimeTableForm = (props: Props) => {
         <Typography variant="body2" sx={{ width: 80 }}>
           Room
         </Typography>
-        <Select value={taskSelect?.roomId || 0} onChange={onChangeRoomSelect}>
+        <Select
+          disabled={!taskSelect?.lecturerId}
+          value={taskSelect?.roomId || 0}
+          onChange={onChangeRoomSelect}
+        >
           <MenuItem disabled value={0}>
             <em style={{ fontSize: 14 }}>Select Room</em>
           </MenuItem>

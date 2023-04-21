@@ -41,7 +41,7 @@ const TimeTableModifyForm = () => {
     useState<boolean>(false);
 
   useEffect(() => {
-    if (semestersSelector && user) {
+    if (semestersSelector && user && taskSelect) {
       setLoadingSelectLecturer(true);
       getLecturers({
         lecturerId: taskSelect?.lecturerId || null,
@@ -204,7 +204,9 @@ const TimeTableModifyForm = () => {
                 ) : (
                   <Select
                     disabled={
-                      !!selectedLecturerIdSwap && selectedLecturerIdSwap > 0
+                      (!!selectedLecturerIdSwap &&
+                        selectedLecturerIdSwap > 0) ||
+                      !taskSelect
                     }
                     value={selectedLecturerIdSwap}
                     onChange={onChangeLecturerSelect}
