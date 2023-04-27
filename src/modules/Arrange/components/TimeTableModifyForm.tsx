@@ -210,7 +210,34 @@ const TimeTableModifyForm = () => {
       setLoadingUploadExcel(false);
     }
   };
+  const onRemoveAssigned = async () => {
+    try {
+      if (!taskSelect) {
+        setNotification({ message: 'Select task first', severity: 'error' });
+        return;
+      }
+      const res = await modifyTimetable({
+        lecturerId: null,
+        taskId: taskSelect?.taskId || null,
+      });
 
+      if (res.isSuccess) {
+        refetch();
+        setTaskSelect(null);
+        setNotification({
+          message: res.message,
+          severity: 'success',
+        });
+      } else {
+        setNotification({
+          message: res.message,
+          severity: 'error',
+        });
+      }
+    } catch (error) {
+      setNotification({ message: 'Modify timetable error', severity: 'error' });
+    }
+  };
   return (
     <Stack
       direction="column"
@@ -326,6 +353,14 @@ const TimeTableModifyForm = () => {
             sx={{ mb: 1 }}
           >
             Modify TimeTable
+          </Button>
+          <Button
+            disabled={!taskSelect?.lecturerId}
+            fullWidth
+            onClick={onRemoveAssigned}
+            size="medium"
+          >
+            Remove Assigned
           </Button>
           <SwapTimeTableForm />
           <Button

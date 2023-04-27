@@ -14,7 +14,7 @@ import useArrange from '~/hooks/useArrange';
 import useAuth from '~/hooks/useAuth';
 import useNotification from '~/hooks/useNotification';
 import { Lecturer } from '~/modules/Lecturer/util/type';
-import { swapLecturer, swapRoom } from '~/services/arrange';
+import { modifyTimetable, swapLecturer, swapRoom } from '~/services/arrange';
 import { getLecturers } from '~/services/lecturer';
 
 interface Props {}
@@ -159,6 +159,7 @@ const SwapTimeTableForm = (props: Props) => {
       <Button fullWidth onClick={onSwapLecturer} size="medium">
         Swap Lecturer
       </Button>
+
       {/* <Stack
         direction="row"
         sx={{ justifyContent: 'center', alignItems: 'center' }}

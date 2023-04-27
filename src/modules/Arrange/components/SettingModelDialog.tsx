@@ -374,7 +374,7 @@ const SettingModelDialog = forwardRef<FiltersRef, Props>((props, ref) => {
                     <Fragment>
                       <FormControlLabel
                         label=""
-                        control={<Checkbox checked={field.value} />}
+                        control={<Checkbox {...field} checked={field.value} />}
                       />
                       <Typography
                         variant="body2"
@@ -415,7 +415,7 @@ const SettingModelDialog = forwardRef<FiltersRef, Props>((props, ref) => {
                     <Fragment>
                       <FormControlLabel
                         label=""
-                        control={<Checkbox checked={field.value} />}
+                        control={<Checkbox {...field} checked={field.value} />}
                       />
                       <Typography
                         variant="body2"
@@ -456,7 +456,7 @@ const SettingModelDialog = forwardRef<FiltersRef, Props>((props, ref) => {
                     <Fragment>
                       <FormControlLabel
                         label=""
-                        control={<Checkbox checked={field.value} />}
+                        control={<Checkbox {...field} checked={field.value} />}
                       />
                       <Typography
                         variant="body2"
@@ -497,7 +497,7 @@ const SettingModelDialog = forwardRef<FiltersRef, Props>((props, ref) => {
                     <Fragment>
                       <FormControlLabel
                         label=""
-                        control={<Checkbox checked={field.value} />}
+                        control={<Checkbox {...field} checked={field.value} />}
                       />
                       <Typography
                         variant="body2"
@@ -536,7 +536,7 @@ const SettingModelDialog = forwardRef<FiltersRef, Props>((props, ref) => {
                     <Fragment>
                       <FormControlLabel
                         label=""
-                        control={<Checkbox checked={field.value} />}
+                        control={<Checkbox {...field} checked={field.value} />}
                       />
                       <Typography
                         variant="body2"
@@ -578,7 +578,7 @@ const SettingModelDialog = forwardRef<FiltersRef, Props>((props, ref) => {
                     <Fragment>
                       <FormControlLabel
                         label=""
-                        control={<Checkbox checked={field.value} />}
+                        control={<Checkbox {...field} checked={field.value} />}
                       />
                       <Typography
                         variant="body2"
@@ -619,7 +619,7 @@ const SettingModelDialog = forwardRef<FiltersRef, Props>((props, ref) => {
                     <Fragment>
                       <FormControlLabel
                         label=""
-                        control={<Checkbox checked={field.value} />}
+                        control={<Checkbox {...field} checked={field.value} />}
                       />
                       <Typography
                         variant="body2"
@@ -660,7 +660,7 @@ const SettingModelDialog = forwardRef<FiltersRef, Props>((props, ref) => {
                     <Fragment>
                       <FormControlLabel
                         label=""
-                        control={<Checkbox checked={field.value} />}
+                        control={<Checkbox {...field} checked={field.value} />}
                       />
                       <Typography
                         variant="body2"
