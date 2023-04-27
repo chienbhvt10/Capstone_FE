@@ -140,7 +140,7 @@ const SwapTimeTableForm = (props: Props) => {
         ) : (
           <Select
             disabled={!taskSelect?.lecturerId}
-            value={selectedLecturerIdSwap}
+            value={selectedLecturerIdSwap || 0}
             onChange={onChangeLecturerSelect}
           >
             <MenuItem disabled value={0}>

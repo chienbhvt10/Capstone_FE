@@ -328,7 +328,7 @@ const TimeTableModifyForm = () => {
                         selectedLecturerIdSwap > 0) ||
                       !taskSelect
                     }
-                    value={selectedLecturerIdSwap}
+                    value={selectedLecturerIdSwap || 0}
                     onChange={onChangeLecturerSelect}
                   >
                     <MenuItem disabled value={0}>
