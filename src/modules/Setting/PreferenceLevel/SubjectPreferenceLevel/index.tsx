@@ -41,6 +41,8 @@ import {
 } from '../utils/types';
 import { subjectPreferenceLevelItems } from '../utils/data';
 import useAuth from '~/hooks/useAuth';
+import TablePagination from '~/components/TableComponents/TablePagination';
+import useFilterSubjectPreference from '~/hooks/filter/useFilterSubjectPreference';
 
 const SubjectPreferenceLevel = () => {
   const theme = useTheme();
@@ -56,6 +58,10 @@ const SubjectPreferenceLevel = () => {
   const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
     null
   );
+  const [totalRow, setTotalRow] = useState<number>(0);
+  const { filters, onChangePage, onChangeRowsPerPage } =
+    useFilterSubjectPreference();
+
   const [refresh, refetch] = useRefresh();
 
   useEffect(() => {
@@ -70,19 +76,28 @@ const SubjectPreferenceLevel = () => {
         }
       });
       getSubjectPreferenceLevels({
-        semesterId: semestersSelector.id || null,
-        departmentHeadId: user?.id || null,
+        pagination: {
+          pageNumber: filters.pageNumber,
+          pageSize: filters.pageSize,
+        },
+        getAllRequest: {
+          semesterId: semestersSelector.id || null,
+          departmentHeadId: user?.id || null,
+        },
       })
         .then((res) => {
-          setSubjectPreferenceLevels(res.data || []);
+          if (res.data) {
+            setSubjectPreferenceLevels(res.data?.subjectPreferenceLevels || []);
+            setTotalRow(res.data?.total);
+          }
         })
         .finally(async () => {
           // await wait(500);
           // setLoadingTable(false);
         });
     }
-  }, [refresh, semestersSelector, user]);
-
+  }, [refresh, semestersSelector, user, filters]);
+  console.log(subjectPreferenceLevels);
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
   }, [currentSemester]);
@@ -249,6 +264,15 @@ const SubjectPreferenceLevel = () => {
           </Fragment>
         )}
       </TableContainer>
+      <TablePagination
+        pageIndex={filters.pageNumber}
+        totalPages={Math.ceil(totalRow / filters.pageSize)}
+        totalRows={totalRow}
+        onChangePage={onChangePage}
+        onChangeRowsPerPage={onChangeRowsPerPage}
+        rowsPerPage={filters.pageSize}
+        rowsPerPageOptions={[5, 10, 25, 50, 100]}
+      />
     </Fragment>
   );
 };
