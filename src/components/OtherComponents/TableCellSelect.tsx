@@ -22,6 +22,12 @@ const TableCellSelect = <T extends Option>(props: Props<T>) => {
   const { item, value, selectItems, selectTitle, callback, disabled } = props;
   const [selectValue, setSelectValue] = useState(value);
 
+  useEffect(() => {
+    if (item) {
+      setSelectValue(value);
+    }
+  }, [item]);
+
   const onChangeSelect = (
     event: SelectChangeEvent<any>,
     child: React.ReactNode
