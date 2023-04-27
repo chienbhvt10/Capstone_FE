@@ -272,7 +272,9 @@ const SubjectPreferenceLevel = () => {
                             border={true}
                             sx={{
                               backgroundColor:
-                                subject.preferenceLevel && '#97cdff',
+                                subject.preferenceLevel > 0
+                                  ? '#97cdff'
+                                  : '#FFF',
                             }}
                           >
                             <TableCellSelect<SubjectPreferenceLevelItems>

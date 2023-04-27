@@ -295,7 +295,7 @@ const SlotPreferenceLevel = () => {
                             border={true}
                             sx={{
                               backgroundColor:
-                                slot.preferenceLevel && '#97cdff',
+                                slot.preferenceLevel > 0 ? '#97cdff' : '#FFF',
                             }}
                           >
                             <TableCellSelect<SlotPreferenceLevelItems>
