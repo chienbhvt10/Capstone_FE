@@ -25,3 +25,9 @@ export interface User {
   username: string;
   department: string;
 }
+
+export interface PreferenceFilter {
+  pageNumber: number;
+  pageSize: number;
+  lecturer: string | null;
+}

@@ -15,10 +15,11 @@ interface Props<T extends Option> {
   selectItems: T[];
   selectTitle: string;
   callback?: (item: any, selectValue: any) => void;
+  disabled?: boolean;
 }
 
 const TableCellSelect = <T extends Option>(props: Props<T>) => {
-  const { item, value, selectItems, selectTitle, callback } = props;
+  const { item, value, selectItems, selectTitle, callback, disabled } = props;
   const [selectValue, setSelectValue] = useState(value);
 
   const onChangeSelect = (
@@ -30,7 +31,7 @@ const TableCellSelect = <T extends Option>(props: Props<T>) => {
   };
 
   return (
-    <Select value={selectValue} onChange={onChangeSelect}>
+    <Select value={selectValue} onChange={onChangeSelect} disabled={disabled}>
       <MenuItem disabled value="">
         <em>{selectTitle}</em>
       </MenuItem>

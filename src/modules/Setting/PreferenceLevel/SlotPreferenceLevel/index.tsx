@@ -17,6 +17,7 @@ import {
   useState,
   SyntheticEvent,
   useLayoutEffect,
+  ChangeEvent,
 } from 'react';
 import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
@@ -42,6 +43,8 @@ import {
   SlotPreferenceLevelItems,
 } from '../utils/types';
 import useAuth from '~/hooks/useAuth';
+import TablePagination from '~/components/TableComponents/TablePagination';
+import useFilterSlotPreference from '~/hooks/filter/useFilterSlotPreference';
 
 const SlotPreferenceLevel = () => {
   const theme = useTheme();
@@ -58,6 +61,11 @@ const SlotPreferenceLevel = () => {
   const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
     null
   );
+  const [totalRow, setTotalRow] = useState<number>(0);
+  const [searchValue, setSearchValue] = useState<string>('');
+
+  const { filters, onChangePage, onChangeRowsPerPage, onSearch } =
+    useFilterSlotPreference();
 
   useEffect(() => {
     if (semestersSelector && user) {
@@ -71,18 +79,28 @@ const SlotPreferenceLevel = () => {
         }
       });
       getSlotPreferenceLevels({
-        semesterId: semestersSelector?.id || null,
-        departmentHeadId: user?.id || null,
+        lecturer: filters.lecturer,
+        pagination: {
+          pageNumber: filters.pageNumber,
+          pageSize: filters.pageSize,
+        },
+        getAllRequest: {
+          semesterId: semestersSelector.id || null,
+          departmentHeadId: user?.id || null,
+        },
       })
         .then((res) => {
-          setSlotPreferenceLevels(res.data || []);
+          if (res.data) {
+            setSlotPreferenceLevels(res.data.slotPreferenceLevels || []);
+            setTotalRow(res.data.total || 0);
+          }
         })
         .finally(async () => {
           // await wait(500);
           // setLoadingTable(false);
         });
     }
-  }, [semestersSelector, refresh, user]);
+  }, [semestersSelector, refresh, user, filters]);
 
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
@@ -144,6 +162,19 @@ const SlotPreferenceLevel = () => {
       });
   };
 
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+
+  const onClickSearch = () => {
+    onSearch(searchValue);
+  };
+
+  const onClickClear = () => {
+    onSearch(null);
+    setSearchValue('');
+  };
+
   return (
     <Fragment>
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -174,6 +205,15 @@ const SlotPreferenceLevel = () => {
               Create default for all Lecturers
             </Button>
           )}
+        <TextField
+          sx={{ maxWidth: 250 }}
+          value={searchValue}
+          variant="outlined"
+          label="Search Lecturer"
+          onChange={handleChange}
+        />
+        <Button onClick={onClickSearch}>Search</Button>
+        <Button onClick={onClickClear}>Clear</Button>
       </Stack>
 
       <TableContainer sx={{ maxHeight: 550, position: 'relative' }}>
@@ -255,9 +295,7 @@ const SlotPreferenceLevel = () => {
                             border={true}
                             sx={{
                               backgroundColor:
-                                slot.preferenceLevel === 0
-                                  ? '#97cdff'
-                                  : 'background.paper',
+                                slot.preferenceLevel > 0 ? '#97cdff' : '#FFF',
                             }}
                           >
                             <TableCellSelect<SlotPreferenceLevelItems>
@@ -276,6 +314,15 @@ const SlotPreferenceLevel = () => {
           </Fragment>
         )}
       </TableContainer>
+      <TablePagination
+        pageIndex={filters.pageNumber}
+        totalPages={Math.ceil(totalRow / filters.pageSize)}
+        totalRows={totalRow}
+        onChangePage={onChangePage}
+        onChangeRowsPerPage={onChangeRowsPerPage}
+        rowsPerPage={filters.pageSize}
+        rowsPerPageOptions={[5, 10, 25, 50, 100]}
+      />
     </Fragment>
   );
 };

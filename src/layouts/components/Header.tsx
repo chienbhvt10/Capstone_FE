@@ -1,5 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import images from '~/assets/images';
 import Image from '~/components/styledComponents/Image';
 import { LOGIN_PATH } from '~/constants/path';
+import useArrange from '~/hooks/useArrange';
 import useAuth from '~/hooks/useAuth';
 import useNotification from '~/hooks/useNotification';
 import LocalStorage from '~/utils/LocalStorage';
@@ -28,6 +29,7 @@ const Header = (props: Props) => {
   const { handleDrawerOpen, open } = props;
   const { pathname } = useLocation();
   const { user } = useAuth();
+  const { currentSemester } = useArrange();
   const navigate = useNavigate();
   const setNotification = useNotification();
 
@@ -49,7 +51,7 @@ const Header = (props: Props) => {
         }}
         disableGutters={true}
       >
-        <Stack direction="row">
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {pathname !== LOGIN_PATH && (
             <IconButton
               aria-label="open drawer"
@@ -64,7 +66,7 @@ const Header = (props: Props) => {
             </IconButton>
           )}
           <Image sx={{ width: 80, height: 'auto' }} src={images.logo} />
-        </Stack>
+        </Box>
         {pathname !== LOGIN_PATH && (
           <Stack
             direction="row"
@@ -78,7 +80,15 @@ const Header = (props: Props) => {
               {user?.username}:{' '}
               <span style={{ color: '#3DA2FF' }}>{user?.department}</span>
             </Typography>
-
+            <Typography
+              variant="body2"
+              sx={{ color: 'black', fontStyle: 'italic' }}
+            >
+              Current Semester:{' '}
+              <span style={{ color: '#3DA2FF' }}>
+                {currentSemester?.semester} {currentSemester?.year}
+              </span>
+            </Typography>
             <Tooltip title="Logout">
               <IconButton onClick={onLogout}>
                 <Image
