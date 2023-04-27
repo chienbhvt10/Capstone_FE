@@ -97,7 +97,7 @@ const SubjectPreferenceLevel = () => {
         });
     }
   }, [refresh, semestersSelector, user, filters]);
-  console.log(subjectPreferenceLevels);
+
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
   }, [currentSemester]);
