@@ -1,16 +1,26 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import {
   Checkbox,
   Dialog,
+  FormLabel,
   Grid,
   MenuItem,
   Select,
-  SelectChangeEvent,
   Stack,
   TextField,
+  FormControlLabel,
   Typography,
 } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import {
+  ChangeEvent,
+  Fragment,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+} from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { boolean } from 'yup';
 import images from '~/assets/images';
 import Image from '~/components/styledComponents/Image';
 import { SOLVER, STRATEGY } from '~/constants';
@@ -18,152 +28,99 @@ import useArrange from '~/hooks/useArrange';
 import useAuth from '~/hooks/useAuth';
 import useNotification from '~/hooks/useNotification';
 import { executeArrange } from '~/services/arrange';
+import Validation from '~/utils/Validation';
+import { FiltersRef } from '~/utils/form';
+
+interface SettingForm {
+  solver: number;
+  strategy: number;
+  maxSearchingTime: number;
+  O01_Level: number;
+  O02_Level: number;
+  O03_Level: number;
+  O04_Level: number;
+  O05_Level: number;
+  O06_Level: number;
+  O07_Level: number;
+  O08_Level: number;
+  O01_Activated: boolean;
+  O02_Activated: boolean;
+  O03_Activated: boolean;
+  O04_Activated: boolean;
+  O05_Activated: boolean;
+  O06_Activated: boolean;
+  O07_Activated: boolean;
+  O08_Activated: boolean;
+}
+const schema = Validation.shape({
+  solver: Validation.number()
+    .default(0)
+    .typeError('Please input a number')
+    .required('Solver is required'),
+  strategy: Validation.number()
+    .default(0)
+    .typeError('Please input a number')
+    .required('Strategy is required'),
+  maxSearchingTime: Validation.number()
+    .typeError('Please input a number')
+    .default(0)
+    .required('MaxSearchingTime is required'),
+  O01_Level: Validation.number().typeError('Please input a number').default(0),
+  O02_Level: Validation.number().typeError('Please input a number').default(0),
+  O03_Level: Validation.number().typeError('Please input a number').default(0),
+  O04_Level: Validation.number().typeError('Please input a number').default(0),
+  O05_Level: Validation.number().typeError('Please input a number').default(0),
+  O06_Level: Validation.number().typeError('Please input a number').default(0),
+  O07_Level: Validation.number().typeError('Please input a number').default(0),
+  O08_Level: Validation.number().typeError('Please input a number').default(0),
+  O01_Activated: boolean().default(false),
+  O02_Activated: boolean().default(false),
+  O03_Activated: boolean().default(false),
+  O04_Activated: boolean().default(false),
+  O05_Activated: boolean().default(false),
+  O06_Activated: boolean().default(false),
+  O07_Activated: boolean().default(false),
+  O08_Activated: boolean().default(false),
+});
 
 interface Props {
   openDialog: boolean;
   onCloseDialog: () => void;
 }
-// sua lai thanh reacthookform
-const SettingModelDialog = (props: Props) => {
+
+const SettingModelDialog = forwardRef<FiltersRef, Props>((props, ref) => {
   const { openDialog, onCloseDialog: onClose } = props;
   const { refetch, refetchClass, refetchRoom, refetchListExecuteInfo } =
     useArrange();
-  const { user } = useAuth();
-  const [solver, setSolver] = useState<number>(0);
-  const [strategy, setStrategy] = useState<number>(0);
-  const [maxSearchingTime, setMaxSearchingTime] = useState<number>(0);
-  const [O01_Level, setO01_Level] = useState<number>(0);
-  const [O02_Level, setO02_Level] = useState<number>(0);
-  const [O03_Level, setO03_Level] = useState<number>(0);
-  const [O04_Level, setO04_Level] = useState<number>(0);
-  const [O05_Level, setO05_Level] = useState<number>(0);
-  const [O06_Level, setO06_Level] = useState<number>(0);
-  const [O07_Level, setO07_Level] = useState<number>(0);
-  const [O08_Level, setO08_Level] = useState<number>(0);
 
-  const [O01_Activated, setO01_Activated] = useState<boolean>(false);
-  const [O02_Activated, setO02_Activated] = useState<boolean>(false);
-  const [O03_Activated, setO03_Activated] = useState<boolean>(false);
-  const [O04_Activated, setO04_Activated] = useState<boolean>(false);
-  const [O05_Activated, setO05_Activated] = useState<boolean>(false);
-  const [O06_Activated, setO06_Activated] = useState<boolean>(false);
-  const [O07_Activated, setO07_Activated] = useState<boolean>(false);
-  const [O08_Activated, setO08_Activated] = useState<boolean>(false);
+  const { user } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    getValues,
+    control,
+    formState: { errors },
+  } = useForm<SettingForm>({
+    mode: 'onChange',
+    resolver: yupResolver(schema),
+    defaultValues: schema.getDefault(),
+  });
 
   const [loadingExecuted, setLoadingExecuted] = useState<boolean>(false);
+  const [isFastArrange, setFastArrange] = useState<boolean>(false);
+  const [isGoodResult, setGoodResult] = useState<boolean>(false);
 
   const setNotification = useNotification();
 
-  const onChangeSolver = (event: SelectChangeEvent<number>) => {
-    setSolver((event.target.value as number) || 0);
-  };
-
-  const onChangeStrategy = (event: SelectChangeEvent<number>) => {
-    setStrategy((event.target.value as number) || 0);
-  };
-
-  const onChangeMaxSearchingTime = (event: ChangeEvent<HTMLInputElement>) => {
-    if (Number.isInteger(parseInt(event.target.value))) {
-      setMaxSearchingTime(parseInt(event.target.value));
-    }
-    if (event.target.value === '') setMaxSearchingTime(0);
-  };
-
-  const onChangeO01Level = (event: ChangeEvent<HTMLInputElement>) => {
-    if (Number.isInteger(parseInt(event.target.value))) {
-      setO01_Level(parseInt(event.target.value));
-    } else {
-      setNotification({
-        message: 'Enter a valid number',
-        severity: 'error',
-      });
-    }
-  };
-
-  const onChangeO01Activated = (event: ChangeEvent<HTMLInputElement>) => {
-    setO01_Activated(event.target.checked);
-  };
-
-  const onChangeO02Level = (event: ChangeEvent<HTMLInputElement>) => {
-    if (Number.isInteger(parseInt(event.target.value))) {
-      setO02_Level(parseInt(event.target.value));
-    }
-    if (event.target.value === '') setMaxSearchingTime(0);
-  };
-
-  const onChangeO02Activated = (event: ChangeEvent<HTMLInputElement>) => {
-    setO02_Activated(event.target.checked);
-  };
-
-  const onChangeO03Level = (event: ChangeEvent<HTMLInputElement>) => {
-    if (Number.isInteger(parseInt(event.target.value))) {
-      setO03_Level(parseInt(event.target.value));
-    }
-    if (event.target.value === '') setMaxSearchingTime(0);
-  };
-
-  const onChangeO03Activated = (event: ChangeEvent<HTMLInputElement>) => {
-    setO03_Activated(event.target.checked);
-  };
-
-  const onChangeO04Level = (event: ChangeEvent<HTMLInputElement>) => {
-    if (Number.isInteger(parseInt(event.target.value))) {
-      setO04_Level(parseInt(event.target.value));
-    }
-    if (event.target.value === '') setMaxSearchingTime(0);
-  };
-
-  const onChangeO04Activated = (event: ChangeEvent<HTMLInputElement>) => {
-    setO04_Activated(event.target.checked);
-  };
-
-  const onChangeO05Level = (event: ChangeEvent<HTMLInputElement>) => {
-    if (Number.isInteger(parseInt(event.target.value))) {
-      setO05_Level(parseInt(event.target.value));
-    }
-    if (event.target.value === '') setMaxSearchingTime(0);
-  };
-
-  const onChangeO05Activated = (event: ChangeEvent<HTMLInputElement>) => {
-    setO05_Activated(event.target.checked);
-  };
-
-  const onChangeO06Level = (event: ChangeEvent<HTMLInputElement>) => {
-    if (Number.isInteger(parseInt(event.target.value))) {
-      setO06_Level(parseInt(event.target.value));
-    }
-    if (event.target.value === '') setMaxSearchingTime(0);
-  };
-
-  const onChangeO06Activated = (event: ChangeEvent<HTMLInputElement>) => {
-    setO06_Activated(event.target.checked);
-  };
-
-  const onChangeO07Level = (event: ChangeEvent<HTMLInputElement>) => {
-    if (Number.isInteger(parseInt(event.target.value))) {
-      setO07_Level(parseInt(event.target.value));
-    }
-    if (event.target.value === '') setMaxSearchingTime(0);
-  };
-
-  const onChangeO07Activated = (event: ChangeEvent<HTMLInputElement>) => {
-    setO07_Activated(event.target.checked);
-  };
-
-  const onChangeO08Level = (event: ChangeEvent<HTMLInputElement>) => {
-    if (Number.isInteger(parseInt(event.target.value))) {
-      setO08_Level(parseInt(event.target.value));
-    }
-    if (event.target.value === '') setMaxSearchingTime(0);
-  };
-
-  const onChangeO08Activated = (event: ChangeEvent<HTMLInputElement>) => {
-    setO08_Activated(event.target.checked);
-  };
-
-  // fetch again execute id when execute success
-  const onArrange = () => {
-    if (solver === 0 || strategy === 0 || maxSearchingTime === 0) {
+  const onSubmit = (value: SettingForm) => {
+    console.log(value);
+    if (
+      value.solver === 0 ||
+      value.strategy === 0 ||
+      value.maxSearchingTime === 0
+    ) {
       setNotification({
         message: 'All of solver, strategy, and max searching time is required',
         severity: 'error',
@@ -173,29 +130,29 @@ const SettingModelDialog = (props: Props) => {
     setLoadingExecuted(true);
     executeArrange({
       departmentHeadId: user?.id || 0,
-      maxSearchingTime: maxSearchingTime,
+      maxSearchingTime: value.maxSearchingTime,
       objectiveOption: [
-        O01_Activated ? 1 : 0,
-        O02_Activated ? 1 : 0,
-        O03_Activated ? 1 : 0,
-        O04_Activated ? 1 : 0,
-        O05_Activated ? 1 : 0,
-        O06_Activated ? 1 : 0,
-        O07_Activated ? 1 : 0,
-        O08_Activated ? 1 : 0,
+        value.O01_Activated ? 1 : 0,
+        value.O02_Activated ? 1 : 0,
+        value.O03_Activated ? 1 : 0,
+        value.O04_Activated ? 1 : 0,
+        value.O05_Activated ? 1 : 0,
+        value.O06_Activated ? 1 : 0,
+        value.O07_Activated ? 1 : 0,
+        value.O08_Activated ? 1 : 0,
       ],
       objectiveWeight: [
-        O01_Level,
-        O02_Level,
-        O03_Level,
-        O04_Level,
-        O05_Level,
-        O06_Level,
-        O07_Level,
-        O08_Level,
+        value.O01_Level,
+        value.O02_Level,
+        value.O03_Level,
+        value.O04_Level,
+        value.O05_Level,
+        value.O06_Level,
+        value.O07_Level,
+        value.O08_Level,
       ],
-      solver: solver,
-      strategy: strategy,
+      solver: value.solver,
+      strategy: value.strategy,
     })
       .then((res) => {
         if (res.isSuccess) {
@@ -226,303 +183,518 @@ const SettingModelDialog = (props: Props) => {
       });
   };
 
+  const handleReset = () => {
+    reset(schema.getDefault());
+  };
+
+  useImperativeHandle(ref, () => ({
+    reset: handleReset,
+    submit: handleSubmit(onSubmit),
+  }));
+
+  const onChangeFastArrange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFastArrange(event.target.checked);
+    if (event.target.checked) {
+      setGoodResult(false);
+      reset({
+        ...schema.getDefault(),
+        maxSearchingTime: 60,
+        solver: 1,
+        strategy: 2,
+      });
+    }
+  };
+
+  const onChangeGoodResult = (event: ChangeEvent<HTMLInputElement>) => {
+    setGoodResult(event.target.checked);
+    if (event.target.checked) {
+      setFastArrange(false);
+      reset({
+        ...schema.getDefault(),
+        maxSearchingTime: 600,
+        solver: 1,
+        strategy: 2,
+        O01_Level: 50,
+        O01_Activated: true,
+        O02_Level: 25,
+        O02_Activated: true,
+      });
+    }
+  };
+
   return (
     <Dialog maxWidth="md" open={openDialog} onClose={onClose}>
-      <Grid container spacing={1} sx={{ p: 3 }}>
-        <Grid item xs={12}>
-          <Typography variant="h5" align="center">
-            Setting Before Execute
-          </Typography>
-        </Grid>
-        <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
-          <Grid item xs={4}>
-            <Typography variant="body1">Max Searching Time</Typography>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={1} sx={{ p: 3 }}>
+          <Grid item xs={12}>
+            <Typography variant="h5" align="center">
+              Setting Before Execute
+            </Typography>
           </Grid>
-          <Grid item xs={4}>
-            <TextField
-              onChange={onChangeMaxSearchingTime}
-              variant="outlined"
-              value={maxSearchingTime}
-              sx={{ maxWidth: 350, width: 1 }}
-            />
+          <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
+            <Grid item xs={4}>
+              <Typography variant="body1">
+                Max Searching Time
+                <Typography component="span" sx={{ color: 'error.main' }}>
+                  *
+                </Typography>
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                {...register('maxSearchingTime')}
+                name="maxSearchingTime"
+                variant="outlined"
+                sx={{ maxWidth: 350, width: 1 }}
+              />
+              <Typography variant="caption" sx={{ color: 'error.main' }}>
+                {errors.maxSearchingTime?.message &&
+                  `*${errors.maxSearchingTime?.message}`}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row" spacing={2}>
+                <Stack direction="row">
+                  <Checkbox
+                    name="isFastArrange"
+                    checked={isFastArrange}
+                    onChange={onChangeFastArrange}
+                  />
+                  <FormLabel
+                    htmlFor="isFastArrange"
+                    sx={{
+                      color: 'warning.main',
+                    }}
+                  >
+                    Fast arrange
+                  </FormLabel>
+                </Stack>
+                <Stack direction="row">
+                  <Checkbox
+                    name="isGoodResult"
+                    checked={isGoodResult}
+                    onChange={onChangeGoodResult}
+                  />
+                  <FormLabel
+                    htmlFor="isGoodResult"
+                    sx={{
+                      color: 'success.main',
+                    }}
+                  >
+                    Good result
+                  </FormLabel>
+                </Stack>
+              </Stack>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography variant="body1">
+                Select optimization model
+                <Typography component="span" sx={{ color: 'error.main' }}>
+                  *
+                </Typography>
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Controller
+                name="solver"
+                control={control}
+                render={({ field }) => (
+                  <Fragment>
+                    <Select {...field} sx={{ maxWidth: 350, width: 1 }}>
+                      <MenuItem disabled value={0}>
+                        <em>Select Solver</em>
+                      </MenuItem>
+                      <MenuItem value={SOLVER.ORTOOL}>OR-Tools</MenuItem>
+                      <MenuItem value={SOLVER.CPLEX}>CPLEX</MenuItem>
+                      <MenuItem value={SOLVER.NGSAII}>NGSA-II</MenuItem>
+                    </Select>
+                    <Typography variant="caption" sx={{ color: 'error.main' }}>
+                      {errors.solver?.message && `*${errors.solver?.message}`}
+                    </Typography>
+                  </Fragment>
+                )}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <Controller
+                name="strategy"
+                control={control}
+                render={({ field }) => (
+                  <Fragment>
+                    <Select {...field} sx={{ maxWidth: 350, width: 1 }}>
+                      <MenuItem disabled value={0}>
+                        <em>Select Strategy</em>
+                      </MenuItem>
+                      <MenuItem value={STRATEGY.SCALARIZATION}>
+                        Scalarization
+                      </MenuItem>
+                      <MenuItem value={STRATEGY.CONSTRAINT_PROGRAMMING}>
+                        Constraint Programming
+                      </MenuItem>
+                      <MenuItem value={STRATEGY.COMPROMISED_PROGRAMMING}>
+                        Compromised Programming
+                      </MenuItem>
+                      <MenuItem value={STRATEGY.PARETO_BASED}>
+                        Pareto based
+                      </MenuItem>
+                    </Select>
+                    <Typography variant="caption" sx={{ color: 'error.main' }}>
+                      {errors.strategy?.message &&
+                        `*${errors.strategy?.message}`}
+                    </Typography>
+                  </Fragment>
+                )}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4}>
-            <Typography variant="body1">Select optimization model</Typography>
+          <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
+            <Grid item xs={4}>
+              <Typography variant="body1">
+                O-01: Minimize working day
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                {...register('O01_Level')}
+                name="O01_Level"
+                variant="outlined"
+                sx={{ maxWidth: 350, width: 1 }}
+              />
+              <Typography variant="caption" sx={{ color: 'error.main' }}>
+                {errors.O01_Level?.message && `*${errors.O01_Level?.message}`}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row">
+                <Controller
+                  name="O01_Activated"
+                  control={control}
+                  defaultValue={false}
+                  render={({ field }) => (
+                    <Fragment>
+                      <FormControlLabel
+                        label=""
+                        control={<Checkbox checked={field.value} />}
+                      />
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'error.main', fontStyle: 'italic' }}
+                      >
+                        Activated Objective
+                      </Typography>
+                    </Fragment>
+                  )}
+                />
+              </Stack>
+            </Grid>
+          </Grid>{' '}
+          <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
+            <Grid item xs={4}>
+              <Typography variant="body1">
+                O-02: Minimize day's session working{' '}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                {...register('O02_Level')}
+                name="O02_Level"
+                variant="outlined"
+                sx={{ maxWidth: 350, width: 1 }}
+              />
+              <Typography variant="caption" sx={{ color: 'error.main' }}>
+                {errors.O02_Level?.message && `*${errors.O02_Level?.message}`}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row">
+                <Controller
+                  name="O02_Activated"
+                  control={control}
+                  defaultValue={false}
+                  render={({ field }) => (
+                    <Fragment>
+                      <FormControlLabel
+                        label=""
+                        control={<Checkbox checked={field.value} />}
+                      />
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'error.main', fontStyle: 'italic' }}
+                      >
+                        Activated Objective
+                      </Typography>
+                    </Fragment>
+                  )}
+                />
+              </Stack>
+            </Grid>
+          </Grid>{' '}
+          <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
+            <Grid item xs={4}>
+              <Typography variant="body1">
+                O-03: Minimize waiting time
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                {...register('O03_Level')}
+                name="O03_Level"
+                variant="outlined"
+                sx={{ maxWidth: 350, width: 1 }}
+              />
+              <Typography variant="caption" sx={{ color: 'error.main' }}>
+                {errors.O03_Level?.message && `*${errors.O03_Level?.message}`}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row">
+                <Controller
+                  name="O03_Activated"
+                  control={control}
+                  defaultValue={false}
+                  render={({ field }) => (
+                    <Fragment>
+                      <FormControlLabel
+                        label=""
+                        control={<Checkbox checked={field.value} />}
+                      />
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'error.main', fontStyle: 'italic' }}
+                      >
+                        Activated Objective
+                      </Typography>
+                    </Fragment>
+                  )}
+                />
+              </Stack>
+            </Grid>
+          </Grid>{' '}
+          <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
+            <Grid item xs={4}>
+              <Typography variant="body1">
+                O-04: Minimize number of subjects per lecturer per semester
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                {...register('O04_Level')}
+                name="O04_Level"
+                variant="outlined"
+                sx={{ maxWidth: 350, width: 1 }}
+              />
+              <Typography variant="caption" sx={{ color: 'error.main' }}>
+                {errors.O04_Level?.message && `*${errors.O04_Level?.message}`}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row">
+                <Controller
+                  name="O04_Activated"
+                  control={control}
+                  defaultValue={false}
+                  render={({ field }) => (
+                    <Fragment>
+                      <FormControlLabel
+                        label=""
+                        control={<Checkbox checked={field.value} />}
+                      />
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'error.main', fontStyle: 'italic' }}
+                      >
+                        Activated Objective
+                      </Typography>
+                    </Fragment>
+                  )}
+                />
+              </Stack>
+            </Grid>
+          </Grid>{' '}
+          <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
+            <Grid item xs={4}>
+              <Typography variant="body1">O-05: Quota of classes</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                {...register('O05_Level')}
+                name="O05_Level"
+                variant="outlined"
+                sx={{ maxWidth: 350, width: 1 }}
+              />
+              <Typography variant="caption" sx={{ color: 'error.main' }}>
+                {errors.O05_Level?.message && `*${errors.O05_Level?.message}`}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row">
+                <Controller
+                  name="O05_Activated"
+                  control={control}
+                  defaultValue={false}
+                  render={({ field }) => (
+                    <Fragment>
+                      <FormControlLabel
+                        label=""
+                        control={<Checkbox checked={field.value} />}
+                      />
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'error.main', fontStyle: 'italic' }}
+                      >
+                        Activated Objective
+                      </Typography>
+                    </Fragment>
+                  )}
+                />
+              </Stack>
+            </Grid>
           </Grid>
-          <Grid item xs={4}>
-            <Select
-              value={solver}
-              onChange={onChangeSolver}
-              sx={{ maxWidth: 350, width: 1 }}
+          <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
+            <Grid item xs={4}>
+              <Typography variant="body1">
+                O-06: Select the priority of moving distance between 2
+                consecutive slots
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                {...register('O06_Level')}
+                name="O06_Level"
+                variant="outlined"
+                sx={{ maxWidth: 350, width: 1 }}
+              />
+              <Typography variant="caption" sx={{ color: 'error.main' }}>
+                {errors.O06_Level?.message && `*${errors.O06_Level?.message}`}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row">
+                <Controller
+                  name="O06_Activated"
+                  control={control}
+                  defaultValue={false}
+                  render={({ field }) => (
+                    <Fragment>
+                      <FormControlLabel
+                        label=""
+                        control={<Checkbox checked={field.value} />}
+                      />
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'error.main', fontStyle: 'italic' }}
+                      >
+                        Activated Objective
+                      </Typography>
+                    </Fragment>
+                  )}
+                />
+              </Stack>
+            </Grid>
+          </Grid>
+          <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
+            <Grid item xs={4}>
+              <Typography variant="body1">
+                O-07: Preference level of subjects
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                {...register('O07_Level')}
+                name="O07_Level"
+                variant="outlined"
+                sx={{ maxWidth: 350, width: 1 }}
+              />
+              <Typography variant="caption" sx={{ color: 'error.main' }}>
+                {errors.O07_Level?.message && `*${errors.O07_Level?.message}`}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row">
+                <Controller
+                  name="O07_Activated"
+                  control={control}
+                  defaultValue={false}
+                  render={({ field }) => (
+                    <Fragment>
+                      <FormControlLabel
+                        label=""
+                        control={<Checkbox checked={field.value} />}
+                      />
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'error.main', fontStyle: 'italic' }}
+                      >
+                        Activated Objective
+                      </Typography>
+                    </Fragment>
+                  )}
+                />
+              </Stack>
+            </Grid>
+          </Grid>
+          <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
+            <Grid item xs={4}>
+              <Typography variant="body1">
+                O-08: Preference level of slots
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                {...register('O08_Level')}
+                name="O08_Level"
+                variant="outlined"
+                sx={{ maxWidth: 350, width: 1 }}
+              />
+              <Typography variant="caption" sx={{ color: 'error.main' }}>
+                {errors.O08_Level?.message && `*${errors.O08_Level?.message}`}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row">
+                <Controller
+                  name="O08_Activated"
+                  control={control}
+                  defaultValue={false}
+                  render={({ field }) => (
+                    <Fragment>
+                      <FormControlLabel
+                        label=""
+                        control={<Checkbox checked={field.value} />}
+                      />
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'error.main', fontStyle: 'italic' }}
+                      >
+                        Activated Objective
+                      </Typography>
+                    </Fragment>
+                  )}
+                />
+              </Stack>
+            </Grid>
+          </Grid>
+          <Grid container item xs={12} sx={{ mt: 2, justifyContent: 'center' }}>
+            <LoadingButton
+              loading={loadingExecuted}
+              loadingPosition="start"
+              size="medium"
+              type="submit"
+              startIcon={
+                <Image
+                  src={images.iconExecute}
+                  sx={{ width: 15, height: 15 }}
+                  alt=""
+                />
+              }
             >
-              <MenuItem disabled value={0}>
-                <em>Select Solver</em>
-              </MenuItem>
-              <MenuItem value={SOLVER.ORTOOL}>OR-Tools</MenuItem>
-              <MenuItem value={SOLVER.CPLEX}>CPLEX</MenuItem>
-              <MenuItem value={SOLVER.NGSAII}>NGSA-II</MenuItem>
-            </Select>
-          </Grid>
-          <Grid item xs={4}>
-            <Select
-              value={strategy}
-              onChange={onChangeStrategy}
-              sx={{ maxWidth: 350, width: 1 }}
-            >
-              <MenuItem disabled value={0}>
-                <em>Select Strategy</em>
-              </MenuItem>
-              <MenuItem value={STRATEGY.SCALARIZATION}>Scalarization</MenuItem>
-              <MenuItem value={STRATEGY.CONSTRAINT_PROGRAMMING}>
-                Constraint Programming
-              </MenuItem>
-              <MenuItem value={STRATEGY.COMPROMISED_PROGRAMMING}>
-                Compromised Programming
-              </MenuItem>
-              <MenuItem value={STRATEGY.PARETO_BASED}>Pareto based</MenuItem>
-            </Select>
+              Execute
+            </LoadingButton>
           </Grid>
         </Grid>
-        <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
-          <Grid item xs={4}>
-            <Typography variant="body1">O-01: Minimize working day</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              onChange={onChangeO01Level}
-              variant="outlined"
-              value={O01_Level}
-              sx={{ maxWidth: 350, width: 1 }}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Stack direction="row">
-              <Checkbox
-                checked={O01_Activated}
-                onChange={onChangeO01Activated}
-              />
-              {O01_Activated && (
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                  Activated Objective
-                </Typography>
-              )}
-            </Stack>
-          </Grid>
-        </Grid>{' '}
-        <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
-          <Grid item xs={4}>
-            <Typography variant="body1">
-              O-02: Minimize day's session working{' '}
-            </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              onChange={onChangeO02Level}
-              variant="outlined"
-              value={O02_Level}
-              sx={{ maxWidth: 350, width: 1 }}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Stack direction="row">
-              <Checkbox
-                checked={O02_Activated}
-                onChange={onChangeO02Activated}
-              />
-              {O02_Activated && (
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                  Activated Objective
-                </Typography>
-              )}
-            </Stack>
-          </Grid>
-        </Grid>{' '}
-        <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
-          <Grid item xs={4}>
-            <Typography variant="body1">O-03: Minimize waiting time</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              onChange={onChangeO03Level}
-              variant="outlined"
-              value={O03_Level}
-              sx={{ maxWidth: 350, width: 1 }}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Stack direction="row">
-              <Checkbox
-                checked={O03_Activated}
-                onChange={onChangeO03Activated}
-              />
-              {O03_Activated && (
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                  Activated Objective
-                </Typography>
-              )}
-            </Stack>
-          </Grid>
-        </Grid>{' '}
-        <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
-          <Grid item xs={4}>
-            <Typography variant="body1">
-              O-04: Minimize number of subjects per lecturer per semester
-            </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              onChange={onChangeO04Level}
-              variant="outlined"
-              value={O04_Level}
-              sx={{ maxWidth: 350, width: 1 }}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Stack direction="row">
-              <Checkbox
-                checked={O04_Activated}
-                onChange={onChangeO04Activated}
-              />
-              {O04_Activated && (
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                  Activated Objective
-                </Typography>
-              )}
-            </Stack>
-          </Grid>
-        </Grid>{' '}
-        <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
-          <Grid item xs={4}>
-            <Typography variant="body1">O-05: Quota of classes</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              onChange={onChangeO05Level}
-              variant="outlined"
-              value={O05_Level}
-              sx={{ maxWidth: 350, width: 1 }}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Stack direction="row">
-              <Checkbox
-                checked={O05_Activated}
-                onChange={onChangeO05Activated}
-              />
-              {O05_Activated && (
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                  Activated Objective
-                </Typography>
-              )}
-            </Stack>
-          </Grid>
-        </Grid>
-        <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
-          <Grid item xs={4}>
-            <Typography variant="body1">
-              O-06: Select the priority of moving distance between 2 consecutive
-              slots
-            </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              onChange={onChangeO06Level}
-              variant="outlined"
-              value={O06_Level}
-              sx={{ maxWidth: 350, width: 1 }}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Stack direction="row">
-              <Checkbox
-                checked={O06_Activated}
-                onChange={onChangeO06Activated}
-              />
-              {O06_Activated && (
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                  Activated Objective
-                </Typography>
-              )}
-            </Stack>
-          </Grid>
-        </Grid>
-        <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
-          <Grid item xs={4}>
-            <Typography variant="body1">
-              O-07: Preference level of subjects
-            </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              onChange={onChangeO07Level}
-              variant="outlined"
-              value={O07_Level}
-              sx={{ maxWidth: 350, width: 1 }}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Stack direction="row">
-              <Checkbox
-                checked={O07_Activated}
-                onChange={onChangeO07Activated}
-              />
-              {O07_Activated && (
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                  Activated Objective
-                </Typography>
-              )}
-            </Stack>
-          </Grid>
-        </Grid>
-        <Grid item container spacing={2} sx={{ alignItems: 'center' }}>
-          <Grid item xs={4}>
-            <Typography variant="body1">
-              O-08: Preference level of slots
-            </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              onChange={onChangeO08Level}
-              variant="outlined"
-              value={O08_Level}
-              sx={{ maxWidth: 350, width: 1 }}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Stack direction="row">
-              <Checkbox
-                checked={O08_Activated}
-                onChange={onChangeO08Activated}
-              />
-              {O08_Activated && (
-                <Typography variant="body2" sx={{ color: 'red' }}>
-                  Activated Objective
-                </Typography>
-              )}
-            </Stack>
-          </Grid>
-        </Grid>
-        <Grid container item xs={12} sx={{ mt: 2, justifyContent: 'center' }}>
-          <LoadingButton
-            loading={loadingExecuted}
-            loadingPosition="start"
-            size="medium"
-            startIcon={
-              <Image
-                src={images.iconExecute}
-                sx={{ width: 15, height: 15 }}
-                alt=""
-              />
-            }
-            onClick={onArrange}
-          >
-            Execute
-          </LoadingButton>
-        </Grid>
-      </Grid>
+      </form>
     </Dialog>
   );
-};
+});
 
 export default SettingModelDialog;

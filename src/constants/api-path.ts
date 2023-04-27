@@ -4,6 +4,7 @@ export const API_LECTURER = '/lecturer';
 export const API_REUSE_LECTURER = '/lecturer/reuse';
 export const API_LECTURER_SEARCH = '/lecturer/search';
 export const API_IMPORT_TIME_TABLE = '/arrange/import-time-table';
+export const API_IMPORT_TIME_TABLE_RESULT = '/arrange/import-time-table-result';
 export const API_SEARCH_TASK = '/arrange/search-tasks';
 export const API_EXPORT_IN_IMPORT_FORMAT = '/arrange/export-in-import-format';
 export const API_EXPORT_GROUP_BY_LECTURER = '/arrange/export-groupby-lecturer';

@@ -123,7 +123,7 @@ const SwapTimeTableForm = (props: Props) => {
   };
 
   return (
-    <Stack direction="column" spacing={2} sx={{ position: 'relative' }}>
+    <Stack direction="column" spacing={2} sx={{ position: 'relative', mt: 2 }}>
       <Typography variant="body1" align="center" sx={{ fontWeight: 'bold' }}>
         Swap Timetable
       </Typography>
@@ -159,7 +159,7 @@ const SwapTimeTableForm = (props: Props) => {
       <Button fullWidth onClick={onSwapLecturer} size="medium">
         Swap Lecturer
       </Button>
-      <Stack
+      {/* <Stack
         direction="row"
         sx={{ justifyContent: 'center', alignItems: 'center' }}
       >
@@ -185,7 +185,7 @@ const SwapTimeTableForm = (props: Props) => {
 
       <Button fullWidth onClick={onSwapRoom} size="medium">
         Swap Room
-      </Button>
+      </Button> */}
     </Stack>
   );
 };
