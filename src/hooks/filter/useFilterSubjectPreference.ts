@@ -11,6 +11,8 @@ const useFilterSubjectPreference = () => {
     setFilters((state) => ({
       ...state,
       lecturer: searchValue,
+      pageNumber: 1,
+      pageSize: 5,
     }));
   };
 

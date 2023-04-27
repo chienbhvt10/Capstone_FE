@@ -11,6 +11,8 @@ const useFilterSlotPreference = () => {
     setFilters((state) => ({
       ...state,
       lecturer: searchValue,
+      pageNumber: 1,
+      pageSize: 5,
     }));
   };
   const onChangePage = (pageNumber: number) => {
