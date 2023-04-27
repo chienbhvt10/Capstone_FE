@@ -88,7 +88,7 @@ const SubjectPreferenceLevel = () => {
         .then((res) => {
           if (res.data) {
             setSubjectPreferenceLevels(res.data?.subjectPreferenceLevels || []);
-            setTotalRow(res.data?.total);
+            setTotalRow(res.data?.total || 0);
           }
         })
         .finally(async () => {

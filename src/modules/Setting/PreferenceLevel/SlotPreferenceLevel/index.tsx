@@ -42,6 +42,8 @@ import {
   SlotPreferenceLevelItems,
 } from '../utils/types';
 import useAuth from '~/hooks/useAuth';
+import TablePagination from '~/components/TableComponents/TablePagination';
+import useFilterSlotPreference from '~/hooks/filter/useFilterSlotPreference';
 
 const SlotPreferenceLevel = () => {
   const theme = useTheme();
@@ -58,6 +60,10 @@ const SlotPreferenceLevel = () => {
   const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
     null
   );
+  const [totalRow, setTotalRow] = useState<number>(0);
+
+  const { filters, onChangePage, onChangeRowsPerPage } =
+    useFilterSlotPreference();
 
   useEffect(() => {
     if (semestersSelector && user) {
@@ -71,18 +77,27 @@ const SlotPreferenceLevel = () => {
         }
       });
       getSlotPreferenceLevels({
-        semesterId: semestersSelector?.id || null,
-        departmentHeadId: user?.id || null,
+        pagination: {
+          pageNumber: filters.pageNumber,
+          pageSize: filters.pageSize,
+        },
+        getAllRequest: {
+          semesterId: semestersSelector.id || null,
+          departmentHeadId: user?.id || null,
+        },
       })
         .then((res) => {
-          setSlotPreferenceLevels(res.data || []);
+          if (res.data) {
+            setSlotPreferenceLevels(res.data.slotPreferenceLevels || []);
+            setTotalRow(res.data.total || 0);
+          }
         })
         .finally(async () => {
           // await wait(500);
           // setLoadingTable(false);
         });
     }
-  }, [semestersSelector, refresh, user]);
+  }, [semestersSelector, refresh, user, filters]);
 
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
@@ -255,9 +270,7 @@ const SlotPreferenceLevel = () => {
                             border={true}
                             sx={{
                               backgroundColor:
-                                slot.preferenceLevel === 0
-                                  ? '#97cdff'
-                                  : 'background.paper',
+                                slot.preferenceLevel && '#97cdff',
                             }}
                           >
                             <TableCellSelect<SlotPreferenceLevelItems>
@@ -276,6 +289,15 @@ const SlotPreferenceLevel = () => {
           </Fragment>
         )}
       </TableContainer>
+      <TablePagination
+        pageIndex={filters.pageNumber}
+        totalPages={Math.ceil(totalRow / filters.pageSize)}
+        totalRows={totalRow}
+        onChangePage={onChangePage}
+        onChangeRowsPerPage={onChangeRowsPerPage}
+        rowsPerPage={filters.pageSize}
+        rowsPerPageOptions={[5, 10, 25, 50, 100]}
+      />
     </Fragment>
   );
 };

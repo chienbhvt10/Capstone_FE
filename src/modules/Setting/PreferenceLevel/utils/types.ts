@@ -10,6 +10,10 @@ export interface Column {
   format?: ((value: number) => string) | null;
 }
 
+export interface LecturerSlotsPreferenceLevelResponse {
+  slotPreferenceLevels: LecturerSlotsPreferenceLevel[];
+  total: number;
+}
 export interface LecturerSubjectsPreferenceLevelResponse {
   subjectPreferenceLevels: LecturerSubjectsPreferenceLevel[];
   total: number;

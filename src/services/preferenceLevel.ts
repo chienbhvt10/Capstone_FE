@@ -6,6 +6,7 @@ import {
 } from '~/constants/api-path';
 import {
   LecturerSlotsPreferenceLevel,
+  LecturerSlotsPreferenceLevelResponse,
   LecturerSubjectsPreferenceLevel,
   LecturerSubjectsPreferenceLevelResponse,
   UpdateSlotPreferenceLevel,
@@ -39,11 +40,21 @@ export const updateSubjectPreferenceLevel = async (
   return HttpClient.put<typeof params, CommonResponse>(url, params);
 };
 
-export const getSlotPreferenceLevels = async (params: GetAllParams) => {
+export interface GetPreferenceLevelsRequest {
+  pagination: {
+    pageNumber: number;
+    pageSize: number;
+  };
+  getAllRequest: GetAllParams;
+}
+
+export const getSlotPreferenceLevels = async (
+  params: GetPreferenceLevelsRequest
+) => {
   const url = API_SLOT_PREFERENCE_LEVELS;
   return HttpClient.post<
     typeof params,
-    CommonResponse<LecturerSlotsPreferenceLevel[]>
+    CommonResponse<LecturerSlotsPreferenceLevelResponse>
   >(url, params);
 };
 
@@ -54,16 +65,8 @@ export const createDefaultSlotPreferenceLevels = async (
   return HttpClient.post<typeof params, CommonResponse>(url, params);
 };
 
-export interface GetSubjectPreferenceLevelsRequest {
-  pagination: {
-    pageNumber: number;
-    pageSize: number;
-  };
-  getAllRequest: GetAllParams;
-}
-
 export const getSubjectPreferenceLevels = async (
-  params: GetSubjectPreferenceLevelsRequest
+  params: GetPreferenceLevelsRequest
 ) => {
   const url = API_SUBJECT_PREFERENCE_LEVELS;
   return HttpClient.post<
