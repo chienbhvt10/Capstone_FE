@@ -4,7 +4,7 @@ import { PreferenceFilter } from '~/utils/types';
 const useFilterSlotPreference = () => {
   const [filters, setFilters] = useState<PreferenceFilter>({
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 5,
   });
 
   const onChangePage = (pageNumber: number) => {
