@@ -29,4 +29,5 @@ export interface User {
 export interface PreferenceFilter {
   pageNumber: number;
   pageSize: number;
+  lecturer: string | null;
 }

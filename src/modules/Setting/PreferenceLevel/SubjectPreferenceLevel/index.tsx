@@ -11,7 +11,10 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { Stack } from '@mui/system';
 import {
+  ChangeEvent,
   Fragment,
+  KeyboardEvent,
+  KeyboardEventHandler,
   SyntheticEvent,
   useEffect,
   useLayoutEffect,
@@ -43,6 +46,7 @@ import { subjectPreferenceLevelItems } from '../utils/data';
 import useAuth from '~/hooks/useAuth';
 import TablePagination from '~/components/TableComponents/TablePagination';
 import useFilterSubjectPreference from '~/hooks/filter/useFilterSubjectPreference';
+import { useDebounce } from 'react-use';
 
 const SubjectPreferenceLevel = () => {
   const theme = useTheme();
@@ -59,9 +63,9 @@ const SubjectPreferenceLevel = () => {
     null
   );
   const [totalRow, setTotalRow] = useState<number>(0);
-  const { filters, onChangePage, onChangeRowsPerPage } =
+  const { filters, onChangePage, onChangeRowsPerPage, onSearch } =
     useFilterSubjectPreference();
-
+  const [searchValue, setSearchValue] = useState<string>('');
   const [refresh, refetch] = useRefresh();
 
   useEffect(() => {
@@ -76,6 +80,7 @@ const SubjectPreferenceLevel = () => {
         }
       });
       getSubjectPreferenceLevels({
+        lecturer: filters.lecturer || null,
         pagination: {
           pageNumber: filters.pageNumber,
           pageSize: filters.pageSize,
@@ -140,6 +145,19 @@ const SubjectPreferenceLevel = () => {
     });
   };
 
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+
+  const onClickSearch = () => {
+    onSearch(searchValue);
+  };
+
+  const onClickClear = () => {
+    onSearch(null);
+    setSearchValue('');
+  };
+
   return (
     <Fragment>
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -164,6 +182,15 @@ const SubjectPreferenceLevel = () => {
               Reuse for current semester
             </Button>
           )}
+        <TextField
+          sx={{ maxWidth: 250 }}
+          value={searchValue}
+          variant="outlined"
+          label="Search Lecturer"
+          onChange={handleChange}
+        />
+        <Button onClick={onClickSearch}>Search</Button>
+        <Button onClick={onClickClear}>Clear</Button>
       </Stack>
       <TableContainer sx={{ maxHeight: 550, position: 'relative' }}>
         {loadingTable ? (
@@ -254,6 +281,9 @@ const SubjectPreferenceLevel = () => {
                               selectItems={subjectPreferenceLevelItems}
                               item={subject}
                               callback={onEdit}
+                              disabled={
+                                currentSemester?.id !== semestersSelector?.id
+                              }
                             />
                           </TableCellCustom>
                         ))}

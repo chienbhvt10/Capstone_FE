@@ -5,7 +5,14 @@ const useFilterSubjectPreference = () => {
   const [filters, setFilters] = useState<PreferenceFilter>({
     pageNumber: 1,
     pageSize: 5,
+    lecturer: null,
   });
+  const onSearch = (searchValue: string | null) => {
+    setFilters((state) => ({
+      ...state,
+      lecturer: searchValue,
+    }));
+  };
 
   const onChangePage = (pageNumber: number) => {
     setFilters((state) => ({
@@ -22,7 +29,7 @@ const useFilterSubjectPreference = () => {
     }));
   };
 
-  return { filters, onChangePage, onChangeRowsPerPage };
+  return { filters, onChangePage, onChangeRowsPerPage, onSearch };
 };
 
 export default useFilterSubjectPreference;

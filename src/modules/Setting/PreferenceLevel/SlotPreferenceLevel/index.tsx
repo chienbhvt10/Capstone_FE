@@ -17,6 +17,7 @@ import {
   useState,
   SyntheticEvent,
   useLayoutEffect,
+  ChangeEvent,
 } from 'react';
 import TableCellSelect from '~/components/OtherComponents/TableCellSelect';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
@@ -61,8 +62,9 @@ const SlotPreferenceLevel = () => {
     null
   );
   const [totalRow, setTotalRow] = useState<number>(0);
+  const [searchValue, setSearchValue] = useState<string>('');
 
-  const { filters, onChangePage, onChangeRowsPerPage } =
+  const { filters, onChangePage, onChangeRowsPerPage, onSearch } =
     useFilterSlotPreference();
 
   useEffect(() => {
@@ -77,6 +79,7 @@ const SlotPreferenceLevel = () => {
         }
       });
       getSlotPreferenceLevels({
+        lecturer: filters.lecturer,
         pagination: {
           pageNumber: filters.pageNumber,
           pageSize: filters.pageSize,
@@ -159,6 +162,19 @@ const SlotPreferenceLevel = () => {
       });
   };
 
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+
+  const onClickSearch = () => {
+    onSearch(searchValue);
+  };
+
+  const onClickClear = () => {
+    onSearch(null);
+    setSearchValue('');
+  };
+
   return (
     <Fragment>
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -189,6 +205,15 @@ const SlotPreferenceLevel = () => {
               Create default for all Lecturers
             </Button>
           )}
+        <TextField
+          sx={{ maxWidth: 250 }}
+          value={searchValue}
+          variant="outlined"
+          label="Search Lecturer"
+          onChange={handleChange}
+        />
+        <Button onClick={onClickSearch}>Search</Button>
+        <Button onClick={onClickClear}>Clear</Button>
       </Stack>
 
       <TableContainer sx={{ maxHeight: 550, position: 'relative' }}>

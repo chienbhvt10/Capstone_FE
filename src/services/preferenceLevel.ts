@@ -41,6 +41,7 @@ export const updateSubjectPreferenceLevel = async (
 };
 
 export interface GetPreferenceLevelsRequest {
+  lecturer: string | null;
   pagination: {
     pageNumber: number;
     pageSize: number;
