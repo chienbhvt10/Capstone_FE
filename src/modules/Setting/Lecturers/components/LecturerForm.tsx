@@ -109,6 +109,7 @@ const LecturerForm = forwardRef<FiltersRef, Props>((props, ref) => {
             message: 'Create successfully',
             severity: 'success',
           });
+          return;
         }
         setNotification({ message: res.message, severity: 'error' });
       })

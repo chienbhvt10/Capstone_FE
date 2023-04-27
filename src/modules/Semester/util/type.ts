@@ -14,12 +14,12 @@ export interface Semester {
   id: number;
   isNow: boolean;
   semester: string;
-  year: string;
+  year: number;
 }
 
 export interface CreateSemesterParams {
   isNow?: boolean;
-  year: string;
+  year: number;
   semester: string;
   departmentHeadId: number;
 }
@@ -27,6 +27,7 @@ export interface CreateSemesterParams {
 export interface UpdateSemesterParams {
   id: number;
   isNow?: boolean;
-  year: string;
+  year: number;
   semester: string;
+  departmentHeadId: number;
 }

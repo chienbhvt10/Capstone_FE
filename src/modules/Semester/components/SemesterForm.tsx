@@ -14,13 +14,13 @@ import useAuth from '~/hooks/useAuth';
 
 interface SemesterForm {
   semester: string;
-  year: string;
+  year: number;
   isNow: boolean;
 }
 
 const schema = Validation.shape({
   semester: Validation.string().required('Semester is required'),
-  year: Validation.string().required('Year is required'),
+  year: Validation.number().required('Year is required').default(0),
 });
 
 interface Props {
@@ -59,8 +59,10 @@ const SemesterForm = forwardRef<FiltersRef, Props>((props, ref) => {
     if (editMode) {
       await updateSemester({
         id: editingItem?.id || -1,
+        isNow: editingItem?.isNow,
         year: value.year,
         semester: value.semester,
+        departmentHeadId: user?.id || 0,
       })
         .then((res) => {
           refetchSemester();

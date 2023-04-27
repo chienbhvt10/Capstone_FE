@@ -12,36 +12,54 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Fragment, useEffect, useState } from 'react';
+import UploadExcelButton from '~/components/ButtonComponents/UploadExcelButton';
+import Image from '~/components/styledComponents/Image';
 import useArrange from '~/hooks/useArrange';
+import useAuth from '~/hooks/useAuth';
 import useNotification from '~/hooks/useNotification';
+import { Lecturer } from '~/modules/Setting/Lecturers/util/type';
+import { getLecturers } from '~/services/lecturer';
 import {
+  importTimeTable,
+  importTimeTableResult,
   lockAndUnLockTask,
   modifyTimetable,
   unLockAllTask,
 } from '../../../services/arrange';
 import SwapTimeTableForm from './SwapTimeTableForm';
-import { Lecturer } from '~/modules/Setting/Lecturers/util/type';
-import { getLecturers } from '~/services/lecturer';
-import useAuth from '~/hooks/useAuth';
 
+import { Backdrop } from '@mui/material';
+import images from '~/assets/images';
+import SettingModelDialog from './SettingModelDialog';
 const TimeTableModifyForm = () => {
   const {
     taskSelect,
     setTaskSelect,
     loadingTimeTableModify,
     refetch,
+    currentSemester,
     semestersSelector,
   } = useArrange();
   const { user } = useAuth();
-  const setNotification = useNotification();
   const [lecturerFilter, setLecturerFilter] = useState<Lecturer[]>([]);
   const [selectedLecturerIdSwap, setSelectedLecturerIdSwap] =
     useState<number>(0);
   const [loadingSelectLecturer, setLoadingSelectLecturer] =
     useState<boolean>(false);
+  const [openDialog, setOpen] = useState<boolean>(false);
+  const [loadingUploadExcel, setLoadingUploadExcel] = useState<boolean>(false);
+  const setNotification = useNotification();
+
+  const onCloseDialog = () => {
+    setOpen(false);
+  };
+
+  const onOpen = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
-    if (semestersSelector && user) {
+    if (semestersSelector && user && taskSelect) {
       setLoadingSelectLecturer(true);
       getLecturers({
         lecturerId: taskSelect?.lecturerId || null,
@@ -131,6 +149,68 @@ const TimeTableModifyForm = () => {
       );
   };
 
+  const handleImportTimeTable = async (file: File) => {
+    try {
+      setLoadingUploadExcel(true);
+      const formData = new FormData();
+      formData.append('file', file, file.name);
+      formData.append('semesterId', String(currentSemester?.id || 0));
+      formData.append('departmentHeadId', String(user?.id || 0));
+
+      const res = await importTimeTable(formData);
+      if (!res.isSuccess) {
+        setNotification({
+          message: res.message,
+          severity: 'error',
+        });
+        return;
+      }
+      setNotification({
+        message: 'Upload file success',
+        severity: 'success',
+      });
+      refetch();
+    } catch (error) {
+      setNotification({
+        message: 'Upload file failed',
+        severity: 'error',
+      });
+    } finally {
+      setLoadingUploadExcel(false);
+    }
+  };
+
+  const handleResults = async (file: File) => {
+    try {
+      setLoadingUploadExcel(true);
+      const formData = new FormData();
+      formData.append('file', file, file.name);
+      formData.append('semesterId', String(currentSemester?.id || 0));
+      formData.append('departmentHeadId', String(user?.id || 0));
+
+      const res = await importTimeTableResult(formData);
+      if (!res.isSuccess) {
+        setNotification({
+          message: res.message,
+          severity: 'error',
+        });
+        return;
+      }
+      setNotification({
+        message: 'Upload file success',
+        severity: 'success',
+      });
+      refetch();
+    } catch (error) {
+      setNotification({
+        message: 'Upload file failed',
+        severity: 'error',
+      });
+    } finally {
+      setLoadingUploadExcel(false);
+    }
+  };
+
   return (
     <Stack
       direction="column"
@@ -143,7 +223,7 @@ const TimeTableModifyForm = () => {
       }}
     >
       <Stack direction="column" spacing={2}>
-        <Stack direction="column" spacing={1} sx={{ position: 'relative' }}>
+        <Stack direction="column" sx={{ position: 'relative' }}>
           <Typography
             variant="body1"
             align="center"
@@ -165,6 +245,19 @@ const TimeTableModifyForm = () => {
             </Box>
           ) : (
             <Fragment>
+              <Stack
+                direction="row"
+                sx={{ justifyContent: 'center', alignItems: 'center' }}
+              >
+                <Typography variant="body2" sx={{ width: 80 }}>
+                  TimeSlot
+                </Typography>
+                <TextField
+                  variant="outlined"
+                  value={taskSelect?.timeSlotName || ''}
+                  disabled
+                />
+              </Stack>
               <Stack
                 direction="row"
                 sx={{ justifyContent: 'center', alignItems: 'center' }}
@@ -204,7 +297,9 @@ const TimeTableModifyForm = () => {
                 ) : (
                   <Select
                     disabled={
-                      !!selectedLecturerIdSwap && selectedLecturerIdSwap > 0
+                      (!!selectedLecturerIdSwap &&
+                        selectedLecturerIdSwap > 0) ||
+                      !taskSelect
                     }
                     value={selectedLecturerIdSwap}
                     onChange={onChangeLecturerSelect}
@@ -228,9 +323,11 @@ const TimeTableModifyForm = () => {
             onClick={onModifyTimeTable}
             size="medium"
             disabled={!!taskSelect?.lecturerId}
+            sx={{ mb: 1 }}
           >
             Modify TimeTable
           </Button>
+          <SwapTimeTableForm />
           <Button
             fullWidth
             onClick={onPreAssignTask(
@@ -239,6 +336,7 @@ const TimeTableModifyForm = () => {
             )}
             disabled={!taskSelect?.lecturerId || !!!taskSelect}
             size="medium"
+            sx={{ mt: 3 }}
           >
             Un/PreAssign Task
           </Button>
@@ -246,8 +344,57 @@ const TimeTableModifyForm = () => {
             UnPreAssign All
           </Button>
         </Stack>
-        <SwapTimeTableForm />
+        <Stack direction="column" spacing={1}>
+          <Typography
+            variant="body1"
+            align="center"
+            sx={{ fontWeight: 'bold' }}
+          >
+            Excel
+          </Typography>
+          <Divider variant="fullWidth" />
+          <UploadExcelButton
+            sx={{ p: 0.5 }}
+            onSelect={handleImportTimeTable}
+            title="Import timetable"
+          />
+          <UploadExcelButton
+            sx={{ p: 0.5 }}
+            onSelect={handleResults}
+            title="Import results"
+          />
+          <Button
+            startIcon={
+              <Image
+                src={images.iconArrange}
+                sx={{ width: 25, height: 25 }}
+                alt=""
+              />
+            }
+            fullWidth
+            onClick={onOpen}
+          >
+            Arrange
+          </Button>
+        </Stack>
       </Stack>
+      <SettingModelDialog
+        openDialog={openDialog}
+        onCloseDialog={onCloseDialog}
+      />
+      <Backdrop
+        sx={{
+          color: '#fff',
+          mt: '0 !important',
+          zIndex: 9999,
+        }}
+        open={loadingUploadExcel}
+      >
+        <Stack direction="column" spacing={2} sx={{ alignItems: 'center' }}>
+          <CircularProgress sx={{ color: 'white' }} />
+          <Typography variant="body1">Importing timetable ...</Typography>
+        </Stack>
+      </Backdrop>
     </Stack>
   );
 };

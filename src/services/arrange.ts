@@ -8,6 +8,7 @@ import {
   API_GET_TASK_ASSIGNED,
   API_GET_TASK_NOT_ASSIGNED,
   API_IMPORT_TIME_TABLE,
+  API_IMPORT_TIME_TABLE_RESULT,
   API_LOCK_UNLOCK_TASK,
   API_MODIFY_TIMETABLE,
   API_SEARCH_TASK,
@@ -73,6 +74,14 @@ export const exportInImportFormat = async () => {
 export const importTimeTable = async (params: FormData) => {
   return HttpClient.post<FormData, CommonResponse>(
     API_IMPORT_TIME_TABLE,
+    params,
+    { headers: { 'Content-Type': 'multipart/form-data' } }
+  );
+};
+
+export const importTimeTableResult = async (params: FormData) => {
+  return HttpClient.post<FormData, CommonResponse>(
+    API_IMPORT_TIME_TABLE_RESULT,
     params,
     { headers: { 'Content-Type': 'multipart/form-data' } }
   );

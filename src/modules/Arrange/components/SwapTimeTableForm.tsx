@@ -37,7 +37,7 @@ const SwapTimeTableForm = (props: Props) => {
     useState<boolean>(false);
 
   useEffect(() => {
-    if (semestersSelector && user) {
+    if (semestersSelector && user && taskSelect) {
       setLoadingSelectLecturer(true);
       getLecturers({
         lecturerId: taskSelect?.lecturerId || null,
@@ -72,7 +72,12 @@ const SwapTimeTableForm = (props: Props) => {
       });
     }
   };
+
   const onSwapLecturer = () => {
+    if (!taskSelect) {
+      setNotification({ message: 'Select task first', severity: 'error' });
+      return;
+    }
     swapLecturer({
       lecturerId: selectedLecturerIdSwap || 0,
       taskId: taskSelect?.taskId || 0,
@@ -94,6 +99,10 @@ const SwapTimeTableForm = (props: Props) => {
   };
 
   const onSwapRoom = () => {
+    if (!taskSelect) {
+      setNotification({ message: 'Select task first', severity: 'error' });
+      return;
+    }
     swapRoom({
       roomId: selectedLecturerIdSwap || 0,
       taskId: taskSelect?.taskId || 0,
@@ -114,7 +123,7 @@ const SwapTimeTableForm = (props: Props) => {
   };
 
   return (
-    <Stack direction="column" spacing={2} sx={{ position: 'relative' }}>
+    <Stack direction="column" spacing={2} sx={{ position: 'relative', mt: 2 }}>
       <Typography variant="body1" align="center" sx={{ fontWeight: 'bold' }}>
         Swap Timetable
       </Typography>
@@ -150,14 +159,18 @@ const SwapTimeTableForm = (props: Props) => {
       <Button fullWidth onClick={onSwapLecturer} size="medium">
         Swap Lecturer
       </Button>
-      <Stack
+      {/* <Stack
         direction="row"
         sx={{ justifyContent: 'center', alignItems: 'center' }}
       >
         <Typography variant="body2" sx={{ width: 80 }}>
           Room
         </Typography>
-        <Select value={taskSelect?.roomId || 0} onChange={onChangeRoomSelect}>
+        <Select
+          disabled={!taskSelect?.lecturerId}
+          value={taskSelect?.roomId || 0}
+          onChange={onChangeRoomSelect}
+        >
           <MenuItem disabled value={0}>
             <em style={{ fontSize: 14 }}>Select Room</em>
           </MenuItem>
@@ -172,7 +185,7 @@ const SwapTimeTableForm = (props: Props) => {
 
       <Button fullWidth onClick={onSwapRoom} size="medium">
         Swap Room
-      </Button>
+      </Button> */}
     </Stack>
   );
 };

@@ -29,7 +29,7 @@ const UploadExcelButton = (props: Props) => {
         ].includes(file.type)
       ) {
         setNotification({
-          message: 'Tệp tin không đúng định dạng',
+          message: 'Not Support file extension',
           severity: 'error',
         });
         return;

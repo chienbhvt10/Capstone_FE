@@ -46,6 +46,13 @@ export const getSlotPreferenceLevels = async (params: GetAllParams) => {
   >(url, params);
 };
 
+export const createDefaultSlotPreferenceLevels = async (
+  params: GetAllParams
+) => {
+  const url = API_SLOT_PREFERENCE_LEVELS + '/create-default';
+  return HttpClient.post<typeof params, CommonResponse>(url, params);
+};
+
 export const getSubjectPreferenceLevels = async (params: GetAllParams) => {
   const url = API_SUBJECT_PREFERENCE_LEVELS;
   return HttpClient.post<

@@ -18,6 +18,7 @@ import { deleteSemester, updateSemester } from '~/services/semester';
 import { getSemesterTableColumns } from '../util/columns';
 import { Semester } from '../util/type';
 import wait from '~/utils/wait';
+import useAuth from '~/hooks/useAuth';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,6 +37,7 @@ const SemesterTable = (props: Props) => {
     refetchSubject,
     refetchTimeSlot,
   } = useArrange();
+  const { user } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const columns = useMemo(() => getSemesterTableColumns(), []);
 
@@ -54,6 +56,7 @@ const SemesterTable = (props: Props) => {
       const res = await updateSemester({
         ...item,
         isNow: true,
+        departmentHeadId: user?.id || 0,
       });
       if (res.isSuccess) {
         refetchSemester();
@@ -117,9 +120,9 @@ const SemesterTable = (props: Props) => {
         <TableBody>
           {semesters?.length > 0 &&
             semesters.map((item, index) => (
-              <TableRow role="checkbox" tabIndex={-1} key={item.id}>
+              <TableRow role="checkbox" tabIndex={-1} key={Math.random()}>
                 <TableCellCustom align="center" border={true} hover={true}>
-                  <Typography variant="body2">{index}</Typography>
+                  <Typography variant="body2">{index + 1}</Typography>
                 </TableCellCustom>
                 <TableCellCustom align="center" border={true} hover={true}>
                   <Typography variant="body2">{item.semester}</Typography>

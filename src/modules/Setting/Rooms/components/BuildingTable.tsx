@@ -102,7 +102,7 @@ const BuildingTable = (props: Props) => {
               buildings.map((item, index) => (
                 <TableRow role="checkbox" tabIndex={-1} key={Math.random()}>
                   <TableCellCustom align="center" border={true} hover={true}>
-                    <Typography variant="body2">{index}</Typography>
+                    <Typography variant="body2">{index + 1}</Typography>
                   </TableCellCustom>
                   <TableCellCustom align="center" border={true} hover={true}>
                     <Typography variant="body2">{item.name}</Typography>
