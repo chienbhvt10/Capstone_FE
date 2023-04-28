@@ -81,6 +81,9 @@ export interface TaskDetail {
 export interface TimeTableModifyParam {
   taskId: number | null;
   lecturerId: number | null;
+  timeSlotId: number | null;
+  departmentHeadId: number | null;
+  semesterId: number | null;
 }
 
 export interface SwapLecturerParams {

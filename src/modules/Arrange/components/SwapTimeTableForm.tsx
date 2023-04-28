@@ -1,5 +1,4 @@
 import {
-  Box,
   LinearProgress,
   MenuItem,
   Select,
@@ -14,7 +13,7 @@ import useArrange from '~/hooks/useArrange';
 import useAuth from '~/hooks/useAuth';
 import useNotification from '~/hooks/useNotification';
 import { Lecturer } from '~/modules/Lecturer/util/type';
-import { modifyTimetable, swapLecturer, swapRoom } from '~/services/arrange';
+import { swapLecturer, swapRoom } from '~/services/arrange';
 import { getLecturers } from '~/services/lecturer';
 
 interface Props {}
@@ -28,11 +27,13 @@ const SwapTimeTableForm = (props: Props) => {
     rooms,
     currentSemester,
     refetch,
+    selectedLecturerIdSwap,
+    setSelectedLecturerIdSwap,
+    setSelectedLecturerIdModify,
   } = useArrange();
   const setNotification = useNotification();
   const [lecturerFilter, setLecturerFilter] = useState<Lecturer[]>([]);
-  const [selectedLecturerIdSwap, setSelectedLecturerIdSwap] =
-    useState<number>(0);
+
   const [loadingSelectLecturer, setLoadingSelectLecturer] =
     useState<boolean>(false);
 
@@ -64,6 +65,7 @@ const SwapTimeTableForm = (props: Props) => {
       setSelectedLecturerIdSwap((event.target.value as number) || 0);
     }
   };
+
   const onChangeRoomSelect = (event: SelectChangeEvent<number>) => {
     if (taskSelect) {
       setTaskSelect({
@@ -91,6 +93,9 @@ const SwapTimeTableForm = (props: Props) => {
           return;
         }
         setNotification({ message: res.message, severity: 'success' });
+        setTaskSelect(null);
+        setSelectedLecturerIdSwap(0);
+        setSelectedLecturerIdModify(0);
         refetch();
       })
       .catch((err) => {

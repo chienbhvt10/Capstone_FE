@@ -36,3 +36,6 @@ export const API_AREA_TIME_SLOT_WEIGHT = '/time-slot/slot-weight';
 export const API_BUILDING = '/distance/building';
 export const API_DISTANCE = '/distance';
 export const API_LOGIN = '/auth/login';
+export const API_LOCK_ALL_TASK_FOR_LECTURER = '/arrange/lock-all-task-lecturer';
+export const API_UNLOCK_ALL_TASK_FOR_LECTURER =
+  '/arrange/unlock-all-task-lecturer';

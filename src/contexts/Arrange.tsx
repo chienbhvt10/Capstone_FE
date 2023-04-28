@@ -70,6 +70,10 @@ export interface ArrangeContextValue {
   setCurrentSemester: React.Dispatch<React.SetStateAction<Semester | null>>;
   refreshListExecuteInfo: any;
   refetchListExecuteInfo: React.DispatchWithoutAction;
+  selectedLecturerIdModify: number;
+  selectedLecturerIdSwap: number;
+  setSelectedLecturerIdSwap: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedLecturerIdModify: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const ArrangeContext = createContext<ArrangeContextValue | null>(null);
@@ -109,6 +113,11 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
     null
   );
   const [refreshListExecuteInfo, refetchListExecuteInfo] = useRefresh();
+  const [selectedLecturerIdModify, setSelectedLecturerIdModify] =
+    useState<number>(0);
+  const [selectedLecturerIdSwap, setSelectedLecturerIdSwap] =
+    useState<number>(0);
+
   const { user } = useAuth();
 
   useEffect(() => {
@@ -225,6 +234,10 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   return (
     <ArrangeContext.Provider
       value={{
+        selectedLecturerIdModify,
+        selectedLecturerIdSwap,
+        setSelectedLecturerIdModify,
+        setSelectedLecturerIdSwap,
         refetchListExecuteInfo,
         refreshListExecuteInfo,
         currentSemester,

@@ -9,12 +9,14 @@ import {
   API_GET_TASK_NOT_ASSIGNED,
   API_IMPORT_TIME_TABLE,
   API_IMPORT_TIME_TABLE_RESULT,
+  API_LOCK_ALL_TASK_FOR_LECTURER,
   API_LOCK_UNLOCK_TASK,
   API_MODIFY_TIMETABLE,
   API_SEARCH_TASK,
   API_SWAP_LECTURER,
   API_SWAP_ROOM,
   API_UNLOCK_ALL_TASK,
+  API_UNLOCK_ALL_TASK_FOR_LECTURER,
 } from '../constants/api-path';
 
 import { GetAllParams } from '~/utils/types';
@@ -111,6 +113,27 @@ export const lockAndUnLockTask = async (params: {
 }) => {
   return HttpClient.put<typeof params, CommonResponse>(
     API_LOCK_UNLOCK_TASK,
+    params
+  );
+};
+export interface LockTaskForUserParams {
+  lecturerId: number | null;
+  semesterId: number | null;
+  departmentHeadId: number | null;
+}
+
+export const lockAllTaskForLecturer = async (params: LockTaskForUserParams) => {
+  return HttpClient.put<typeof params, CommonResponse>(
+    API_LOCK_ALL_TASK_FOR_LECTURER,
+    params
+  );
+};
+
+export const unlockAllTaskForLecturer = async (
+  params: LockTaskForUserParams
+) => {
+  return HttpClient.put<typeof params, CommonResponse>(
+    API_UNLOCK_ALL_TASK_FOR_LECTURER,
     params
   );
 };

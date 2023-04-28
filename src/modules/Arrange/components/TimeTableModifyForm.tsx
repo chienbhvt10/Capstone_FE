@@ -39,11 +39,12 @@ const TimeTableModifyForm = () => {
     refetch,
     currentSemester,
     semestersSelector,
+    setSelectedLecturerIdModify,
+    selectedLecturerIdModify,
   } = useArrange();
   const { user } = useAuth();
   const [lecturerFilter, setLecturerFilter] = useState<Lecturer[]>([]);
-  const [selectedLecturerIdSwap, setSelectedLecturerIdSwap] =
-    useState<number>(0);
+
   const [loadingSelectLecturer, setLoadingSelectLecturer] =
     useState<boolean>(false);
   const [openDialog, setOpen] = useState<boolean>(false);
@@ -74,7 +75,7 @@ const TimeTableModifyForm = () => {
           }
         })
         .finally(() => {
-          setSelectedLecturerIdSwap(taskSelect?.lecturerId || 0);
+          setSelectedLecturerIdModify(taskSelect?.lecturerId || 0);
           setLoadingSelectLecturer(false);
         });
     }
@@ -82,7 +83,7 @@ const TimeTableModifyForm = () => {
 
   const onChangeLecturerSelect = (event: SelectChangeEvent<number>) => {
     if (taskSelect) {
-      setSelectedLecturerIdSwap((event.target.value as number) || 0);
+      setSelectedLecturerIdModify((event.target.value as number) || 0);
     }
   };
 
@@ -93,12 +94,16 @@ const TimeTableModifyForm = () => {
         return;
       }
       const res = await modifyTimetable({
-        lecturerId: selectedLecturerIdSwap || null,
+        lecturerId: selectedLecturerIdModify || null,
         taskId: taskSelect?.taskId || null,
+        timeSlotId: taskSelect?.timeSlotId || null,
+        departmentHeadId: user?.id || null,
+        semesterId: semestersSelector?.id || null,
       });
 
       if (res.isSuccess) {
         refetch();
+        setSelectedLecturerIdModify(0);
         setTaskSelect(null);
         setNotification({
           message: res.message,
@@ -210,6 +215,7 @@ const TimeTableModifyForm = () => {
       setLoadingUploadExcel(false);
     }
   };
+
   const onRemoveAssigned = async () => {
     try {
       if (!taskSelect) {
@@ -219,11 +225,15 @@ const TimeTableModifyForm = () => {
       const res = await modifyTimetable({
         lecturerId: null,
         taskId: taskSelect?.taskId || null,
+        timeSlotId: null,
+        departmentHeadId: null,
+        semesterId: null,
       });
 
       if (res.isSuccess) {
         refetch();
         setTaskSelect(null);
+        setSelectedLecturerIdModify(0);
         setNotification({
           message: res.message,
           severity: 'success',
@@ -238,6 +248,7 @@ const TimeTableModifyForm = () => {
       setNotification({ message: 'Modify timetable error', severity: 'error' });
     }
   };
+
   return (
     <Stack
       direction="column"
@@ -323,12 +334,8 @@ const TimeTableModifyForm = () => {
                   <LinearProgress sx={{ width: 1 }} />
                 ) : (
                   <Select
-                    disabled={
-                      (!!selectedLecturerIdSwap &&
-                        selectedLecturerIdSwap > 0) ||
-                      !taskSelect
-                    }
-                    value={selectedLecturerIdSwap || 0}
+                    disabled={!!taskSelect?.lecturerId || !taskSelect}
+                    value={selectedLecturerIdModify || 0}
                     onChange={onChangeLecturerSelect}
                   >
                     <MenuItem disabled value={0}>
