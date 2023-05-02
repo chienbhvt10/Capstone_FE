@@ -127,29 +127,31 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   }, [executeId]);
 
   useEffect(() => {
-    if (semestersSelector) {
-      getTaskAssigned({
-        semesterId: semestersSelector?.id || null,
-        departmentHeadId: user?.id || null,
-      }).then((res) => {
-        if (res.data && res.data.length > 0) {
-          setLecturersTaskAssignInfo(res.data);
-        }
-        getTaskNotAssign({
-          semesterId: semestersSelector?.id || null,
-          departmentHeadId: user?.id || null,
-        }).then((res) => {
-          if (
-            res.data &&
-            res.data.timeSlotInfos &&
-            res.data.timeSlotInfos.length > 0
-          ) {
-            setTasksNotAssigned(res.data);
+    const fetchData = async () => {
+      if (semestersSelector) {
+        try {
+          const assignedRes = await getTaskAssigned({
+            semesterId: semestersSelector?.id || null,
+            departmentHeadId: user?.id || null,
+          });
+          if (assignedRes.data) {
+            setLecturersTaskAssignInfo(assignedRes.data || []);
           }
-        });
-      });
-    }
-  }, [refresh, semestersSelector]);
+          const notAssignedRes = await getTaskNotAssign({
+            semesterId: semestersSelector?.id || null,
+            departmentHeadId: user?.id || null,
+          });
+          if (notAssignedRes.data) {
+            setTasksNotAssigned(notAssignedRes.data || []);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [refresh, semestersSelector, currentSemester]);
 
   useEffect(() => {
     if (semestersSelector && user) {
@@ -161,7 +163,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         departmentHeadId: user?.id || 0,
       }).then((res) => {
         if (res.data) {
-          setLecturers(res.data);
+          setLecturers(res.data || []);
         }
       });
     }
@@ -174,7 +176,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         departmentHeadId: user?.id || null,
       }).then((res) => {
         if (res.data) {
-          setSubjects(res.data);
+          setSubjects(res.data || []);
         }
       });
     }
@@ -187,7 +189,7 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         departmentHeadId: user?.id || null,
       }).then((res) => {
         if (res.data) {
-          setRooms(res.data);
+          setRooms(res.data || []);
         }
       });
     }
@@ -200,24 +202,24 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
         departmentHeadId: user?.id || null,
       }).then((res) => {
         if (res.data) {
-          setClasses(res.data);
+          setClasses(res.data || []);
         }
       });
     }
   }, [refreshClass, semestersSelector, user]);
 
   useEffect(() => {
-    if (currentSemester && user) {
+    if (semestersSelector && user) {
       getTimeSlots({
-        semesterId: currentSemester?.id || null,
+        semesterId: semestersSelector?.id || null,
         departmentHeadId: user?.id || null,
       }).then((res) => {
-        if (res.data && res.data.length > 0) {
+        if (res.data) {
           setTimeSlots(res.data || []);
         }
       });
     }
-  }, [refreshTimeSlot, currentSemester, user]);
+  }, [refreshTimeSlot, semestersSelector, user]);
 
   useEffect(() => {
     if (user) {

@@ -36,6 +36,7 @@ const SemesterTable = (props: Props) => {
     refetchClass,
     refetchSubject,
     refetchTimeSlot,
+    refetch,
   } = useArrange();
   const { user } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
