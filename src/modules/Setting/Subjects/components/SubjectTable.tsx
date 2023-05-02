@@ -55,7 +55,7 @@ const SubjectTable = (props: Props) => {
     subjects,
   } = props;
   const columns = useMemo(() => getSubjectTableColumns(), []);
-  const { semesters, currentSemester } = useArrange();
+  const { semesters, currentSemester, refetchSubject } = useArrange();
 
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
@@ -88,6 +88,7 @@ const SubjectTable = (props: Props) => {
         setNotifications({ message: res.message, severity: 'error' });
         return;
       }
+      refetchSubject();
       setNotifications({ message: res.message, severity: 'success' });
     });
   };

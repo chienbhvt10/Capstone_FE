@@ -41,6 +41,8 @@ const TimeTableModifyForm = () => {
     semestersSelector,
     setSelectedLecturerIdModify,
     selectedLecturerIdModify,
+    refetchClass,
+    refetchRoom,
   } = useArrange();
   const { user } = useAuth();
   const [lecturerFilter, setLecturerFilter] = useState<Lecturer[]>([]);
@@ -175,6 +177,8 @@ const TimeTableModifyForm = () => {
         severity: 'success',
       });
       refetch();
+      refetchClass();
+      refetchRoom();
     } catch (error) {
       setNotification({
         message: 'Upload file failed',
@@ -206,6 +210,8 @@ const TimeTableModifyForm = () => {
         severity: 'success',
       });
       refetch();
+      refetchClass();
+      refetchRoom();
     } catch (error) {
       setNotification({
         message: 'Upload file failed',

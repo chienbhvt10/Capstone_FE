@@ -42,7 +42,7 @@ const LecturerTable = (props: Props) => {
     lecturers,
   } = props;
   const columns = useMemo(() => getLecturersTableColumns(), []);
-  const { semesters, currentSemester } = useArrange();
+  const { semesters, currentSemester, refetchLecturer } = useArrange();
   const { user } = useAuth();
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
@@ -78,6 +78,7 @@ const LecturerTable = (props: Props) => {
         setNotifications({ message: res.message, severity: 'error' });
         return;
       }
+      refetchLecturer();
       setNotifications({ message: res.message, severity: 'success' });
     });
   };

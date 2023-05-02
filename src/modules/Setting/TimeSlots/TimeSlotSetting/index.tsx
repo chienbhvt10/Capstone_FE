@@ -30,7 +30,7 @@ import useNotification from '~/hooks/useNotification';
 import useAuth from '~/hooks/useAuth';
 
 const TimeSlotSetting = () => {
-  const { semesters, currentSemester } = useArrange();
+  const { semesters, currentSemester, refetchTimeSlot } = useArrange();
   const { user } = useAuth();
   const setNotifications = useNotification();
   const [numberSlots, setNumberSlots] = useState<number>(4);
@@ -157,6 +157,7 @@ const TimeSlotSetting = () => {
         setNotifications({ message: res.message, severity: 'error' });
         return;
       }
+      refetchTimeSlot();
       setNotifications({ message: res.message, severity: 'success' });
     });
   };
