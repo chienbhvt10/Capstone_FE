@@ -9,6 +9,7 @@ import {
   API_EXPORT_IN_IMPORT_FORMAT,
 } from '~/constants/api-path';
 import useAuth from '~/hooks/useAuth';
+import useNotification from '~/hooks/useNotification';
 import { downloadFileFromBlob } from '~/utils/downloadExcel';
 
 interface Props {}
@@ -19,39 +20,49 @@ const ExcelAndArrangeAction = (props: Props) => {
     useState<boolean>(false);
   const [loadingExportGroupByLecturer, setLoadingExportGroupByLecturer] =
     useState<boolean>(false);
-
+  const setNotification = useNotification();
   const onExportInImportFormat = async () => {
-    setLoadingExportInImportFormat(true);
-    const response: AxiosResponse = await axios.get(
-      `https://localhost:7279/api${API_EXPORT_IN_IMPORT_FORMAT}/${
-        user?.id || 0
-      }`,
-      {
-        responseType: 'blob',
+    try {
+      setLoadingExportInImportFormat(true);
+      const response: AxiosResponse = await axios.get(
+        `https://localhost:7279/api${API_EXPORT_IN_IMPORT_FORMAT}/${
+          user?.id || 0
+        }`,
+        {
+          responseType: 'blob',
+        }
+      );
+      if (response.status === 200) {
+        const { data, headers } = response;
+        downloadFileFromBlob(data, headers as AxiosResponseHeaders);
       }
-    );
-    if (response.status === 200) {
-      const { data, headers } = response;
-      downloadFileFromBlob(data, headers as AxiosResponseHeaders);
+      setLoadingExportInImportFormat(true);
+    } catch (err) {
+      setNotification({ message: 'Export fail', severity: 'error' });
+      setLoadingExportInImportFormat(false);
     }
-    setLoadingExportInImportFormat(false);
   };
 
   const onExportGroupByLecturer = async () => {
-    setLoadingExportGroupByLecturer(true);
-    const response: AxiosResponse = await axios.get(
-      `https://localhost:7279/api${API_EXPORT_GROUP_BY_LECTURER}/${
-        user?.id || 0
-      }`,
-      {
-        responseType: 'blob',
+    try {
+      setLoadingExportGroupByLecturer(true);
+      const response: AxiosResponse = await axios.get(
+        `https://localhost:7279/api${API_EXPORT_GROUP_BY_LECTURER}/${
+          user?.id || 0
+        }`,
+        {
+          responseType: 'blob',
+        }
+      );
+      if (response.status === 200) {
+        const { data, headers } = response;
+        downloadFileFromBlob(data, headers as AxiosResponseHeaders);
       }
-    );
-    if (response.status === 200) {
-      const { data, headers } = response;
-      downloadFileFromBlob(data, headers as AxiosResponseHeaders);
+      setLoadingExportGroupByLecturer(false);
+    } catch (err) {
+      setNotification({ message: 'Export fail', severity: 'error' });
+      setLoadingExportGroupByLecturer(false);
     }
-    setLoadingExportGroupByLecturer(false);
   };
 
   return (

@@ -38,7 +38,11 @@ interface Props {
 
 const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
   const { open, onCloseCreateDialog, onGetValueSegment, refetch } = props;
-  const { currentSemester } = useArrange();
+  const {
+    currentSemester,
+    refetchTimeSlot,
+    refetch: refetchTask,
+  } = useArrange();
   const { user } = useAuth();
   const setNotification = useNotification();
   const [loadingCreate, setLoadingCreate] = useState<boolean>(false);
@@ -67,6 +71,8 @@ const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
       .then((res) => {
         if (res.isSuccess) {
           refetch();
+          refetchTimeSlot();
+          refetchTask();
           onCloseCreateDialog();
           handleReset();
           setNotification({
