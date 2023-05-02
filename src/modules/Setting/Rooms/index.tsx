@@ -33,6 +33,7 @@ const DistanceSetting = () => {
   const [semestersSelector, setSemestersSelector] = useState<Semester | null>(
     null
   );
+  const [loadingReuse, setLoadingReuse] = useState<boolean>(false);
 
   useEffect(() => {
     if (currentSemester) {
@@ -69,17 +70,22 @@ const DistanceSetting = () => {
   };
 
   const reUseForCurrentSemester = () => {
+    setLoadingReuse(true);
     reuseBuilding({
       fromSemesterId: semestersSelector?.id || 0,
       toSemesterId: currentSemester?.id || 0,
       departmentHeadId: user?.id || 0,
-    }).then((res) => {
-      if (!res.isSuccess) {
-        setNotifications({ message: res.message, severity: 'error' });
-        return;
-      }
-      setNotifications({ message: res.message, severity: 'success' });
-    });
+    })
+      .then((res) => {
+        if (!res.isSuccess) {
+          setNotifications({ message: res.message, severity: 'error' });
+          return;
+        }
+        setNotifications({ message: res.message, severity: 'success' });
+      })
+      .finally(() => {
+        setLoadingReuse(false);
+      });
   };
 
   return (
@@ -116,6 +122,7 @@ const DistanceSetting = () => {
                 setEditMode={setEditMode}
               />
               <BuildingTable
+                loadingReuse={loadingReuse}
                 buildings={buildings}
                 semestersSelector={semestersSelector}
                 onChangeSemestersSelector={onChangeSemestersSelector}

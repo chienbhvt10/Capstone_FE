@@ -28,6 +28,7 @@ import {
 } from '~/services/timeslot';
 import useNotification from '~/hooks/useNotification';
 import useAuth from '~/hooks/useAuth';
+import { LoadingButton } from '@mui/lab';
 
 const TimeSlotSetting = () => {
   const { semesters, currentSemester, refetchTimeSlot } = useArrange();
@@ -44,6 +45,7 @@ const TimeSlotSetting = () => {
   const [timeSlotsSegment, setTimeSlotsSegment] = useState<TimeSlotSegment[]>(
     []
   );
+  const [loadingReuse, setLoadingReuse] = useState<boolean>(false);
 
   useEffect(() => {
     if (semestersSelector && user) {
@@ -148,18 +150,23 @@ const TimeSlotSetting = () => {
   };
 
   const reUseForCurrentSemester = () => {
+    setLoadingReuse(true);
     reuseTimeSlot({
       fromSemesterId: semestersSelector?.id || 0,
       toSemesterId: currentSemester?.id || 0,
       departmentHeadId: user?.id || 0,
-    }).then((res) => {
-      if (!res.isSuccess) {
-        setNotifications({ message: res.message, severity: 'error' });
-        return;
-      }
-      refetchTimeSlot();
-      setNotifications({ message: res.message, severity: 'success' });
-    });
+    })
+      .then((res) => {
+        if (!res.isSuccess) {
+          setNotifications({ message: res.message, severity: 'error' });
+          return;
+        }
+        refetchTimeSlot();
+        setNotifications({ message: res.message, severity: 'success' });
+      })
+      .finally(() => {
+        setLoadingReuse(false);
+      });
   };
 
   return (
@@ -207,9 +214,13 @@ const TimeSlotSetting = () => {
           />
           {semestersSelector?.id !== currentSemester?.id &&
             timeSlotsSegment?.length > 0 && (
-              <Button onClick={reUseForCurrentSemester}>
+              <LoadingButton
+                loading={loadingReuse}
+                loadingPosition="start"
+                onClick={reUseForCurrentSemester}
+              >
                 Reuse for current semester
-              </Button>
+              </LoadingButton>
             )}
         </Stack>
       </Container>

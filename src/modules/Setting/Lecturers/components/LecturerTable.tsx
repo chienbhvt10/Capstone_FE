@@ -9,7 +9,12 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField/TextField';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import React, { SyntheticEvent, useLayoutEffect, useMemo } from 'react';
+import React, {
+  SyntheticEvent,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
@@ -20,6 +25,7 @@ import { Semester } from '~/modules/Semester/util/type';
 import { deleteLecturer, reuseLecturer } from '~/services/lecturer';
 import { getLecturersTableColumns } from '../util/columns';
 import useAuth from '~/hooks/useAuth';
+import { LoadingButton } from '@mui/lab';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,13 +50,14 @@ const LecturerTable = (props: Props) => {
   const columns = useMemo(() => getLecturersTableColumns(), []);
   const { semesters, currentSemester, refetchLecturer } = useArrange();
   const { user } = useAuth();
+  const [loadingReuse, setLoadingReuse] = useState<boolean>(false);
+
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
   }, [currentSemester]);
 
   const onEdit = (item: Lecturer) => () => {
     setEditMode(true);
-    console.log(item);
     setEditingItem(item);
   };
 
@@ -69,18 +76,23 @@ const LecturerTable = (props: Props) => {
   };
 
   const reUseForCurrentSemester = () => {
+    setLoadingReuse(true);
     reuseLecturer({
       fromSemesterId: semestersSelector?.id || 0,
       toSemesterId: currentSemester?.id || 0,
       departmentHeadId: user?.id || 0,
-    }).then((res) => {
-      if (!res.isSuccess) {
-        setNotifications({ message: res.message, severity: 'error' });
-        return;
-      }
-      refetchLecturer();
-      setNotifications({ message: res.message, severity: 'success' });
-    });
+    })
+      .then((res) => {
+        if (!res.isSuccess) {
+          setNotifications({ message: res.message, severity: 'error' });
+          return;
+        }
+        refetchLecturer();
+        setNotifications({ message: res.message, severity: 'success' });
+      })
+      .finally(() => {
+        setLoadingReuse(false);
+      });
   };
 
   return (
@@ -103,9 +115,13 @@ const LecturerTable = (props: Props) => {
         />
         {semestersSelector?.id !== currentSemester?.id &&
           lecturers.length > 0 && (
-            <Button onClick={reUseForCurrentSemester}>
+            <LoadingButton
+              loading={loadingReuse}
+              loadingPosition="start"
+              onClick={reUseForCurrentSemester}
+            >
               Reuse for current semester
-            </Button>
+            </LoadingButton>
           )}
       </Stack>
       <TableContainer sx={{ maxHeight: 600 }}>

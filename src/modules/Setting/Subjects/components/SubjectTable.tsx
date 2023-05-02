@@ -32,6 +32,7 @@ import { Subject } from '../util/type';
 import useNotification from '~/hooks/useNotification';
 import useRefresh from '~/hooks/useRefresh';
 import useAuth from '~/hooks/useAuth';
+import { LoadingButton } from '@mui/lab';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -56,6 +57,7 @@ const SubjectTable = (props: Props) => {
   } = props;
   const columns = useMemo(() => getSubjectTableColumns(), []);
   const { semesters, currentSemester, refetchSubject } = useArrange();
+  const [loadingReuse, setLoadingReuse] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     setSemestersSelector(currentSemester);
@@ -79,18 +81,23 @@ const SubjectTable = (props: Props) => {
   };
 
   const reUseForCurrentSemester = () => {
+    setLoadingReuse(true);
     reuseSubject({
       fromSemesterId: semestersSelector?.id || 0,
       toSemesterId: currentSemester?.id || 0,
       departmentHeadId: user?.id || 0,
-    }).then((res) => {
-      if (!res.isSuccess) {
-        setNotifications({ message: res.message, severity: 'error' });
-        return;
-      }
-      refetchSubject();
-      setNotifications({ message: res.message, severity: 'success' });
-    });
+    })
+      .then((res) => {
+        if (!res.isSuccess) {
+          setNotifications({ message: res.message, severity: 'error' });
+          return;
+        }
+        refetchSubject();
+        setNotifications({ message: res.message, severity: 'success' });
+      })
+      .finally(() => {
+        setLoadingReuse(false);
+      });
   };
 
   return (
@@ -113,9 +120,13 @@ const SubjectTable = (props: Props) => {
         />
         {semestersSelector?.id !== currentSemester?.id &&
           subjects.length > 0 && (
-            <Button onClick={reUseForCurrentSemester}>
+            <LoadingButton
+              loading={loadingReuse}
+              loadingPosition="start"
+              onClick={reUseForCurrentSemester}
+            >
               Reuse for current semester
-            </Button>
+            </LoadingButton>
           )}
       </Stack>
       <TableContainer sx={{ maxHeight: 600 }}>

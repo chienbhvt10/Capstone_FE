@@ -6,17 +6,16 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField/TextField';
 import Typography from '@mui/material/Typography';
-import { Fragment, SyntheticEvent, useMemo, useState } from 'react';
+import { SyntheticEvent, useMemo } from 'react';
 import TableCellCustom from '~/components/TableComponents/TableCellCustom';
 import TableCustom from '~/components/TableComponents/TableCustom';
 import TableToolCustom from '~/components/TableComponents/TableToolCustom';
 import useArrange from '~/hooks/useArrange';
-import { deleteBuilding, reuseBuilding } from '~/services/distance';
+import { Semester } from '~/modules/Semester/util/type';
+import { deleteBuilding } from '~/services/distance';
 import { getBuildingColumns } from '../util/columns';
 import { Building } from '../util/type';
-import useNotification from '~/hooks/useNotification';
-import { Semester } from '~/modules/Semester/util/type';
-import useAuth from '~/hooks/useAuth';
+import { LoadingButton } from '@mui/lab';
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   setEditingItem: React.Dispatch<React.SetStateAction<Building | null>>;
@@ -28,6 +27,7 @@ interface Props {
     newValue: Semester | null
   ) => void;
   semestersSelector: Semester | null;
+  loadingReuse: boolean;
 }
 
 const BuildingTable = (props: Props) => {
@@ -39,6 +39,7 @@ const BuildingTable = (props: Props) => {
     reUseForCurrentSemester,
     onChangeSemestersSelector,
     semestersSelector,
+    loadingReuse,
   } = props;
   const columns = useMemo(() => getBuildingColumns(), []);
   const { currentSemester, semesters } = useArrange();
@@ -72,9 +73,13 @@ const BuildingTable = (props: Props) => {
         />
         {semestersSelector?.id !== currentSemester?.id &&
           buildings?.length > 0 && (
-            <Button onClick={reUseForCurrentSemester}>
+            <LoadingButton
+              loading={loadingReuse}
+              loadingPosition="start"
+              onClick={reUseForCurrentSemester}
+            >
               Reuse for current semester
-            </Button>
+            </LoadingButton>
           )}
       </Stack>
       <TableContainer sx={{ maxHeight: 550 }}>

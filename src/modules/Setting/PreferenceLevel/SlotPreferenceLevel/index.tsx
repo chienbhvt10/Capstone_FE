@@ -45,6 +45,7 @@ import {
 import useAuth from '~/hooks/useAuth';
 import TablePagination from '~/components/TableComponents/TablePagination';
 import useFilterSlotPreference from '~/hooks/filter/useFilterSlotPreference';
+import { LoadingButton } from '@mui/lab';
 
 const SlotPreferenceLevel = () => {
   const theme = useTheme();
@@ -63,6 +64,9 @@ const SlotPreferenceLevel = () => {
   );
   const [totalRow, setTotalRow] = useState<number>(0);
   const [searchValue, setSearchValue] = useState<string>('');
+  const [loadingReuse, setLoadingReuse] = useState<boolean>(false);
+  const [loadingCreateDefault, setLoadingCreateDefault] =
+    useState<boolean>(false);
 
   const { filters, onChangePage, onChangeRowsPerPage, onSearch } =
     useFilterSlotPreference();
@@ -131,20 +135,26 @@ const SlotPreferenceLevel = () => {
   };
 
   const reUseForCurrentSemester = () => {
+    setLoadingReuse(true);
     reuseSlotPreference({
       fromSemesterId: semestersSelector?.id || 0,
       toSemesterId: currentSemester?.id || 0,
       departmentHeadId: user?.id || 0,
-    }).then((res) => {
-      if (!res.isSuccess) {
-        setNotifications({ message: res.message, severity: 'error' });
-        return;
-      }
-      setNotifications({ message: res.message, severity: 'success' });
-    });
+    })
+      .then((res) => {
+        if (!res.isSuccess) {
+          setNotifications({ message: res.message, severity: 'error' });
+          return;
+        }
+        setNotifications({ message: res.message, severity: 'success' });
+      })
+      .finally(() => {
+        setLoadingReuse(false);
+      });
   };
 
   const onCreateDefaultForLecturers = () => {
+    setLoadingCreateDefault(true);
     createDefaultSlotPreferenceLevels({
       departmentHeadId: user?.id || null,
       semesterId: currentSemester?.id || null,
@@ -159,6 +169,9 @@ const SlotPreferenceLevel = () => {
       })
       .catch((err) => {
         setNotifications({ message: 'Create fail', severity: 'error' });
+      })
+      .finally(() => {
+        setLoadingCreateDefault(false);
       });
   };
 
@@ -195,15 +208,23 @@ const SlotPreferenceLevel = () => {
         />
         {semestersSelector?.id !== currentSemester?.id &&
           slotPreferenceLevels.length > 0 && (
-            <Button onClick={reUseForCurrentSemester}>
+            <LoadingButton
+              loading={loadingReuse}
+              loadingPosition="start"
+              onClick={reUseForCurrentSemester}
+            >
               Reuse for current semester
-            </Button>
+            </LoadingButton>
           )}
         {slotPreferenceLevels.length === 0 &&
           semestersSelector?.id === currentSemester?.id && (
-            <Button onClick={onCreateDefaultForLecturers}>
+            <LoadingButton
+              loading={loadingCreateDefault}
+              loadingPosition="start"
+              onClick={onCreateDefaultForLecturers}
+            >
               Create default for all Lecturers
-            </Button>
+            </LoadingButton>
           )}
         <TextField
           sx={{ maxWidth: 250 }}

@@ -47,6 +47,7 @@ import useAuth from '~/hooks/useAuth';
 import TablePagination from '~/components/TableComponents/TablePagination';
 import useFilterSubjectPreference from '~/hooks/filter/useFilterSubjectPreference';
 import { useDebounce } from 'react-use';
+import { LoadingButton } from '@mui/lab';
 
 const SubjectPreferenceLevel = () => {
   const theme = useTheme();
@@ -67,6 +68,7 @@ const SubjectPreferenceLevel = () => {
     useFilterSubjectPreference();
   const [searchValue, setSearchValue] = useState<string>('');
   const [refresh, refetch] = useRefresh();
+  const [loadingReuse, setLoadingReuse] = useState<boolean>(false);
 
   useEffect(() => {
     if (semestersSelector && user) {
@@ -132,17 +134,22 @@ const SubjectPreferenceLevel = () => {
   };
 
   const reUseForCurrentSemester = () => {
+    setLoadingReuse(true);
     reuseSubjectPreference({
       fromSemesterId: semestersSelector?.id || 0,
       toSemesterId: currentSemester?.id || 0,
       departmentHeadId: user?.id || 0,
-    }).then((res) => {
-      if (!res.isSuccess) {
-        setNotifications({ message: res.message, severity: 'error' });
-        return;
-      }
-      setNotifications({ message: res.message, severity: 'success' });
-    });
+    })
+      .then((res) => {
+        if (!res.isSuccess) {
+          setNotifications({ message: res.message, severity: 'error' });
+          return;
+        }
+        setNotifications({ message: res.message, severity: 'success' });
+      })
+      .finally(() => {
+        setLoadingReuse(false);
+      });
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -178,9 +185,13 @@ const SubjectPreferenceLevel = () => {
         />
         {semestersSelector?.id !== currentSemester?.id &&
           subjectPreferenceLevels.length > 0 && (
-            <Button onClick={reUseForCurrentSemester}>
+            <LoadingButton
+              loading={loadingReuse}
+              loadingPosition="start"
+              onClick={reUseForCurrentSemester}
+            >
               Reuse for current semester
-            </Button>
+            </LoadingButton>
           )}
         <TextField
           sx={{ maxWidth: 250 }}

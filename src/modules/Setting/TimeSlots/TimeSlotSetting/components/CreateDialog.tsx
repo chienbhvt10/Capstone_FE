@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { createTimeSlot } from '~/services/timeslot';
 import Validation from '~/utils/Validation';
@@ -41,6 +41,8 @@ const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
   const { currentSemester } = useArrange();
   const { user } = useAuth();
   const setNotification = useNotification();
+  const [loadingCreate, setLoadingCreate] = useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
@@ -52,9 +54,10 @@ const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
     defaultValues: schema.getDefault(),
   });
 
-  const onSubmit: SubmitHandler<CreateTimeSlotForm> = async (value) => {
+  const onSubmit: SubmitHandler<CreateTimeSlotForm> = (value) => {
     const segmentValue = onGetValueSegment();
-    await createTimeSlot({
+    setLoadingCreate(true);
+    createTimeSlot({
       daySession: value.daySession,
       name: value.name,
       segments: segmentValue,
@@ -76,6 +79,9 @@ const CreateTimeSlotDialog = forwardRef<FiltersRef, Props>((props, ref) => {
       })
       .catch((err) => {
         setNotification({ message: 'Create fail', severity: 'error' });
+      })
+      .finally(() => {
+        setLoadingCreate(true);
       });
   };
 
