@@ -46,6 +46,8 @@ import useAuth from '~/hooks/useAuth';
 import TablePagination from '~/components/TableComponents/TablePagination';
 import useFilterSlotPreference from '~/hooks/filter/useFilterSlotPreference';
 import { LoadingButton } from '@mui/lab';
+import Image from '~/components/styledComponents/Image';
+import images from '~/assets/images';
 
 const SlotPreferenceLevel = () => {
   const theme = useTheme();
@@ -211,6 +213,13 @@ const SlotPreferenceLevel = () => {
             <LoadingButton
               loading={loadingReuse}
               loadingPosition="start"
+              startIcon={
+                <Image
+                  src={images.iconReuse}
+                  alt=""
+                  sx={{ width: 25, height: 25 }}
+                />
+              }
               onClick={reUseForCurrentSemester}
             >
               Reuse for current semester

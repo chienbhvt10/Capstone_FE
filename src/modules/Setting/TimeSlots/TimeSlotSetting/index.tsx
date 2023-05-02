@@ -29,6 +29,8 @@ import {
 import useNotification from '~/hooks/useNotification';
 import useAuth from '~/hooks/useAuth';
 import { LoadingButton } from '@mui/lab';
+import Image from '~/components/styledComponents/Image';
+import images from '~/assets/images';
 
 const TimeSlotSetting = () => {
   const { semesters, currentSemester, refetchTimeSlot } = useArrange();
@@ -217,6 +219,13 @@ const TimeSlotSetting = () => {
               <LoadingButton
                 loading={loadingReuse}
                 loadingPosition="start"
+                startIcon={
+                  <Image
+                    src={images.iconReuse}
+                    alt=""
+                    sx={{ width: 25, height: 25 }}
+                  />
+                }
                 onClick={reUseForCurrentSemester}
               >
                 Reuse for current semester

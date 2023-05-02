@@ -16,6 +16,7 @@ const images = {
   iconPreference: require('~/assets/images/sidebar/preference.png'),
   iconDistance: require('~/assets/images/sidebar/distance.png'),
   iconTime: require('~/assets/images/sidebar/time.png'),
+  iconReuse: require('~/assets/images/button/recycle.png'),
 };
 
 export default images;

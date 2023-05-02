@@ -16,6 +16,8 @@ import { deleteBuilding } from '~/services/distance';
 import { getBuildingColumns } from '../util/columns';
 import { Building } from '../util/type';
 import { LoadingButton } from '@mui/lab';
+import Image from '~/components/styledComponents/Image';
+import images from '~/assets/images';
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   setEditingItem: React.Dispatch<React.SetStateAction<Building | null>>;
@@ -77,6 +79,13 @@ const BuildingTable = (props: Props) => {
               loading={loadingReuse}
               loadingPosition="start"
               onClick={reUseForCurrentSemester}
+              startIcon={
+                <Image
+                  src={images.iconReuse}
+                  alt=""
+                  sx={{ width: 25, height: 25 }}
+                />
+              }
             >
               Reuse for current semester
             </LoadingButton>

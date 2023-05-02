@@ -33,6 +33,8 @@ import useNotification from '~/hooks/useNotification';
 import useRefresh from '~/hooks/useRefresh';
 import useAuth from '~/hooks/useAuth';
 import { LoadingButton } from '@mui/lab';
+import Image from '~/components/styledComponents/Image';
+import images from '~/assets/images';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -124,6 +126,13 @@ const SubjectTable = (props: Props) => {
               loading={loadingReuse}
               loadingPosition="start"
               onClick={reUseForCurrentSemester}
+              startIcon={
+                <Image
+                  src={images.iconReuse}
+                  alt=""
+                  sx={{ width: 25, height: 25 }}
+                />
+              }
             >
               Reuse for current semester
             </LoadingButton>

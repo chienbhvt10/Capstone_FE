@@ -26,6 +26,8 @@ import { deleteLecturer, reuseLecturer } from '~/services/lecturer';
 import { getLecturersTableColumns } from '../util/columns';
 import useAuth from '~/hooks/useAuth';
 import { LoadingButton } from '@mui/lab';
+import Image from '~/components/styledComponents/Image';
+import images from '~/assets/images';
 
 interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -118,6 +120,13 @@ const LecturerTable = (props: Props) => {
             <LoadingButton
               loading={loadingReuse}
               loadingPosition="start"
+              startIcon={
+                <Image
+                  src={images.iconReuse}
+                  alt=""
+                  sx={{ width: 25, height: 25 }}
+                />
+              }
               onClick={reUseForCurrentSemester}
             >
               Reuse for current semester

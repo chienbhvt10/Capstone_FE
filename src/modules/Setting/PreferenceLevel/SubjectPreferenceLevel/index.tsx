@@ -48,6 +48,8 @@ import TablePagination from '~/components/TableComponents/TablePagination';
 import useFilterSubjectPreference from '~/hooks/filter/useFilterSubjectPreference';
 import { useDebounce } from 'react-use';
 import { LoadingButton } from '@mui/lab';
+import Image from '~/components/styledComponents/Image';
+import images from '~/assets/images';
 
 const SubjectPreferenceLevel = () => {
   const theme = useTheme();
@@ -189,6 +191,13 @@ const SubjectPreferenceLevel = () => {
               loading={loadingReuse}
               loadingPosition="start"
               onClick={reUseForCurrentSemester}
+              startIcon={
+                <Image
+                  src={images.iconReuse}
+                  alt=""
+                  sx={{ width: 25, height: 25 }}
+                />
+              }
             >
               Reuse for current semester
             </LoadingButton>
