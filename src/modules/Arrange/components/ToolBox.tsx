@@ -66,11 +66,11 @@ const ToolBox = () => {
       <Stack
         direction="column"
         spacing={1}
-        sx={{ border: '1px solid #ccc', p: 1, borderRadius: 1, maxWidth: 200 }}
+        sx={{ border: '1px solid #ccc', p: 1, borderRadius: 1, maxWidth: 220 }}
       >
-        <Stack direction="column" sx={{ width: 1 }}>
+        <Stack direction="column">
           <Autocomplete
-            sx={{ width: 1 }}
+            sx={{ width: 200 }}
             size="small"
             filterSelectedOptions
             disabled
@@ -86,8 +86,12 @@ const ToolBox = () => {
             )}
           />
         </Stack>
-        <Stack direction="column" sx={{ width: 1, alignItems: 'center' }}>
-          <Select value={executeId} onChange={onChangeExecuteId}>
+        <Stack direction="column" sx={{ alignItems: 'center' }}>
+          <Select
+            value={executeId}
+            onChange={onChangeExecuteId}
+            sx={{ width: 200 }}
+          >
             <MenuItem disabled value={0}>
               <em style={{ fontSize: 14 }}>Select Execute Time</em>
             </MenuItem>

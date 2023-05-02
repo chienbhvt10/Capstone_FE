@@ -36,7 +36,7 @@ const ExcelAndArrangeAction = (props: Props) => {
         const { data, headers } = response;
         downloadFileFromBlob(data, headers as AxiosResponseHeaders);
       }
-      setLoadingExportInImportFormat(true);
+      setLoadingExportInImportFormat(false);
     } catch (err) {
       setNotification({ message: 'Export fail', severity: 'error' });
       setLoadingExportInImportFormat(false);
