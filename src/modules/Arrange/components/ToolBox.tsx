@@ -1,16 +1,23 @@
-import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import {
+  CircularProgress,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete/Autocomplete';
 import TextField from '@mui/material/TextField/TextField';
+import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/system';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import useArrange from '~/hooks/useArrange';
+import useAuth from '~/hooks/useAuth';
 import { Semester } from '~/modules/Semester/util/type';
+import { getExecuteInfos } from '~/services/execute';
+import { ExecuteInfo } from '../utils/type';
 import ExcelAndArrangeAction from './ExcelAndArrangeAction';
 import FilterForm from './FilterForm';
-import { getExecuteInfos } from '~/services/execute';
-import useRefresh from '~/hooks/useRefresh';
-import { ExecuteInfo } from '../utils/type';
-import useAuth from '~/hooks/useAuth';
+
+import { Backdrop } from '@mui/material';
 
 const ToolBox = () => {
   const {
@@ -22,6 +29,8 @@ const ToolBox = () => {
     semesters,
     refreshListExecuteInfo,
     refetchListExecuteInfo,
+    loadingExecuteData,
+    setLoadingExecuteData,
   } = useArrange();
   const { user } = useAuth();
   const [executeInfos, setExecuteInfos] = useState<ExecuteInfo[]>([]);
@@ -38,6 +47,7 @@ const ToolBox = () => {
   }, [semestersSelector, user, refreshListExecuteInfo]);
 
   const onChangeExecuteId = async (event: SelectChangeEvent<number>) => {
+    setLoadingExecuteData(true);
     setExecuteId(event.target.value as number);
     setTaskSelect(null);
   };
@@ -63,6 +73,7 @@ const ToolBox = () => {
             sx={{ width: 1 }}
             size="small"
             filterSelectedOptions
+            disabled
             getOptionLabel={(option) => `${option.semester} ${option.year}`}
             isOptionEqualToValue={(option, value) => {
               return option.id === value.id;
@@ -71,11 +82,7 @@ const ToolBox = () => {
             value={semestersSelector}
             onChange={onChangeSemestersSelector}
             renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                label="Select Semester"
-              />
+              <TextField {...params} variant="outlined" />
             )}
           />
         </Stack>
@@ -96,24 +103,19 @@ const ToolBox = () => {
         </Stack>
       </Stack>
 
-      {/* <Stack direction="row" sx={{ width: 1, alignItems: 'center' }}>
-          <Box component="span" sx={{ border: '7px solid #60D4B8' }}></Box>
-          <Typography component="span" variant="body2">
-            Final
-          </Typography>
-          <Box component="span" sx={{ border: '7px solid #FDC455' }}></Box>
-          <Typography component="span" variant="body2">
-            Public
-          </Typography>
-          <Box component="span" sx={{ border: '7px solid #FD5555' }}></Box>
-          <Typography component="span" variant="body2">
-            Reject
-          </Typography>
-          <Box component="span" sx={{ border: '7px solid #0083FC' }}></Box>
-          <Typography component="span" variant="body2">
-            Draft
-          </Typography>
-        </Stack> */}
+      <Backdrop
+        sx={{
+          color: '#fff',
+          mt: '0 !important',
+          zIndex: 9999,
+        }}
+        open={loadingExecuteData}
+      >
+        <Stack direction="column" spacing={2} sx={{ alignItems: 'center' }}>
+          <CircularProgress sx={{ color: 'white' }} />
+          <Typography variant="body1">Loading arrange result ...</Typography>
+        </Stack>
+      </Backdrop>
       <FilterForm />
     </Stack>
   );

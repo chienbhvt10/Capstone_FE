@@ -3,10 +3,19 @@ import PageWrapper from '~/components/PageWrapper';
 import TimeTable from './components/TimeTable';
 import TimeTableModifyForm from './components/TimeTableModifyForm';
 import ToolBox from './components/ToolBox';
+import { useEffect } from 'react';
+import useArrange from '~/hooks/useArrange';
 
 interface Props {}
 
 const ArrangePage = (props: Props) => {
+  const { setTaskSelect } = useArrange();
+  useEffect(() => {
+    return () => {
+      setTaskSelect(null);
+    };
+  }, []);
+
   return (
     <PageWrapper title="Arrange Page">
       {/* <PageBreadcrumbs title={'Arrange'} breadcrumbs={[]} /> */}

@@ -31,6 +31,7 @@ import SwapTimeTableForm from './SwapTimeTableForm';
 import { Backdrop } from '@mui/material';
 import images from '~/assets/images';
 import SettingModelDialog from './SettingModelDialog';
+
 const TimeTableModifyForm = () => {
   const {
     taskSelect,
@@ -347,7 +348,7 @@ const TimeTableModifyForm = () => {
                     <MenuItem disabled value={0}>
                       <em style={{ fontSize: 14 }}>Select Lecturer</em>
                     </MenuItem>
-                    {lecturerFilter?.length &&
+                    {lecturerFilter?.length > 0 &&
                       lecturerFilter?.map((item) => (
                         <MenuItem key={Math.random()} value={item.id}>
                           {item.shortName}

@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import useAuth from '~/hooks/useAuth';
+import useNotification from '~/hooks/useNotification';
 import useRefresh from '~/hooks/useRefresh';
 import {
   Class,
@@ -27,6 +28,7 @@ import { getLecturers } from '~/services/lecturer';
 import { getSemesters } from '~/services/semester';
 import { getSubjects } from '~/services/subject';
 import { getTimeSlots } from '~/services/timeslot';
+import wait from '~/utils/wait';
 
 export interface ArrangeContextValue {
   lecturersTaskAssignInfo: LecturerAssign[];
@@ -74,6 +76,8 @@ export interface ArrangeContextValue {
   selectedLecturerIdSwap: number;
   setSelectedLecturerIdSwap: React.Dispatch<React.SetStateAction<number>>;
   setSelectedLecturerIdModify: React.Dispatch<React.SetStateAction<number>>;
+  loadingExecuteData: boolean;
+  setLoadingExecuteData: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ArrangeContext = createContext<ArrangeContextValue | null>(null);
@@ -84,6 +88,7 @@ if (process.env.NODE_ENV === 'development') {
 
 const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   const { children } = props;
+  const setNotification = useNotification();
   const [refresh, refetch] = useRefresh();
   const [refreshLecturer, refetchLecturer] = useRefresh();
   const [refreshSubject, refetchSubject] = useRefresh();
@@ -117,12 +122,23 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
     useState<number>(0);
   const [selectedLecturerIdSwap, setSelectedLecturerIdSwap] =
     useState<number>(0);
-
+  const [loadingExecuteData, setLoadingExecuteData] = useState<boolean>(false);
   const { user } = useAuth();
 
   useEffect(() => {
     if (executeId) {
-      getExecutedArrangeInfo(executeId).then((res) => refetch());
+      getExecutedArrangeInfo(executeId)
+        .then((res) => refetch())
+        .catch((err) =>
+          setNotification({
+            message: 'Get data arrange error',
+            severity: 'error',
+          })
+        )
+        .finally(async () => {
+          await wait(1000);
+          setLoadingExecuteData(false);
+        });
     }
   }, [executeId]);
 
@@ -236,6 +252,8 @@ const ArrangeProvider: React.FC<React.PropsWithChildren> = (props) => {
   return (
     <ArrangeContext.Provider
       value={{
+        setLoadingExecuteData,
+        loadingExecuteData,
         selectedLecturerIdModify,
         selectedLecturerIdSwap,
         setSelectedLecturerIdModify,

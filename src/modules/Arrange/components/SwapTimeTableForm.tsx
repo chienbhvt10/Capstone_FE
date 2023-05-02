@@ -151,7 +151,7 @@ const SwapTimeTableForm = (props: Props) => {
             <MenuItem disabled value={0}>
               <em style={{ fontSize: 14 }}>Select Lecturer</em>
             </MenuItem>
-            {lecturerFilter.length &&
+            {lecturerFilter?.length > 0 &&
               lecturerFilter?.map((item) => (
                 <MenuItem key={Math.random()} value={item.id}>
                   {item.shortName}
@@ -164,34 +164,6 @@ const SwapTimeTableForm = (props: Props) => {
       <Button fullWidth onClick={onSwapLecturer} size="medium">
         Swap Lecturer
       </Button>
-
-      {/* <Stack
-        direction="row"
-        sx={{ justifyContent: 'center', alignItems: 'center' }}
-      >
-        <Typography variant="body2" sx={{ width: 80 }}>
-          Room
-        </Typography>
-        <Select
-          disabled={!taskSelect?.lecturerId}
-          value={taskSelect?.roomId || 0}
-          onChange={onChangeRoomSelect}
-        >
-          <MenuItem disabled value={0}>
-            <em style={{ fontSize: 14 }}>Select Room</em>
-          </MenuItem>
-          {rooms.length &&
-            rooms?.map((item) => (
-              <MenuItem key={Math.random()} value={item.id}>
-                {item.name}
-              </MenuItem>
-            ))}
-        </Select>
-      </Stack>
-
-      <Button fullWidth onClick={onSwapRoom} size="medium">
-        Swap Room
-      </Button> */}
     </Stack>
   );
 };
