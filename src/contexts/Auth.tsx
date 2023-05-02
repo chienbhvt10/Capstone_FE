@@ -1,4 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { LOGIN_PATH } from '~/constants/path';
 import useRefresh from '~/hooks/useRefresh';
 import LocalStorage from '~/utils/LocalStorage';
 import { User } from '~/utils/types';
@@ -19,11 +21,14 @@ const AuthProvider: React.FC<React.PropsWithChildren> = (props) => {
   const { children } = props;
   const [refresh, refetch] = useRefresh();
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const user = LocalStorage.get('currentUser');
     if (user) {
       setUser(user);
+    } else {
+      navigate(LOGIN_PATH, { replace: true });
     }
   }, [refresh]);
 
