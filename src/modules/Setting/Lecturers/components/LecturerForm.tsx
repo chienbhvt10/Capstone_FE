@@ -24,8 +24,14 @@ const schema = Validation.shape({
   email: Validation.string().required('Email is required'),
   shortName: Validation.string().required('ShortName is required'),
   name: Validation.string(),
-  quota: Validation.number().default(0).required('Quota is required'),
-  minQuota: Validation.number().default(0).required('MinQuota is required'),
+  quota: Validation.number()
+    .default(0)
+    .required('Quota is required')
+    .typeError('Please enter a number'),
+  minQuota: Validation.number()
+    .default(0)
+    .required('MinQuota is required')
+    .typeError('Please enter a number'),
 });
 
 interface Props {
